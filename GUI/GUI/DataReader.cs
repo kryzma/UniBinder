@@ -21,6 +21,7 @@ public class DataReader
 
         //foreach (var person in PersonList)
         //{
+        //    Console.WriteLine(person.ImgId);
         //    people.Add(person);
         //    Console.WriteLine(person.Name);
         //    Console.WriteLine(person.Age);

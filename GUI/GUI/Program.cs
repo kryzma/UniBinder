@@ -18,31 +18,9 @@ namespace GUI
             /// Start GUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            UniBinder GUI = new UniBinder();
-            LoadValues(GUI);
-            GUI.InitialLoad();
+            UserProperties GUI = new UserProperties();
             Application.Run(GUI);
      
-        }
-        static void LoadValues(object gui)
-        {
-            ////data = dr.UploadData();
-            ////int dataLenght = data.Count;
-            ////Person current = new Person();
-            ////current = data[0];
-            ////NameLabel.Text = current.Name;
-            ////LoadSubjects();
-
-            //int index = 1;
-            //DataReader dr = new DataReader();
-            //List<Person> data;
-
-            //data = dr.UploadData();
-            //int dataLenght = data.Count;
-            //Person current = new Person();
-            //current = data[0];
-            //NameLabel.Text = current.Name;
-
         }
     }
 }

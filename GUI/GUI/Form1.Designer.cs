@@ -39,12 +39,12 @@ namespace GUI
             this.Subject1 = new System.Windows.Forms.Label();
             this.Subject2 = new System.Windows.Forms.Label();
             this.Subject3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.DescriptionButton = new System.Windows.Forms.Button();
+            this.ContactButton = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.PeopleHelpedLabel = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.LikeButton = new System.Windows.Forms.PictureBox();
+            this.DislikeButton = new System.Windows.Forms.PictureBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.LikesLabel = new System.Windows.Forms.Label();
@@ -53,8 +53,8 @@ namespace GUI
             this.ForwardButton = new GUI.RoundButton();
             this.BackwardsButton = new GUI.RoundButton();
             ((System.ComponentModel.ISupportInitialize)(this.Photo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LikeButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DislikeButton)).BeginInit();
             this.SuspendLayout();
             // 
             // NameLabel
@@ -66,7 +66,6 @@ namespace GUI
             this.NameLabel.Size = new System.Drawing.Size(92, 31);
             this.NameLabel.TabIndex = 0;
             this.NameLabel.Text = "NAME";
-            this.NameLabel.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // Photo
             // 
@@ -93,7 +92,7 @@ namespace GUI
             // 
             this.HelpLabel.AutoSize = true;
             this.HelpLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F);
-            this.HelpLabel.Location = new System.Drawing.Point(39, 149);
+            this.HelpLabel.Location = new System.Drawing.Point(45, 149);
             this.HelpLabel.Name = "HelpLabel";
             this.HelpLabel.Size = new System.Drawing.Size(45, 22);
             this.HelpLabel.TabIndex = 7;
@@ -118,13 +117,12 @@ namespace GUI
             this.Subject1.Size = new System.Drawing.Size(87, 17);
             this.Subject1.TabIndex = 9;
             this.Subject1.Text = "Mathematics";
-            this.Subject1.Click += new System.EventHandler(this.label4_Click);
             // 
             // Subject2
             // 
             this.Subject2.AutoSize = true;
             this.Subject2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.Subject2.Location = new System.Drawing.Point(476, 178);
+            this.Subject2.Location = new System.Drawing.Point(446, 178);
             this.Subject2.Name = "Subject2";
             this.Subject2.Size = new System.Drawing.Size(25, 17);
             this.Subject2.TabIndex = 10;
@@ -134,33 +132,32 @@ namespace GUI
             // 
             this.Subject3.AutoSize = true;
             this.Subject3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.Subject3.Location = new System.Drawing.Point(467, 207);
+            this.Subject3.Location = new System.Drawing.Point(446, 211);
             this.Subject3.Name = "Subject3";
             this.Subject3.Size = new System.Drawing.Size(38, 17);
             this.Subject3.TabIndex = 11;
             this.Subject3.Text = "Java";
-            this.Subject3.Click += new System.EventHandler(this.label6_Click);
             // 
-            // button1
+            // DescriptionButton
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.button1.Location = new System.Drawing.Point(432, 269);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 37);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "Description";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.DescriptionButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.DescriptionButton.Location = new System.Drawing.Point(432, 269);
+            this.DescriptionButton.Name = "DescriptionButton";
+            this.DescriptionButton.Size = new System.Drawing.Size(100, 37);
+            this.DescriptionButton.TabIndex = 13;
+            this.DescriptionButton.Text = "Description";
+            this.DescriptionButton.UseVisualStyleBackColor = true;
+            this.DescriptionButton.Click += new System.EventHandler(this.DescriptionButton_Click);
             // 
-            // button2
+            // ContactButton
             // 
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.button2.Location = new System.Drawing.Point(432, 312);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 37);
-            this.button2.TabIndex = 14;
-            this.button2.Text = "Contact";
-            this.button2.UseVisualStyleBackColor = true;
+            this.ContactButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.ContactButton.Location = new System.Drawing.Point(432, 312);
+            this.ContactButton.Name = "ContactButton";
+            this.ContactButton.Size = new System.Drawing.Size(100, 37);
+            this.ContactButton.TabIndex = 14;
+            this.ContactButton.Text = "Contact";
+            this.ContactButton.UseVisualStyleBackColor = true;
             // 
             // label7
             // 
@@ -171,39 +168,40 @@ namespace GUI
             this.label7.Size = new System.Drawing.Size(125, 22);
             this.label7.TabIndex = 15;
             this.label7.Text = "People helped";
-            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // PeopleHelpedLabel
             // 
             this.PeopleHelpedLabel.AutoSize = true;
             this.PeopleHelpedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F);
-            this.PeopleHelpedLabel.Location = new System.Drawing.Point(51, 227);
+            this.PeopleHelpedLabel.Location = new System.Drawing.Point(45, 232);
             this.PeopleHelpedLabel.Name = "PeopleHelpedLabel";
             this.PeopleHelpedLabel.Size = new System.Drawing.Size(30, 22);
             this.PeopleHelpedLabel.TabIndex = 16;
             this.PeopleHelpedLabel.Text = "11";
             // 
-            // pictureBox1
+            // LikeButton
             // 
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(134, 366);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(55, 49);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 17;
-            this.pictureBox1.TabStop = false;
+            this.LikeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.LikeButton.Image = ((System.Drawing.Image)(resources.GetObject("LikeButton.Image")));
+            this.LikeButton.Location = new System.Drawing.Point(134, 366);
+            this.LikeButton.Name = "LikeButton";
+            this.LikeButton.Size = new System.Drawing.Size(55, 49);
+            this.LikeButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.LikeButton.TabIndex = 17;
+            this.LikeButton.TabStop = false;
+            this.LikeButton.Click += new System.EventHandler(this.LikeButton_Click);
             // 
-            // pictureBox2
+            // DislikeButton
             // 
-            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(355, 366);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(55, 49);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 18;
-            this.pictureBox2.TabStop = false;
+            this.DislikeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.DislikeButton.Image = ((System.Drawing.Image)(resources.GetObject("DislikeButton.Image")));
+            this.DislikeButton.Location = new System.Drawing.Point(355, 366);
+            this.DislikeButton.Name = "DislikeButton";
+            this.DislikeButton.Size = new System.Drawing.Size(55, 49);
+            this.DislikeButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.DislikeButton.TabIndex = 18;
+            this.DislikeButton.TabStop = false;
+            this.DislikeButton.Click += new System.EventHandler(this.DislikeButton_Click);
             // 
             // label9
             // 
@@ -298,12 +296,12 @@ namespace GUI
             this.Controls.Add(this.LikesLabel);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.DislikeButton);
+            this.Controls.Add(this.LikeButton);
             this.Controls.Add(this.PeopleHelpedLabel);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.ContactButton);
+            this.Controls.Add(this.DescriptionButton);
             this.Controls.Add(this.roundButton3);
             this.Controls.Add(this.Subject3);
             this.Controls.Add(this.Subject2);
@@ -320,8 +318,8 @@ namespace GUI
             this.Name = "UniBinder";
             this.Text = "UniBinder";
             ((System.ComponentModel.ISupportInitialize)(this.Photo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LikeButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DislikeButton)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -340,12 +338,12 @@ namespace GUI
         private System.Windows.Forms.Label Subject2;
         private System.Windows.Forms.Label Subject3;
         private RoundButton roundButton3;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button DescriptionButton;
+        private System.Windows.Forms.Button ContactButton;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label PeopleHelpedLabel;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox LikeButton;
+        private System.Windows.Forms.PictureBox DislikeButton;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label LikesLabel;

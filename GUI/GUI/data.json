@@ -1,65 +1,92 @@
-[{
-		"Name": "Brad Pitt 1",
-  "Age": 25,
-  "HelpScore": 7,
-  "Likes": 15,
-  "Dislikes": 1,
-  "PeopleHelped": 8,
-  "Subjects": [
-    {
-      "Name": "Maths"
-    }
-  ]
-	},
+[
   {
-    "Name": "Johnny Depp 2",
+    "Name": "Brad Pitt",
+    "Age": 25,
+    "ImgId": 0,
+    "HelpScore": 7,
+    "Likes": 15,
+    "Dislikes": 1,
+    "PeopleHelped": 8,
+    "Subjects": [
+      {
+        "Name": "Maths",
+        "SubjectName": "Maths"
+      },
+      {
+        "Name": "Physics",
+        "SubjectName": "Physics"
+      }
+    ]
+  },
+  {
+    "Name": "Johnny Depp",
     "Age": 40,
+    "ImgId": 1,
     "HelpScore": 6,
     "Likes": 12,
     "Dislikes": 3,
     "PeopleHelped": 6,
     "Subjects": [
       {
-        "Name": "Physics"
+        "Name": "Physics",
+        "SubjectName": "Physics"
+      },
+      {
+        "Name": "C#",
+        "SubjectName": "C#"
+      },
+      {
+        "Name": "Maths",
+        "SubjectName": "Maths"
       }
     ]
   },
   {
-    "Name": "Will Smith 3",
+    "Name": "Will Smith",
     "Age": 40,
+    "ImgId": 2,
     "HelpScore": 8,
     "Likes": 20,
     "Dislikes": 4,
     "PeopleHelped": 12,
     "Subjects": [
       {
-        "Name": "Java"
+        "Name": "Java",
+        "SubjectName": "Java"
+      },
+      {
+        "Name": "Maths",
+        "SubjectName": "Maths"
       }
     ]
   },
   {
-    "Name": "Morgan Freeman 4",
+    "Name": "Morgan Freeman",
     "Age": 40,
+    "ImgId": 3,
     "HelpScore": 10,
     "Likes": 35,
     "Dislikes": 1,
     "PeopleHelped": 15,
     "Subjects": [
       {
-        "Name": "Calculus"
+        "Name": "Calculus",
+        "SubjectName": "Calculus"
       }
     ]
   },
   {
-    "Name": "Samuel L. Jackson 5",
+    "Name": "Samuel L. Jackson",
     "Age": 40,
+    "ImgId": 4,
     "HelpScore": 7,
     "Likes": 16,
     "Dislikes": 2,
     "PeopleHelped": 5,
     "Subjects": [
       {
-        "Name": "C#"
+        "Name": "C#",
+        "SubjectName": "C#"
       }
     ]
   }

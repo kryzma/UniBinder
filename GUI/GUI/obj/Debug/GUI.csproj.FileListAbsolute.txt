@@ -11,3 +11,4 @@ D:\Programos\C#\GUI\GUI\obj\Debug\GUI.csproj.CoreCompileInputs.cache
 D:\Programos\C#\GUI\GUI\bin\Debug\Newtonsoft.Json.dll
 D:\Programos\C#\GUI\GUI\bin\Debug\Newtonsoft.Json.xml
 D:\Programos\C#\GUI\GUI\obj\Debug\GUI.csproj.CopyComplete
+D:\Programos\C#\GUI\GUI\obj\Debug\GUI.UserProperties.resources

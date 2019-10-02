@@ -20,31 +20,6 @@ namespace GUI
         {
             InitializeComponent();
         }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
         private void ForwardButton_Click(object sender, EventArgs e)
         {
             data = dr.UploadData();
@@ -58,6 +33,7 @@ namespace GUI
             HelpLabel.Text = current.HelpScore.ToString();
             NameLabel.Text = current.Name;
             PeopleHelpedLabel.Text = current.PeopleHelped.ToString();
+            LoadImage(current.ImgId);
             LoadSubjects(index);
         }
 
@@ -74,6 +50,7 @@ namespace GUI
             HelpLabel.Text = current.HelpScore.ToString();
             NameLabel.Text = current.Name;
             PeopleHelpedLabel.Text = current.PeopleHelped.ToString();
+            LoadImage(current.ImgId);
             LoadSubjects(index);
         }
         private void LoadSubjects(int indx)
@@ -90,10 +67,6 @@ namespace GUI
                 Subject3.Text = data[index].Subjects[2].SubjectName;
             else Subject3.Text = "";
         }
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
         public void InitialLoad()
         {
             data = dr.UploadData();
@@ -105,7 +78,53 @@ namespace GUI
             HelpLabel.Text = current.HelpScore.ToString();
             NameLabel.Text = current.Name;
             PeopleHelpedLabel.Text = current.PeopleHelped.ToString();
+            LoadImage(current.ImgId);
             LoadSubjects(0);
+        }
+        private void LoadImage(int id)
+        {
+            string img = @"../../images/" + id + ".jpg";
+            int BOXHEIGHT = Photo.Height;
+            int BOXWIDTH = Photo.Width;
+            Image avatar = Image.FromFile(img);
+            try
+            {
+                Photo.Image = avatar;
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                Console.WriteLine("Image file doesn't exist");
+            }
+        }
+
+        private void DescriptionButton_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void LikeButton_Click(object sender, EventArgs e)
+        {
+            if (Int32.TryParse(LikesLabel.Text, out int likes))
+            {
+                likes++;
+                LikesLabel.Text = likes.ToString();
+            }
+            else
+            {
+                Console.WriteLine("Failed to convert likes to integer");
+            }
+        }
+
+        private void DislikeButton_Click(object sender, EventArgs e)
+        {
+            if (Int32.TryParse(DislikesLabel.Text, out int dislikes))
+            {
+                dislikes++;
+                DislikesLabel.Text = dislikes.ToString();
+            }
+            else
+            {
+                Console.WriteLine("Failed to convert dislikes to integer");
+            }
         }
     }
 }
