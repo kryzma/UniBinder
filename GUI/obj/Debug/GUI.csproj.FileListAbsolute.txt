@@ -1,9 +1,0 @@
-D:\Programos\C#\GUI\GUI\bin\Debug\GUI.exe.config
-D:\Programos\C#\GUI\GUI\bin\Debug\GUI.exe
-D:\Programos\C#\GUI\GUI\bin\Debug\GUI.pdb
-D:\Programos\C#\GUI\GUI\obj\Debug\GUI.csprojResolveAssemblyReference.cache
-D:\Programos\C#\GUI\GUI\obj\Debug\GUI.Properties.Resources.resources
-D:\Programos\C#\GUI\GUI\obj\Debug\GUI.csproj.GenerateResource.Cache
-D:\Programos\C#\GUI\GUI\obj\Debug\GUI.exe
-D:\Programos\C#\GUI\GUI\obj\Debug\GUI.pdb
-D:\Programos\C#\GUI\GUI\obj\Debug\GUI.UniBinder.resources
