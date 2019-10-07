@@ -50,7 +50,7 @@ namespace LogIn
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("select * ");
-            sb.Append("from Persons ");
+            sb.Append("from Persons ;");
             return sb.ToString();
         }
         private List<Subject> givePersonSubjectsList(int ID, SqlConnectionStringBuilder cb)
@@ -71,8 +71,8 @@ namespace LogIn
         private string givePersonSubjectListQuerry(int ID)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("select subjectName ");
-            sb.Append("from subjects ");
+            sb.Append("select Name ");
+            sb.Append("from Subjects ");
             sb.Append("where ID = ");
             sb.Append(ID.ToString());
             return sb.ToString();
