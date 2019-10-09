@@ -44,6 +44,9 @@ namespace LogIn
                 UserDataInserter userDataInserter = new UserDataInserter();
                 Person person = new Person(BasicFunctions.UserCount(),this.username, this.email, this.password);
                 userDataInserter.sendUserData(person);
+                this.Hide();
+                MainProgram mainProgram = new MainProgram(BasicFunctions.UserID(username));
+                mainProgram.Show();
             }
         }
 

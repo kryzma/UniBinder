@@ -15,35 +15,25 @@ namespace LogIn
         {
             return giveUserList();
         }
-        private SqlConnectionStringBuilder connectionToDatabaseFormating()
-        {
-            var builder = new SqlConnectionStringBuilder();
-            builder.DataSource = DataBaseInfo.DataSource;
-            builder.UserID = DataBaseInfo.UserID;
-            builder.Password = DataBaseInfo.Password;
-            builder.InitialCatalog = DataBaseInfo.InitialCatalog;
-            return builder;
-        }
 
         private List<Person> giveUserList()
         {
             List<Person> usersList = new List<Person>();
-            SqlConnectionStringBuilder builder = connectionToDatabaseFormating();
-            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+            SqlConnection connection = DataBaseInfo.getSqlConnection();
             connection.Open();
             string personInfoQuerry = givePersonInfoQuerry();
             SqlCommand command = new SqlCommand(personInfoQuerry, connection);
             SqlDataReader reader = command.ExecuteReader();
-            
+
             while (reader.Read())
             {
                 int ID = reader.GetInt32(0);
-                List<Subject> Subjects = givePersonSubjectsList(ID, builder);
+                List<Subject> Subjects = givePersonSubjectsList(ID);
                 usersList.Add(new Person(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3),
                     reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(6),
                     reader.GetInt32(7), reader.GetInt32(8), Subjects));
                 ImageProcessor imageProcessor = new ImageProcessor();
-                
+
 
                 if (reader[9].Equals("0"))
                 {
@@ -65,17 +55,17 @@ namespace LogIn
             sb.Append("from Persons ;");
             return sb.ToString();
         }
-        private List<Subject> givePersonSubjectsList(int ID, SqlConnectionStringBuilder cb)
+        private List<Subject> givePersonSubjectsList(int ID)
         {
             List<Subject> subjects = new List<Subject>();
-            SqlConnection connection = new SqlConnection(cb.ConnectionString);
+            SqlConnection connection = DataBaseInfo.getSqlConnection();
             connection.Open();
             string SubjectListQuerry = givePersonSubjectListQuerry(ID);
             SqlCommand command = new SqlCommand(SubjectListQuerry, connection);
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
-                subjects.Add( new Subject(reader.GetString(0)) );
+                subjects.Add(new Subject(reader.GetString(0)));
                 System.Console.WriteLine(reader.GetString(0));
             }
             return subjects;

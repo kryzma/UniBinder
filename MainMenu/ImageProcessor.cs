@@ -15,33 +15,17 @@ namespace LogIn
         public Image defaultImage;
         public ImageProcessor()
         {
-            var builder = new SqlConnectionStringBuilder();
-            builder.DataSource = DataBaseInfo.DataSource;
-            builder.UserID = DataBaseInfo.UserID;
-            builder.Password = DataBaseInfo.Password;
-            builder.InitialCatalog = DataBaseInfo.InitialCatalog;
-            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+            SqlConnection connection = DataBaseInfo.getSqlConnection();
             connection.Open();
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append("select image ");
-            sb.Append("from images ");
-            sb.Append("where id = -1;");
-            string querry =  sb.ToString();
+            string querry = "select image from images where id = -1 ";
             SqlCommand command = new SqlCommand(querry, connection);
             SqlDataReader reader = command.ExecuteReader();
+            reader.Read();
 
-            
-            if (reader.FieldCount.Equals(0))
-            {
-                defaultImage = Base64ToImage(reader.GetString(0));
-            }
+            defaultImage = Base64ToImage(reader[0].ToString());
 
             connection.Close();
-        }
-        public void LoadUserImage()
-        {
-
         }
         public string ImageToBase64(Image image, System.Drawing.Imaging.ImageFormat format)
         {

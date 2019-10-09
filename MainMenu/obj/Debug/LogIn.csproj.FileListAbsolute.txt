@@ -26,3 +26,5 @@ C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.csproj.CopyComplete
 C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.exe
 C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.pdb
 C:\Users\manta\Desktop\MainMenu\bin\Debug\Newtonsoft.Json.dll
+C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.UserSettingsMenu.resources
+C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.MainProgram.resources
