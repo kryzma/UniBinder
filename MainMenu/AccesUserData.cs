@@ -14,6 +14,7 @@ namespace LogIn
         private void UpdateUserList()
         {
             userList = userDataReader.ReadUserData();
+            ImageProcessor imageProcessor = new ImageProcessor();
         }
 
         public List<Person> GetUserList()

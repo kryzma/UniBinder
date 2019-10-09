@@ -33,12 +33,17 @@ namespace LogIn
             }
 
             CheckLogIn checkLogin = new CheckLogIn();
-            if(checkLogin.CheckLogInValidity(nickname, password))
+            if (checkLogin.CheckLogInValidity(nickname, password))
             {
                 System.Windows.Forms.MessageBox.Show("Login succesful");
-                // go to program
+                this.Hide();
+                MainProgram mainProgram = new MainProgram(BasicFunctions.UserID(nickname));
+                mainProgram.Show();
             }
-            System.Windows.Forms.MessageBox.Show("Login unsuccesful");
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Login unsuccesful");
+            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

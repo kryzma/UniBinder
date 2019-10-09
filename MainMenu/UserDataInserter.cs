@@ -11,30 +11,20 @@ namespace LogIn
     {
         public void sendUserData(Person person)
         {
-            SqlConnectionStringBuilder builder = connectionToDatabaseFormating();
             string personInfoSubmitionQuerry = givePersonInfoSubmitQuerry(person);
-            callQuerry(builder,personInfoSubmitionQuerry);
+            callQuerry(personInfoSubmitionQuerry);
 
             foreach(var subject in person.Subjects)
             {
                 string personSubjectSubmitQuerry = givePersonSubjectSubmitQuerry(person.ID,subject);
-                callQuerry(builder, personSubjectSubmitQuerry);
+                callQuerry(personSubjectSubmitQuerry);
             }
-        }
-        private SqlConnectionStringBuilder connectionToDatabaseFormating()
-        {
-            var builder = new SqlConnectionStringBuilder();
-            builder.DataSource = DataBaseInfo.DataSource;
-            builder.UserID = DataBaseInfo.UserID;
-            builder.Password = DataBaseInfo.Password;
-            builder.InitialCatalog = DataBaseInfo.InitialCatalog;
-            return builder;
         }
         private string givePersonInfoSubmitQuerry(Person person)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("insert into Persons ");
-            sb.Append("values('" + person.ID + "','" + person.Name + "','" + person.Email + "','" + person.Password + "',0,0,0,0,0);");
+            sb.Append("values('" + person.ID + "','" + person.Name + "','" + person.Email + "','" + person.Password + "',0,0,0,0,0,0);");
             System.Windows.Forms.MessageBox.Show(sb.ToString());
             return sb.ToString();
         }
@@ -45,12 +35,13 @@ namespace LogIn
             sb.Append("values ( " + ID + ",'" + subject.Name + "');");
             return sb.ToString();
         }
-        private void callQuerry(SqlConnectionStringBuilder builder,string querry)
+        private void callQuerry(string querry)
         {
-            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+            SqlConnection connection = DataBaseInfo.getSqlConnection();
             connection.Open();
             SqlCommand command = new SqlCommand(querry, connection);
             command.ExecuteNonQuery();
+            connection.Close();
         }
     }
 
