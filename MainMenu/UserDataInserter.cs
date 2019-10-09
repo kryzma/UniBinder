@@ -34,7 +34,7 @@ namespace LogIn
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("insert into Persons ");
-            sb.Append("values('" + person.ID + "','" + person.Name + "','" + person.Email + "','" + person.Password + "',0,0,0,0,0);");
+            sb.Append("values('" + person.ID + "','" + person.Name + "','" + person.Email + "','" + person.Password + "',0,0,0,0,0,0);");
             System.Windows.Forms.MessageBox.Show(sb.ToString());
             return sb.ToString();
         }
@@ -51,6 +51,7 @@ namespace LogIn
             connection.Open();
             SqlCommand command = new SqlCommand(querry, connection);
             command.ExecuteNonQuery();
+            connection.Close();
         }
     }
 

@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace LogIn
 {
@@ -41,6 +42,17 @@ namespace LogIn
                 usersList.Add(new Person(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3),
                     reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(6),
                     reader.GetInt32(7), reader.GetInt32(8), Subjects));
+                ImageProcessor imageProcessor = new ImageProcessor();
+                
+
+                if (reader[9].Equals("0"))
+                {
+                    usersList[ID].image = imageProcessor.defaultImage;
+                }
+                else
+                {
+                    usersList[ID].image = imageProcessor.Base64ToImage(reader[9].ToString());
+                }
             }
             connection.Close();
             return usersList;
@@ -77,6 +89,16 @@ namespace LogIn
             sb.Append(ID.ToString());
             return sb.ToString();
         }
+        private string getUserImageQuerry(int ID)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("select Image ");
+            sb.Append("from Images ");
+            sb.Append("where ID = ");
+            sb.Append(ID.ToString());
+            return sb.ToString();
+        }
+
 
     }
 }

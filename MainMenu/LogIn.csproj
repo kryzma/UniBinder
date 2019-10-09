@@ -53,6 +53,7 @@
     <Compile Include="BasicFunctions.cs" />
     <Compile Include="CheckLogIn.cs" />
     <Compile Include="DataBaseInfo.cs" />
+    <Compile Include="ImageProcessor.cs" />
     <Compile Include="RegisterForm.cs">
       <SubType>Form</SubType>
     </Compile>
