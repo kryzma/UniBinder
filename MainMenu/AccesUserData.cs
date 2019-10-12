@@ -9,7 +9,13 @@ namespace LogIn
     class AccesUserData
     {
         List<Person> userList;
-        UserDataReader userDataReader = new UserDataReader();
+        public static AccesUserData instance = new AccesUserData();
+        private UserDataReader userDataReader;
+
+        private AccesUserData()
+        {
+            userDataReader = new UserDataReader();
+        }
         
         private void UpdateUserList()
         {

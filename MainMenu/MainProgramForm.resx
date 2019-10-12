@@ -117,32 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BadLogin" xml:space="preserve">
-    <value>Login unsuccesful</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="DefaultImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Default.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="EmailInUse" xml:space="preserve">
-    <value>Use different email</value>
-  </data>
-  <data name="GetExistingSubjects" xml:space="preserve">
-    <value>select * from subjectslist</value>
-  </data>
-  <data name="ImageQuery" xml:space="preserve">
-    <value>select image from images where id = -1 </value>
-  </data>
-  <data name="MissingLoginData" xml:space="preserve">
-    <value>Insert login data</value>
-  </data>
-  <data name="NickNameInUse" xml:space="preserve">
-    <value>Use different nickname</value>
-  </data>
-  <data name="NotAllRegisterFieldsFilled" xml:space="preserve">
-    <value>Fill all fields</value>
-  </data>
-  <data name="UserDataQuery" xml:space="preserve">
-    <value>select * from persons</value>
-  </data>
 </root>

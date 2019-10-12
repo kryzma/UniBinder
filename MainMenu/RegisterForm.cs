@@ -12,92 +12,73 @@ namespace LogIn
 {
     public partial class RegisterForm : Form
     {
-        MainMenu mainMenu;
+        MainMenuForm mainMenu;
         string username;
         string email;
         string password;
-        public RegisterForm(MainMenu mainMenu)
+        public RegisterForm(MainMenuForm mainMenu)
         {
             this.mainMenu = mainMenu;
             InitializeComponent();
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void TextBox1_TextChanged(object sender, EventArgs e)
         {
-            this.username = textBox1.Text;
+            username = textBox1.Text;
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
+        private void TextBox2_TextChanged(object sender, EventArgs e)
         {
-            this.email = textBox2.Text;
+            email = textBox2.Text;
         }
 
-        private void textBox3_TextChanged(object sender, EventArgs e)
+        private void TextBox3_TextChanged(object sender, EventArgs e)
         {
-            this.password = textBox3.Text;
+            password = textBox3.Text;
         }
-
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
-            if (validateData(this.username, this.email, this.password)){
-                System.Windows.Forms.MessageBox.Show("Account created succesfully");
+            if (ValidateData(username, email, password)){
                 UserDataInserter userDataInserter = new UserDataInserter();
-                Person person = new Person(BasicFunctions.UserCount(),this.username, this.email, this.password);
-                userDataInserter.sendUserData(person);
+                userDataInserter.SendUserData(new Person(BasicFunctions.UserCount(), username, email, password));
+                Hide();
+                MainProgramForm mainProgram = new MainProgramForm(BasicFunctions.GetUserIDFromName(username));
+                mainProgram.Show();
             }
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            Hide();
             mainMenu.Show();
         }
-
-
-        Boolean validateData(string name,string email,string password)
+        Boolean ValidateData(string name,string email,string password)
         {
             if(name == null || email == null || password == null)
             {
-                System.Windows.Forms.MessageBox.Show("Please fill all fields");
+                MessageBox.Show(Properties.Resources.NotAllRegisterFieldsFilled);
                 return false;
             }
-            if (usernameInUse(name))
+            if (UsernameInUse(name))
             {
-                System.Windows.Forms.MessageBox.Show("Try different nickname");
+                MessageBox.Show(Properties.Resources.NickNameInUse);
                 return false;
             }
-            if (emailInUse(email))
+            if (EmailInUse(email))
             {
-                System.Windows.Forms.MessageBox.Show("Try different email");
+                MessageBox.Show(Properties.Resources.EmailInUse);
                 return false;
             }
             return true;
         }
-        Boolean usernameInUse(string name)
+        Boolean UsernameInUse(string name)
         {
-            AccesUserData accesUserData = new AccesUserData();
-            List<Person> userList = accesUserData.GetUserList();
-            foreach(var user in userList)
-            {
-                if(user.Name == name)
-                {
-                    return true;
-                }
-            }
-            return false;
+            List<Person> userList = AccesUserData.instance.GetUserList();
+            return userList.Exists((user) => user.Name.Equals(name));
         }
-        Boolean emailInUse(string email)
+        Boolean EmailInUse(string email)
         {
-            AccesUserData accesUserData = new AccesUserData();
-            List<Person> userList = accesUserData.GetUserList();
-            foreach (var user in userList)
-            {
-                if (user.Email == email)
-                {
-                    return true;
-                }
-            }
-            return false;
+            List<Person> userList = AccesUserData.instance.GetUserList();
+            return userList.Exists((user) => user.Email.Equals(email));
         }
     }
 }

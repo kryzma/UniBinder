@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Xml.Linq;
 
@@ -19,6 +20,7 @@ namespace LogIn
         public int Dislikes { get; set; }
         public int PeopleHelped { get; set; }
         public List<Subject> Subjects { get; set; }
+        public Image image { get; set; }
 
         public Person(int ID, string Name, string Password, string Email)
         {

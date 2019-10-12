@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace LogIn
 {
-    interface IUserDataInserter
+    static class Session
     {
-        void SendUserData(Person person);
+        static int ID { get; set; }
     }
 }

@@ -9,49 +9,30 @@ namespace LogIn
 {
     class UserDataInserter : IUserDataInserter
     {
-        public void sendUserData(Person person)
+        public void SendUserData(Person person)
         {
-            SqlConnectionStringBuilder builder = connectionToDatabaseFormating();
-            string personInfoSubmitionQuerry = givePersonInfoSubmitQuerry(person);
-            callQuerry(builder,personInfoSubmitionQuerry);
+            string personInfoSubmitionQuery = GivePersonInfoSubmitQuerry(person);
+            DataBaseHelper.instance.SqlCommandExcecutor(personInfoSubmitionQuery);
 
-            foreach(var subject in person.Subjects)
-            {
-                string personSubjectSubmitQuerry = givePersonSubjectSubmitQuerry(person.ID,subject);
-                callQuerry(builder, personSubjectSubmitQuerry);
-            }
+            person.Subjects.ForEach((subject) =>
+                DataBaseHelper.instance.SqlCommandExcecutor(GivePersonSubjectSubmitQuerry(person.ID, subject)));
         }
-        private SqlConnectionStringBuilder connectionToDatabaseFormating()
-        {
-            var builder = new SqlConnectionStringBuilder();
-            builder.DataSource = DataBaseInfo.DataSource;
-            builder.UserID = DataBaseInfo.UserID;
-            builder.Password = DataBaseInfo.Password;
-            builder.InitialCatalog = DataBaseInfo.InitialCatalog;
-            return builder;
-        }
-        private string givePersonInfoSubmitQuerry(Person person)
+        private string GivePersonInfoSubmitQuerry(Person person)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("insert into Persons ");
-            sb.Append("values('" + person.ID + "','" + person.Name + "','" + person.Email + "','" + person.Password + "',0,0,0,0,0);");
+            sb.Append("values('" + person.ID + "','" + person.Name + "','" + person.Email + "','" + person.Password + "',0,0,0,0,0,0);");
             System.Windows.Forms.MessageBox.Show(sb.ToString());
             return sb.ToString();
         }
-        private string givePersonSubjectSubmitQuerry(int ID,Subject subject)
+        private string GivePersonSubjectSubmitQuerry(int ID,Subject subject)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("insert into subjects ");
             sb.Append("values ( " + ID + ",'" + subject.Name + "');");
             return sb.ToString();
         }
-        private void callQuerry(SqlConnectionStringBuilder builder,string querry)
-        {
-            SqlConnection connection = new SqlConnection(builder.ConnectionString);
-            connection.Open();
-            SqlCommand command = new SqlCommand(querry, connection);
-            command.ExecuteNonQuery();
-        }
+
     }
 
 }

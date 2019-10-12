@@ -17,7 +17,6 @@ C:\Users\manta\Desktop\MainMenu\bin\Debug\LogIn.exe
 C:\Users\manta\Desktop\MainMenu\bin\Debug\LogIn.pdb
 C:\Users\manta\Desktop\MainMenu\bin\Debug\Newtonsoft.Json.xml
 C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.csprojAssemblyReference.cache
-C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.MainMenu.resources
 C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.LoginForm.resources
 C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.Properties.Resources.resources
 C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.RegisterForm.resources
@@ -25,3 +24,6 @@ C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.csproj.GenerateResource.cache
 C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.csproj.CopyComplete
 C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.exe
 C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.pdb
+C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.UserSettingsMenu.resources
+C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.MainMenuForm.resources
+C:\Users\manta\Desktop\MainMenu\obj\Debug\LogIn.MainProgramForm.resources

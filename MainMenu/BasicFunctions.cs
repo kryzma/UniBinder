@@ -11,16 +11,13 @@ namespace LogIn
     {
         public static int UserCount()
         {
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            builder.DataSource = DataBaseInfo.DataSource;
-            builder.UserID = DataBaseInfo.UserID;
-            builder.Password = DataBaseInfo.Password;
-            builder.InitialCatalog = DataBaseInfo.InitialCatalog;
-            SqlConnection connection = new SqlConnection(builder.ConnectionString);
-            connection.Open();
-            string personInfoQuerry = "select count (*) from Persons;";
-            SqlCommand command = new SqlCommand(personInfoQuerry, connection);
-            SqlDataReader reader = command.ExecuteReader();
+            SqlDataReader reader = DataBaseHelper.instance.GetSqlDataReader("select count (*) from Persons;");
+            reader.Read();
+            return reader.GetInt32(0);
+        }
+        public static int GetUserIDFromName(string name)
+        {
+            SqlDataReader reader = DataBaseHelper.instance.GetSqlDataReader("select ID from Persons where name = '" + name + "'");
             reader.Read();
             return reader.GetInt32(0);
         }
