@@ -14,34 +14,12 @@ namespace LogIn
     {
         string nickname;
         string password;
-        private MainMenuForm mainMenu;
+        private EntryWindowForm mainMenu;
 
-        public LoginForm(MainMenuForm mainMenu)
+        public LoginForm(EntryWindowForm mainMenu)
         {
             this.mainMenu = mainMenu; 
             InitializeComponent();
-        }
-
-        private void Button1_Click(object sender, EventArgs e)
-        {
-
-            if(!CheckFieldValidity(nickname,password))
-            {
-                MessageBox.Show(Properties.Resources.MissingLoginData);
-                return;
-            }
-
-            CheckLogIn checkLogin = new CheckLogIn();
-            if (checkLogin.CheckLogInValidity(nickname, password))
-            {
-                Hide();
-                MainProgramForm mainProgram = new MainProgramForm(BasicFunctions.GetUserIDFromName(nickname));
-                mainProgram.Show();
-            }
-            else
-            {
-                MessageBox.Show(Properties.Resources.BadLogin);
-            }
         }
 
         private void TextBox1_TextChanged(object sender, EventArgs e)
@@ -54,15 +32,38 @@ namespace LogIn
             password = textBox2.Text;
         }
 
-        private void Button2_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            mainMenu.Show();
-        }
         private Boolean CheckFieldValidity(string nickname,string password)
         {
             if (nickname == null || password == null) return false;
             return true;
+        }
+
+        private void LogIn_Button(object sender, EventArgs e)
+        {
+            CheckLogIn checkLogin = new CheckLogIn();
+
+            if (!CheckFieldValidity(nickname, password))
+            {
+                MessageBox.Show(Properties.Resources.MissingLoginData);
+                return;
+            }
+
+            if (checkLogin.CheckLogInValidity(nickname, password))
+            {
+                Hide();
+                MainProgramForm mainProgram = new MainProgramForm(DatabaseUserInfo.GetUserIDFromName(nickname));
+                mainProgram.Show();
+            }
+            else
+            {
+                MessageBox.Show(Properties.Resources.BadLogin);
+            }
+        }
+
+        private void ReturnMainWindow_Button(object sender, EventArgs e)
+        {
+            this.Hide();
+            mainMenu.Show();
         }
     }
 }

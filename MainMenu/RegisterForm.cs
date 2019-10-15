@@ -12,11 +12,11 @@ namespace LogIn
 {
     public partial class RegisterForm : Form
     {
-        MainMenuForm mainMenu;
+        EntryWindowForm mainMenu;
         string username;
         string email;
         string password;
-        public RegisterForm(MainMenuForm mainMenu)
+        public RegisterForm(EntryWindowForm mainMenu)
         {
             this.mainMenu = mainMenu;
             InitializeComponent();
@@ -40,9 +40,9 @@ namespace LogIn
         {
             if (ValidateData(username, email, password)){
                 UserDataInserter userDataInserter = new UserDataInserter();
-                userDataInserter.SendUserData(new Person(BasicFunctions.UserCount(), username, email, password));
+                userDataInserter.SendUserData(new Person(DatabaseUserInfo.UserCount(), username, email, password));
                 Hide();
-                MainProgramForm mainProgram = new MainProgramForm(BasicFunctions.GetUserIDFromName(username));
+                MainProgramForm mainProgram = new MainProgramForm(DatabaseUserInfo.GetUserIDFromName(username));
                 mainProgram.Show();
             }
         }

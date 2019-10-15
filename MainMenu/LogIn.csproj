@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccesUserData.cs" />
-    <Compile Include="BasicFunctions.cs" />
+    <Compile Include="DatabaseUserInfo.cs" />
     <Compile Include="CheckLogIn.cs" />
     <Compile Include="DataBaseHelper.cs" />
     <Compile Include="ImageProcessor.cs" />
@@ -66,11 +66,11 @@
     <Compile Include="RegisterForm.Designer.cs">
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainMenuForm.cs">
+    <Compile Include="EntryWindowForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainMenuForm.Designer.cs">
-      <DependentUpon>MainMenuForm.cs</DependentUpon>
+    <Compile Include="EntryWindowForm.Designer.cs">
+      <DependentUpon>EntryWindowForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IUserDataInserter.cs" />
     <Compile Include="Session.cs" />
@@ -93,8 +93,8 @@
     <Compile Include="UserSettingsMenu.Designer.cs">
       <DependentUpon>UserSettingsMenu.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="MainMenuForm.resx">
-      <DependentUpon>MainMenuForm.cs</DependentUpon>
+    <EmbeddedResource Include="EntryWindowForm.resx">
+      <DependentUpon>EntryWindowForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>

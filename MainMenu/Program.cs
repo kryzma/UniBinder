@@ -17,7 +17,8 @@ namespace LogIn
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new UserSettingsMenu());
-            Application.Run(new MainMenuForm());
+            Application.Run(new EntryWindowForm());
+            DataBaseHelper dataBaseHelper = new DataBaseHelper();
         }
     }
 }

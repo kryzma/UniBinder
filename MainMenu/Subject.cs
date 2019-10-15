@@ -1,6 +1,6 @@
 ﻿using System;
 
-public class Subject
+public struct Subject
 {
     public string Name;
 
