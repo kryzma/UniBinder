@@ -18,7 +18,7 @@ namespace LogIn
         private List<Subject> subjects = new List<Subject>();
         MainProgramForm mainProgram;
 
-        private int ID { get; set; }
+        public int ID { get; set; }
 
         public object Current => throw new NotImplementedException();
 
@@ -30,6 +30,10 @@ namespace LogIn
             SetUpCheckedList();
         }
 
+        public int GetCurrentUserID()
+        {
+            return ID;
+        }
         private void SetUpCheckedList()
         {
             GetSubjectsList();
@@ -65,6 +69,8 @@ namespace LogIn
             {
                 DataBaseHelper.instance.SqlCommandExcecutor("Insert into Subjects values('" + ID + "','" + item + "')");
             }
+            Console.WriteLine(ID);
+
         }
 
         private void LoadImage()

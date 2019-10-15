@@ -19,12 +19,16 @@ namespace LogIn
 
         private int TotalUsersCount { get; set; }
 
+        private string UserName { get; set; }
+
         UserSettingsMenu userSettingsMenu;
 
-        public MainProgramForm(int ID)
+
+        public MainProgramForm(int ID, string Name)
         {
             userSettingsMenu = new UserSettingsMenu(this,ID);
             CurrentID = 0;
+            UserName = Name;
             TotalUsersCount = DatabaseUserInfo.UserCount();
             InitializeComponent();
         }
@@ -37,16 +41,17 @@ namespace LogIn
 
         private void UpdatePerson()
         {
-
             List<Person> users = AccesUserData.instance.GetUserList();
-
+            if (users[GetNormalisedCurrentUserId()].Name == UserName) CurrentID++;
+            Console.WriteLine(users.Count);
             pictureBox1.Image = users[GetNormalisedCurrentUserId()].image;
             label1.Text = users[GetNormalisedCurrentUserId()].Name;
             label3.Text = "";
-
             users[GetNormalisedCurrentUserId()].Subjects.ForEach((subject) => label3.Text += subject.Name + '\n');
 
         }
+
+
         private int GetNormalisedCurrentUserId()
         {
             return (CurrentID + NORMALISE) % TotalUsersCount;
@@ -60,20 +65,37 @@ namespace LogIn
         private void UserSettings_Button(object sender, EventArgs e)
         {
             Hide();
+            
             userSettingsMenu.Show();
         }
 
         private void SwipeLeft_Button(object sender, EventArgs e)
         {
-            CurrentID--;
+            List<Person> users = AccesUserData.instance.GetUserList();
+
+            if (users[GetNormalisedCurrentUserId() - 1].Name == UserName) CurrentID -= 2;
+            else
+            {
+                CurrentID--;
+            }
             UpdatePerson();
         }
 
         private void SwipeRight_Button(object sender, EventArgs e)
         {
+            NextRightPerson();
+        }
+
+        private void NextRightPerson()
+        {
+            //if (CurrentID == userSettingsMenu.GetCurrentUserID()) CurrentID++;
+            //if (CurrentID == userSettingsMenu.GetCurrentUserID()) Console.WriteLine(CurrentID);
+            //List<Person> users = AccesUserData.instance.GetUserList();
+            //if (users[CurrentID].Name == UserName) Console.WriteLine(UserName);
             CurrentID++;
             UpdatePerson();
         }
+
 
         private void Contacts_Button(object sender, EventArgs e)
         {

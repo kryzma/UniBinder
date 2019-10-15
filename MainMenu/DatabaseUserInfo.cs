@@ -21,5 +21,12 @@ namespace LogIn
             reader.Read();
             return reader.GetInt32(0);
         }
+
+        public static string  GetUserNameFromId(int ID)
+        {
+            SqlDataReader reader = DataBaseHelper.instance.GetSqlDataReader("select name from Persons where ID ='" + ID + "'");
+            reader.Read();
+            return reader.GetString(0);
+        }
     }
 }

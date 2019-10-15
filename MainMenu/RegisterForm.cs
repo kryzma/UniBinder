@@ -38,11 +38,12 @@ namespace LogIn
         }
         private void Button2_Click(object sender, EventArgs e)
         {
-            if (ValidateData(username, email, password)){
+            if (ValidateData(username, email, password))
+            {
                 UserDataInserter userDataInserter = new UserDataInserter();
                 userDataInserter.SendUserData(new Person(DatabaseUserInfo.UserCount(), username, email, password));
                 Hide();
-                MainProgramForm mainProgram = new MainProgramForm(DatabaseUserInfo.GetUserIDFromName(username));
+                MainProgramForm mainProgram = new MainProgramForm(DatabaseUserInfo.GetUserIDFromName(username), username);
                 mainProgram.Show();
             }
         }

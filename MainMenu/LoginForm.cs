@@ -51,7 +51,7 @@ namespace LogIn
             if (checkLogin.CheckLogInValidity(nickname, password))
             {
                 Hide();
-                MainProgramForm mainProgram = new MainProgramForm(DatabaseUserInfo.GetUserIDFromName(nickname));
+                MainProgramForm mainProgram = new MainProgramForm(DatabaseUserInfo.GetUserIDFromName(nickname),nickname);
                 mainProgram.Show();
             }
             else

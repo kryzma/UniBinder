@@ -10,8 +10,8 @@ namespace LogIn
     class DataBaseHelper
     {
         public static string DataSource = "studybuddy.database.windows.net";
-        public static string UserID = "admin";
-        public static string Password = "studybuddy";
+        public static string UserID = "notadmin";
+        public static string Password = "321?studybuddy";
         public static string InitialCatalog = "studybuddy";
 
         public SqlConnection connection;
