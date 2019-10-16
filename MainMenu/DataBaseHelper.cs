@@ -11,7 +11,7 @@ namespace LogIn
     {
         public static string DataSource = "studybuddy.database.windows.net";
         public static string UserID = "notadmin";
-        public static string Password = "321?studybuddy";
+        public static string Password = "studybuddy321?";
         public static string InitialCatalog = "studybuddy";
 
         public SqlConnection connection;
