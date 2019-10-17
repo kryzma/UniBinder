@@ -12,20 +12,9 @@ namespace LogIn
 {
     class ImageProcessor
     {
-        public Image defaultImage;
         public ImageProcessor()
         {
-            SqlConnection connection = DataBaseInfo.getSqlConnection();
-            connection.Open();
 
-            string querry = "select image from images where id = -1 ";
-            SqlCommand command = new SqlCommand(querry, connection);
-            SqlDataReader reader = command.ExecuteReader();
-            reader.Read();
-
-            defaultImage = Base64ToImage(reader[0].ToString());
-
-            connection.Close();
         }
         public string ImageToBase64(Image image, System.Drawing.Imaging.ImageFormat format)
         {

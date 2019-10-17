@@ -52,13 +52,13 @@
     <Compile Include="AccesUserData.cs" />
     <Compile Include="BasicFunctions.cs" />
     <Compile Include="CheckLogIn.cs" />
-    <Compile Include="DataBaseInfo.cs" />
+    <Compile Include="DataBaseHelper.cs" />
     <Compile Include="ImageProcessor.cs" />
-    <Compile Include="MainProgram.cs">
+    <Compile Include="MainProgramForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainProgram.Designer.cs">
-      <DependentUpon>MainProgram.cs</DependentUpon>
+    <Compile Include="MainProgramForm.Designer.cs">
+      <DependentUpon>MainProgramForm.cs</DependentUpon>
     </Compile>
     <Compile Include="RegisterForm.cs">
       <SubType>Form</SubType>
@@ -66,11 +66,11 @@
     <Compile Include="RegisterForm.Designer.cs">
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainMenu.cs">
+    <Compile Include="MainMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainMenu.Designer.cs">
-      <DependentUpon>MainMenu.cs</DependentUpon>
+    <Compile Include="MainMenuForm.Designer.cs">
+      <DependentUpon>MainMenuForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IUserDataInserter.cs" />
     <Compile Include="Session.cs" />
@@ -93,14 +93,14 @@
     <Compile Include="UserSettingsMenu.Designer.cs">
       <DependentUpon>UserSettingsMenu.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="MainMenu.resx">
-      <DependentUpon>MainMenu.cs</DependentUpon>
+    <EmbeddedResource Include="MainMenuForm.resx">
+      <DependentUpon>MainMenuForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainProgram.resx">
-      <DependentUpon>MainProgram.cs</DependentUpon>
+    <EmbeddedResource Include="MainProgramForm.resx">
+      <DependentUpon>MainProgramForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -110,6 +110,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="RegisterForm.resx">
       <DependentUpon>RegisterForm.cs</DependentUpon>
@@ -130,6 +131,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Default.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

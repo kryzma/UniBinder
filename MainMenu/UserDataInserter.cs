@@ -9,18 +9,15 @@ namespace LogIn
 {
     class UserDataInserter : IUserDataInserter
     {
-        public void sendUserData(Person person)
+        public void SendUserData(Person person)
         {
-            string personInfoSubmitionQuerry = givePersonInfoSubmitQuerry(person);
-            callQuerry(personInfoSubmitionQuerry);
+            string personInfoSubmitionQuery = GivePersonInfoSubmitQuerry(person);
+            DataBaseHelper.instance.SqlCommandExcecutor(personInfoSubmitionQuery);
 
-            foreach(var subject in person.Subjects)
-            {
-                string personSubjectSubmitQuerry = givePersonSubjectSubmitQuerry(person.ID,subject);
-                callQuerry(personSubjectSubmitQuerry);
-            }
+            person.Subjects.ForEach((subject) =>
+                DataBaseHelper.instance.SqlCommandExcecutor(GivePersonSubjectSubmitQuerry(person.ID, subject)));
         }
-        private string givePersonInfoSubmitQuerry(Person person)
+        private string GivePersonInfoSubmitQuerry(Person person)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("insert into Persons ");
@@ -28,21 +25,14 @@ namespace LogIn
             System.Windows.Forms.MessageBox.Show(sb.ToString());
             return sb.ToString();
         }
-        private string givePersonSubjectSubmitQuerry(int ID,Subject subject)
+        private string GivePersonSubjectSubmitQuerry(int ID,Subject subject)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("insert into subjects ");
             sb.Append("values ( " + ID + ",'" + subject.Name + "');");
             return sb.ToString();
         }
-        private void callQuerry(string querry)
-        {
-            SqlConnection connection = DataBaseInfo.getSqlConnection();
-            connection.Open();
-            SqlCommand command = new SqlCommand(querry, connection);
-            command.ExecuteNonQuery();
-            connection.Close();
-        }
+
     }
 
 }

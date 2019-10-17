@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 
 namespace LogIn
@@ -9,17 +10,10 @@ namespace LogIn
     {
         public Boolean CheckLogInValidity(string nickname, string password)
         {
-            AccesUserData accesUserData = new AccesUserData();
-            List<LogIn.Person> users = accesUserData.GetUserList();
-            foreach (var x in users)
-            {
-                if (nickname.Equals(x.Name) && password.Equals(x.Password))
-                {
-                    return true;
-                }
-            }
-            // Couldn't find your account
-            return false;
+            List<LogIn.Person> users = AccesUserData.instance.GetUserList();
+            return users.Any((user)=> nickname.Equals(user.Name) && password.Equals(user.Password));
+            // Without LINQ
+            //return users.Exists((user) => nickname.Equals(user.Name) && password.Equals(user.Password));
         }
     }
 }

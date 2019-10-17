@@ -14,56 +14,54 @@ namespace LogIn
     {
         string nickname;
         string password;
+        private MainMenuForm mainMenu;
 
-        MainMenu mainMenu;
-
-        public LoginForm(MainMenu mainMenu)
+        public LoginForm(MainMenuForm mainMenu)
         {
             this.mainMenu = mainMenu; 
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
 
             if(!CheckFieldValidity(nickname,password))
             {
-                System.Windows.Forms.MessageBox.Show("Insert login data");
+                MessageBox.Show(Properties.Resources.MissingLoginData);
                 return;
             }
 
             CheckLogIn checkLogin = new CheckLogIn();
             if (checkLogin.CheckLogInValidity(nickname, password))
             {
-                System.Windows.Forms.MessageBox.Show("Login succesful");
-                this.Hide();
-                MainProgram mainProgram = new MainProgram(BasicFunctions.UserID(nickname));
+                Hide();
+                MainProgramForm mainProgram = new MainProgramForm(BasicFunctions.GetUserIDFromName(nickname));
                 mainProgram.Show();
             }
             else
             {
-                System.Windows.Forms.MessageBox.Show("Login unsuccesful");
+                MessageBox.Show(Properties.Resources.BadLogin);
             }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void TextBox1_TextChanged(object sender, EventArgs e)
         {
             nickname = textBox1.Text;
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
+        private void TextBox2_TextChanged(object sender, EventArgs e)
         {
             password = textBox2.Text;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             this.Hide();
             mainMenu.Show();
         }
-        private Boolean CheckFieldValidity(string name,string password)
+        private Boolean CheckFieldValidity(string nickname,string password)
         {
-            if (name == null || password == null) return false;
+            if (nickname == null || password == null) return false;
             return true;
         }
     }

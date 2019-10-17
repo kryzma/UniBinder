@@ -8,6 +8,6 @@ namespace LogIn
 {
     interface IUserDataInserter
     {
-        void sendUserData(Person person);
+        void SendUserData(Person person);
     }
 }

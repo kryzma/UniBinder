@@ -15,25 +15,23 @@ namespace LogIn
     {
         private Image image;
         private List<Subject> subjects = new List<Subject>();
-        MainProgram mainProgram;
+        MainProgramForm mainProgram;
 
         private int ID { get; set; }
 
-        public UserSettingsMenu(MainProgram mainProgram,int ID)
+        public UserSettingsMenu(MainProgramForm mainProgram,int ID)
         {
-            ImageProcessor imageProcessor = new ImageProcessor();
-            this.image = imageProcessor.defaultImage;
             this.ID = ID;
             this.mainProgram = mainProgram;
             InitializeComponent();
             SetUpCheckedList();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string selectedFile = openFileDialog.FileName;
                 image = Image.FromFile(selectedFile);
@@ -45,64 +43,43 @@ namespace LogIn
         private void SetUpCheckedList()
         {
             GetSubjectsList();
-            foreach(var subject in this.subjects)
-            {
-                checkedListBox1.Items.Add(subject.Name);
-            }
+            subjects.ForEach((subject) => checkedListBox1.Items.Add(subject.Name));
         }
 
         private void GetSubjectsList()
         {
-            SqlConnection connection = DataBaseInfo.getSqlConnection();
-            connection.Open();
-            string personInfoQuerry = "select * from subjectslist";
-            SqlCommand command = new SqlCommand(personInfoQuerry, connection);
-            SqlDataReader reader = command.ExecuteReader();
+            SqlDataReader reader = DataBaseHelper.instance.GetSqlDataReader(Properties.Resources.GetExistingSubjects);
 
             while (reader.Read())
             {
-                this.subjects.Add(new Subject(reader.GetString(0)));
+                subjects.Add(new Subject(reader.GetString(0)));
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             ClearOldSubjects();
             LoadNewSubjects();
-            this.Hide();
+            Hide();
             mainProgram.Show();
         }
         private void ClearOldSubjects()
         {
-            string querry = "Delete from Subjects Where ID = " + ID;
-            SqlConnection connection = DataBaseInfo.getSqlConnection();
-            connection.Open();
-            SqlCommand command = new SqlCommand(querry, connection);
-            command.ExecuteNonQuery();
-            connection.Close();
+            DataBaseHelper.instance.SqlCommandExcecutor("Delete from Subjects Where ID = " + ID);
         }
         private void LoadNewSubjects()
         {
-            SqlConnection connection = DataBaseInfo.getSqlConnection();
-            connection.Open();
-            foreach(string subject in checkedListBox1.CheckedItems)
-            {
-                string querry = "Insert into Subjects values('" + ID + "','" + subject + "')";
-                SqlCommand command = new SqlCommand(querry, connection);
-                command.ExecuteNonQuery();
-            }
-            connection.Close();
+            // ITERATE OVER checkedlist and insert subjects
+
+            //checkedListBox1.CheckedItems.GetEnumerator
+
         }
         private void LoadImage()
         {
             ImageProcessor imageProcessor = new ImageProcessor();
-            string querry = "UPDATE Persons SET Image = '" + 
+            string query = "UPDATE Persons SET Image = '" + 
                 imageProcessor.ImageToBase64(image, System.Drawing.Imaging.ImageFormat.Png) + "' where ID =" + ID;
-            SqlConnection connection = DataBaseInfo.getSqlConnection();
-            connection.Open();
-            SqlCommand command = new SqlCommand(querry, connection);
-            command.ExecuteNonQuery();
-            connection.Close();
+            DataBaseHelper.instance.SqlCommandExcecutor(query);
         }
     }
 }
