@@ -1,6 +1,0 @@
-C:\Users\manta\source\repos\LogIn\LogIn\obj\Debug\LogIn.LoginForm.resources
-C:\Users\manta\source\repos\LogIn\LogIn\obj\Debug\LogIn.Properties.Resources.resources
-C:\Users\manta\source\repos\LogIn\LogIn\obj\Debug\LogIn.StartMenu.resources
-C:\Users\manta\source\repos\LogIn\LogIn\obj\Debug\UniBinder.csproj.GenerateResource.cache
-C:\Users\manta\source\repos\LogIn\LogIn\obj\Debug\LogIn.exe
-C:\Users\manta\source\repos\LogIn\LogIn\obj\Debug\LogIn.pdb
