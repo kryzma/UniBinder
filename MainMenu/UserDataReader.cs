@@ -8,7 +8,19 @@ using System.Windows.Forms;
 
 namespace LogIn
 {
-    class UserDataReader : IUserDataReader
+
+    public static class ExtensionSQLCheck
+    {
+        public static void Query(this StringBuilder sb, int ID)
+        {
+            sb.Append("select Name ");
+            sb.Append("from Subjects ");
+            sb.Append("where ID = ");
+            sb.Append(ID.ToString());
+        }
+    }
+
+    public class UserDataReader : IUserDataReader
     {
 
         public List<Person> ReadUserData()
@@ -24,7 +36,7 @@ namespace LogIn
             while (reader.Read())
             {
                 int ID = reader.GetInt32(0);
-                List<Subject> Subjects = GetPersonSubjectsList(ID);
+                var Subjects = GetPersonSubjectsList(ID);
                 usersList.Add(new Person(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3),
                     reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(6),
                     reader.GetInt32(7), reader.GetInt32(8), Subjects));
@@ -57,10 +69,7 @@ namespace LogIn
         private string GivePersonSubjectListQuerry(int ID)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("select Name ");
-            sb.Append("from Subjects ");
-            sb.Append("where ID = ");
-            sb.Append(ID.ToString());
+            sb.Query(ID);
             return sb.ToString();
         }
     }

@@ -41,7 +41,7 @@ namespace LogIn
         private void UpdatePerson()
         {
             List<Person> users = AccesUserData.instance.GetUserList();
-            if (users[GetNormalisedCurrentUserId()].Name == userName)
+            //if (users[GetNormalisedCurrentUserId()].Name == userName)
 
 
             Console.WriteLine(users.Count);
@@ -101,17 +101,8 @@ namespace LogIn
         {
             currentID++;
             UpdatePersonRight();
-        }
-
-        private void NextRightPerson()
-        {
-            //if (CurrentID == userSettingsMenu.GetCurrentUserID()) CurrentID++;
-            //if (CurrentID == userSettingsMenu.GetCurrentUserID()) Console.WriteLine(CurrentID);
-            //List<Person> users = AccesUserData.instance.GetUserList();
-            //if (users[CurrentID].Name == UserName) Console.WriteLine(UserName);
             //UpdatePerson();
         }
-
 
         private void Contacts_Button(object sender, EventArgs e)
         {

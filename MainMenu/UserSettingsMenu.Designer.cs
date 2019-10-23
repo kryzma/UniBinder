@@ -38,7 +38,7 @@
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(107, 82);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(188, 28);
             this.button1.TabIndex = 0;
@@ -49,7 +49,7 @@
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(487, 401);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(100, 28);
             this.button2.TabIndex = 1;
@@ -61,7 +61,7 @@
             // 
             this.SubjectListBox.FormattingEnabled = true;
             this.SubjectListBox.Location = new System.Drawing.Point(763, 118);
-            this.SubjectListBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.SubjectListBox.Margin = new System.Windows.Forms.Padding(4);
             this.SubjectListBox.Name = "SubjectListBox";
             this.SubjectListBox.Size = new System.Drawing.Size(247, 276);
             this.SubjectListBox.TabIndex = 2;
@@ -69,7 +69,7 @@
             // UserImageBox
             // 
             this.UserImageBox.Location = new System.Drawing.Point(16, 118);
-            this.UserImageBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.UserImageBox.Margin = new System.Windows.Forms.Padding(4);
             this.UserImageBox.Name = "UserImageBox";
             this.UserImageBox.Size = new System.Drawing.Size(435, 340);
             this.UserImageBox.TabIndex = 3;
@@ -84,9 +84,9 @@
             this.Controls.Add(this.SubjectListBox);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "UserSettingsMenu";
-            this.Text = "UserSettingsMenu";
+            this.Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)(this.UserImageBox)).EndInit();
             this.ResumeLayout(false);
 

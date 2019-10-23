@@ -53,7 +53,7 @@ namespace LogIn
             Hide();
             mainMenu.Show();
         }
-        Boolean ValidateData(string name,string email,string password)
+        private Boolean ValidateData(string name,string email,string password)
         {
             if(name == null || email == null || password == null)
             {
@@ -83,6 +83,8 @@ namespace LogIn
         private Boolean CorrectEmailForm(string email)
         {
             Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            //Regex regex = new Regex(@"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$");
+
             Match match = regex.Match(email);
             if (match.Success) return true;
             else return false;
@@ -90,6 +92,7 @@ namespace LogIn
         Boolean UsernameInUse(string name)
         {
             List<Person> userList = AccesUserData.instance.GetUserList();
+
             return userList.Exists((user) => user.Name.Equals(name));
         }
         Boolean EmailInUse(string email)
@@ -97,5 +100,6 @@ namespace LogIn
             List<Person> userList = AccesUserData.instance.GetUserList();
             return userList.Exists((user) => user.Email.Equals(email));
         }
+
     }
 }

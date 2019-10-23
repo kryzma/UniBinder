@@ -2,12 +2,16 @@
 
 public struct Subject
 {
-    public string Name;
+    private string name;
 
-    public string SubjectName { get => Name; set => Name = value; }
-
-    public Subject(string name)
+    public Subject(string name1)
     {
-        this.Name = name;
+        this.name = name1;
+    }
+
+    public string Name
+    {
+        get { return name; }
+        set { name = value; }
     }
 }

@@ -56,6 +56,32 @@ namespace LogIn
             //{
             //Console.WriteLine(subjectArray[i]);
             //}
+
+            //widening
+            short i1 = 5;
+            int i2 = i1;
+
+            checked
+            {
+                //narrowing
+                short i3 = (short)i2;
+            }
+            getValue(2, "asd");
+            getValue(2, "asd", "asd");
+            getValue(3, "asdas", age:2);
+            
+
         }
+
+        private void getValue(int value, string name, string email ="", int age =0)
+        {
+            Console.WriteLine(email);
+            Console.WriteLine(value);
+            Console.WriteLine(name);
+            Console.WriteLine(age);
+        }
+
+        
+
     }
 }
