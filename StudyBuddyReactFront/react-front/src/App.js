@@ -1,25 +1,20 @@
 import React from "react"
+import Login from "./pages/login/components/Login"
+import Register from "./pages/register/components/Register"
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 
-import Container from "react-bootstrap/Container"
-import Col from "react-bootstrap/Col"
-
-import Logo from "./components/Logo"
-import Username from "./components/Username"
-import Password from "./components/Password"
+import 'typeface-roboto';
 
 import "./styles/App.css"
 
 function App() {
   return (
-    <Container>
-      <Col lg={{ span: 4, offset: 4 }}>
-        <div className="app-wrapper">
-          <Logo />
-          <Username />
-          <Password />
-        </div>
-      </Col>
-    </Container>
+    <Router>
+      <Switch>
+        <Route path="/" exact component={Login} />
+        <Route path="/register" component={Register} />
+      </Switch>
+    </Router>
   )
 }
 
