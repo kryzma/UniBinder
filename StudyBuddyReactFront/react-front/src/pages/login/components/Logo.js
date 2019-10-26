@@ -1,5 +1,5 @@
 import React from "react"
-import LogoPng from "../../../images/logo-3.png"
+import LogoPng from "../../../images/logo.png"
 
 import Container from "react-bootstrap/Container"
 import Col from "react-bootstrap/Col"

@@ -7,7 +7,6 @@ import "../styles/Password.css"
 
 function Password() {
   return (
-
     <Col lg={{ span: 12 }}>
       <TextField
         label="Password"
