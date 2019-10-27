@@ -17,17 +17,19 @@ import "../styles/Login.css"
 
 function Login() {
   return (
-    <Container className="login-page">
-      <Col lg={{ span: 4, offset: 4 }} md={{ span: 6, offset: 3 }} sm={{ span: 8, offset: 2 }} xs={{ span: 12, offset: 0 }}>
-        <Paper className="input-form-paper">
-          <Logo />
-          <Username />
-          <Password />
-          <LoginButton />
-          <Register />
-        </Paper>
-      </Col>
-    </Container>
+    <div className="login-wrapper">
+      <Container className="login-page">
+        <Col lg={{ span: 4, offset: 4 }} md={{ span: 6, offset: 3 }} sm={{ span: 8, offset: 2 }} xs={{ span: 12, offset: 0 }}>
+          <Paper className="input-form-paper">
+            <Logo />
+            <Username />
+            <Password />
+            <LoginButton />
+            <Register />
+          </Paper>
+        </Col>
+      </Container>
+    </div>
   )
 }
 

@@ -5,3 +5,7 @@
   .login-page {
     padding-top: 100px;
   }
+  .login-wrapper {
+  height: 100vh;
+  background: #3f51b5;
+}

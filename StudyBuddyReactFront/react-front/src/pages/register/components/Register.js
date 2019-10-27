@@ -18,7 +18,7 @@ import "../styles/Register.css"
 
 function Register() {
     return (
-        <div>
+        <div className="register-wrapper">
             <Container className="register-page">
                 <Col lg={{ span: 4, offset: 4 }} md={{ span: 6, offset: 3 }} sm={{ span: 8, offset: 2 }} xs={{ span: 12, offset: 0 }}>
                     <Paper className="input-form-paper">

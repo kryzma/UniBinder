@@ -1,0 +1,10 @@
+.profile-wrapper {
+  padding-top: 10px;
+  color: white;
+  font-size: 18px;
+}
+
+.profile-wrapper:hover {
+  cursor: pointer;
+  color: #ddd;
+}

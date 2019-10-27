@@ -1,0 +1,18 @@
+.arrow-back-wrapper {
+  width: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+  color: #3f51b5;
+}
+
+.arrow-back {
+  font-size: 60px !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.arrow-back:hover {
+  cursor: pointer;
+  transform: scale(1.2) rotate(360deg);
+}

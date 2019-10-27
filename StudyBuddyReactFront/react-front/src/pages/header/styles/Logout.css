@@ -1,0 +1,15 @@
+.logout-wrapper {
+  padding-top: 10px;
+  color: white;
+  padding-left: 20px;
+  font-size: 18px;
+}
+
+.logout-link {
+  color: white;
+}
+
+.logout-link:hover {
+  color: #ddd;
+  text-decoration: none;
+}
