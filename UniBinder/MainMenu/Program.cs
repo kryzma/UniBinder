@@ -17,8 +17,14 @@ namespace LogIn
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new UserSettingsMenu());
+            SubjectArrayManager test = new SubjectArrayManager();
+            test.AddSubjectsToArray();
+            GroupJoinManager test2 = new GroupJoinManager();
+            test2.GroupJoin();
+            test2.DisplayGeneric();
             Application.Run(new EntryWindowForm());
             DataBaseHelper dataBaseHelper = new DataBaseHelper();
+
         }
     }
 }

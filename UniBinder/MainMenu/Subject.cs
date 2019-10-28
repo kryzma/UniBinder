@@ -1,13 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
+[DataContract]
 public struct Subject
 {
-    public string Name;
-
-    public string SubjectName { get => Name; set => Name = value; }
-
-    public Subject(string name)
+    public Subject(string name1)
     {
-        this.Name = name;
+        this.Name = name1;
     }
+    [DataMember]
+    public string Name { get; set; }
 }

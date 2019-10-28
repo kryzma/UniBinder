@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogIn", "LogIn.csproj", "{0184F9F6-6C3C-4BBB-9F5B-AD24EE822A54}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniBinderAPI", "..\UniBinderAPI\UniBinderAPI.csproj", "{360C7470-062E-4059-9AAD-AD3924BE2D9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniBinderAPI.Tests", "UniBinderAPI.Tests\UniBinderAPI.Tests.csproj", "{10F5E2BC-7466-4EA9-88B3-E9D61801562A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{0184F9F6-6C3C-4BBB-9F5B-AD24EE822A54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0184F9F6-6C3C-4BBB-9F5B-AD24EE822A54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0184F9F6-6C3C-4BBB-9F5B-AD24EE822A54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{360C7470-062E-4059-9AAD-AD3924BE2D9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{360C7470-062E-4059-9AAD-AD3924BE2D9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{360C7470-062E-4059-9AAD-AD3924BE2D9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{360C7470-062E-4059-9AAD-AD3924BE2D9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10F5E2BC-7466-4EA9-88B3-E9D61801562A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10F5E2BC-7466-4EA9-88B3-E9D61801562A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10F5E2BC-7466-4EA9-88B3-E9D61801562A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10F5E2BC-7466-4EA9-88B3-E9D61801562A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

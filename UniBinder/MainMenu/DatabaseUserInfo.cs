@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LogIn
 {
-    static class DatabaseUserInfo
+   public static class DatabaseUserInfo
     {
         public static int UserCount()
         {
@@ -20,6 +20,13 @@ namespace LogIn
             SqlDataReader reader = DataBaseHelper.instance.GetSqlDataReader("select ID from Persons where name = '" + name + "'");
             reader.Read();
             return reader.GetInt32(0);
+        }
+
+        public static string  GetUserNameFromId(int ID)
+        {
+            SqlDataReader reader = DataBaseHelper.instance.GetSqlDataReader("select name from Persons where ID ='" + ID + "'");
+            reader.Read();
+            return reader.GetString(0);
         }
     }
 }

@@ -12,13 +12,13 @@ using System.Windows.Forms;
 
 namespace LogIn
 {
-    public partial class UserSettingsMenu : Form, IEnumerator
+    public partial class UserSettingsMenu : Form, IEnumerator, IEnumerable
     {
         private Image image;
         private List<Subject> subjects = new List<Subject>();
         MainProgramForm mainProgram;
 
-        private int ID { get; set; }
+        public int ID { get; set; }
 
         public object Current => throw new NotImplementedException();
 
@@ -30,9 +30,15 @@ namespace LogIn
             SetUpCheckedList();
         }
 
+        public int GetCurrentUserID()
+        {
+            return ID;
+        }
         private void SetUpCheckedList()
         {
             GetSubjectsList();
+           
+            
             IEnumerator enumerator = subjects.GetEnumerator();
             while(enumerator.MoveNext())
             {
@@ -59,12 +65,21 @@ namespace LogIn
         }
         private void LoadNewSubjects()
         {
-            // ITERATE OVER checkedlist and insert subjects
-            //checkedListBox1.CheckedItems.GetEnumerator
-            foreach(var item in SubjectListBox.CheckedItems)
+
+            IEnumerable a = SubjectListBox.CheckedItems;
+            foreach (var item in a)
             {
                 DataBaseHelper.instance.SqlCommandExcecutor("Insert into Subjects values('" + ID + "','" + item + "')");
             }
+
+            // ITERATE OVER checkedlist and insert subjects
+            //checkedListBox1.CheckedItems.GetEnumerator
+            //foreach (var item in SubjectListBox.CheckedItems)
+            //{
+            //    DataBaseHelper.instance.SqlCommandExcecutor("Insert into Subjects values('" + ID + "','" + item + "')");
+            //}
+            //Console.WriteLine(ID);
+
         }
 
         private void LoadImage()
@@ -104,6 +119,11 @@ namespace LogIn
             LoadNewSubjects();
             Hide();
             mainProgram.Show();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            throw new NotImplementedException();
         }
     }
 }

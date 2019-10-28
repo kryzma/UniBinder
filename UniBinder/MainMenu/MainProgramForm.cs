@@ -15,17 +15,20 @@ namespace LogIn
     {
 
         private int NORMALISE = 1000;
-        private int CurrentID { get; set; }
+        private int currentID { get; set; }
 
-        private int TotalUsersCount { get; set; }
+        private int totalUsersCount { get; set; }
+
+        private string userName { get; set; }
 
         UserSettingsMenu userSettingsMenu;
 
-        public MainProgramForm(int ID)
+        public MainProgramForm(int ID, string Name)
         {
             userSettingsMenu = new UserSettingsMenu(this,ID);
-            CurrentID = 0;
-            TotalUsersCount = DatabaseUserInfo.UserCount();
+            currentID = 0;
+            userName = Name;
+            totalUsersCount = DatabaseUserInfo.UserCount();
             InitializeComponent();
         }
 
@@ -37,19 +40,42 @@ namespace LogIn
 
         private void UpdatePerson()
         {
-
             List<Person> users = AccesUserData.instance.GetUserList();
+            //if (users[GetNormalisedCurrentUserId()].Name == userName)
 
-            pictureBox1.Image = users[GetNormalisedCurrentUserId()].image;
+
+            Console.WriteLine(users.Count);
+            //pictureBox1.Image = users[GetNormalisedCurrentUserId()].image;
             label1.Text = users[GetNormalisedCurrentUserId()].Name;
             label3.Text = "";
-
             users[GetNormalisedCurrentUserId()].Subjects.ForEach((subject) => label3.Text += subject.Name + '\n');
-
         }
+
+        private void UpdatePersonLeft()
+        {
+            List<Person> users = AccesUserData.instance.GetUserList();
+            if (users[GetNormalisedCurrentUserId()].Name == userName) currentID--;
+            UpdateNamePhoto(users);
+        }
+
+        private void UpdatePersonRight()
+        {
+            List<Person> users = AccesUserData.instance.GetUserList();
+            if (users[GetNormalisedCurrentUserId()].Name == userName) currentID++;
+            UpdateNamePhoto(users);
+        }
+
+        private void UpdateNamePhoto(List<Person> users)
+        {
+            //pictureBox1.Image = users[GetNormalisedCurrentUserId()].image;
+            label1.Text = users[GetNormalisedCurrentUserId()].Name;
+            label3.Text = "";
+            users[GetNormalisedCurrentUserId()].Subjects.ForEach((subject) => label3.Text += subject.Name + '\n');
+        }
+
         private int GetNormalisedCurrentUserId()
         {
-            return (CurrentID + NORMALISE) % TotalUsersCount;
+            return (currentID + NORMALISE) % totalUsersCount;
         }
 
         public IEnumerator GetEnumerator()
@@ -60,19 +86,22 @@ namespace LogIn
         private void UserSettings_Button(object sender, EventArgs e)
         {
             Hide();
+            
             userSettingsMenu.Show();
         }
 
         private void SwipeLeft_Button(object sender, EventArgs e)
         {
-            CurrentID--;
-            UpdatePerson();
+            currentID--;
+            UpdatePersonLeft();
+            //UpdatePerson();
         }
 
         private void SwipeRight_Button(object sender, EventArgs e)
         {
-            CurrentID++;
-            UpdatePerson();
+            currentID++;
+            UpdatePersonRight();
+            //UpdatePerson();
         }
 
         private void Contacts_Button(object sender, EventArgs e)

@@ -15,7 +15,7 @@ namespace LogIn
             DataBaseHelper.instance.SqlCommandExcecutor(personInfoSubmitionQuery);
 
             person.Subjects.ForEach((subject) =>
-                DataBaseHelper.instance.SqlCommandExcecutor(GivePersonSubjectSubmitQuerry(person.ID, subject)));
+                DataBaseHelper.instance.SqlCommandExcecutor(GivePersonSubjectSubmitQuerry((person.ID), subject)));
         }
         private string GivePersonInfoSubmitQuerry(Person person)
         {

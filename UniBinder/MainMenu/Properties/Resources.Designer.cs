@@ -68,7 +68,7 @@ namespace LogIn.Properties {
                 return ResourceManager.GetString("BadLogin", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>

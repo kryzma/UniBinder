@@ -37,7 +37,9 @@
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,6 +55,8 @@
     <Compile Include="DatabaseUserInfo.cs" />
     <Compile Include="CheckLogIn.cs" />
     <Compile Include="DataBaseHelper.cs" />
+    <Compile Include="GenericList.cs" />
+    <Compile Include="GroupJoinManager.cs" />
     <Compile Include="ImageProcessor.cs" />
     <Compile Include="MainProgramForm.cs">
       <SubType>Form</SubType>
@@ -60,6 +64,7 @@
     <Compile Include="MainProgramForm.Designer.cs">
       <DependentUpon>MainProgramForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PersonID.cs" />
     <Compile Include="RegisterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +81,8 @@
     <Compile Include="Session.cs" />
     <Compile Include="Subject.cs" />
     <Compile Include="Person.cs" />
+    <Compile Include="SubjectArrayManager.cs" />
+    <Compile Include="SubjectID.cs" />
     <Compile Include="UserDataInserter.cs" />
     <Compile Include="UserDataReader.cs" />
     <Compile Include="LoginForm.cs">

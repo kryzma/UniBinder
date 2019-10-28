@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogIn
 {
-    class AccesUserData
+    public class AccesUserData
     {
         List<Person> userList;
         public static AccesUserData instance = new AccesUserData();
