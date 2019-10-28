@@ -76,6 +76,7 @@
     <Compile Include="Session.cs" />
     <Compile Include="Subject.cs" />
     <Compile Include="Person.cs" />
+    <Compile Include="SubjectArrayManager.cs" />
     <Compile Include="UserDataInserter.cs" />
     <Compile Include="UserDataReader.cs" />
     <Compile Include="LoginForm.cs">

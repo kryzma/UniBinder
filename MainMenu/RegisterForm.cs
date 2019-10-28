@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -52,7 +53,7 @@ namespace LogIn
             Hide();
             mainMenu.Show();
         }
-        Boolean ValidateData(string name,string email,string password)
+        private Boolean ValidateData(string name,string email,string password)
         {
             if(name == null || email == null || password == null)
             {
@@ -64,16 +65,34 @@ namespace LogIn
                 MessageBox.Show(Properties.Resources.NickNameInUse);
                 return false;
             }
+            if(!CorrectEmailForm(email))
+            {
+                MessageBox.Show(email + " write correct email adress","Wrong email adress");
+                return false;
+            }
+
             if (EmailInUse(email))
             {
                 MessageBox.Show(Properties.Resources.EmailInUse);
                 return false;
             }
+            
             return true;
+        }
+
+        private Boolean CorrectEmailForm(string email)
+        {
+            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            //Regex regex = new Regex(@"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$");
+
+            Match match = regex.Match(email);
+            if (match.Success) return true;
+            else return false;
         }
         Boolean UsernameInUse(string name)
         {
             List<Person> userList = AccesUserData.instance.GetUserList();
+
             return userList.Exists((user) => user.Name.Equals(name));
         }
         Boolean EmailInUse(string email)
@@ -81,5 +100,6 @@ namespace LogIn
             List<Person> userList = AccesUserData.instance.GetUserList();
             return userList.Exists((user) => user.Email.Equals(email));
         }
+
     }
 }

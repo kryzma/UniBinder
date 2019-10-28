@@ -9,10 +9,12 @@ namespace LogIn
 {
     class DataBaseHelper
     {
-        public static string DataSource = "studybuddy.database.windows.net";
-        public static string UserID = "notadmin";
-        public static string Password = "studybuddy321?";
-        public static string InitialCatalog = "studybuddy";
+
+        public static string dataSource = "studybuddy.database.windows.net";
+        public static string userID = "notadmin";
+        public static string password = "321?studybuddy";
+        public static string initialCatalog = "studybuddy";
+
 
         public SqlConnection connection;
 
@@ -20,10 +22,10 @@ namespace LogIn
         public DataBaseHelper()
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            builder.DataSource = DataBaseHelper.DataSource;
-            builder.UserID = DataBaseHelper.UserID;
-            builder.Password = DataBaseHelper.Password;
-            builder.InitialCatalog = DataBaseHelper.InitialCatalog;
+            builder.DataSource = DataBaseHelper.dataSource;
+            builder.UserID = DataBaseHelper.userID;
+            builder.Password = DataBaseHelper.password;
+            builder.InitialCatalog = DataBaseHelper.initialCatalog;
             builder.MultipleActiveResultSets = true;
             connection = new SqlConnection(builder.ConnectionString);
             connection.Open();
