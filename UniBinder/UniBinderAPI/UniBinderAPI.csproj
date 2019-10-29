@@ -158,10 +158,20 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Database\AccesUserData.cs" />
+    <Compile Include="Database\DataBaseHelper.cs" />
+    <Compile Include="Database\DatabaseUserInfo.cs" />
+    <Compile Include="Database\ImageProcessor.cs" />
+    <Compile Include="Database\IUserDataInserter.cs" />
+    <Compile Include="Database\IUserDataReader.cs" />
+    <Compile Include="Database\UserDataInserter.cs" />
+    <Compile Include="Database\UserDataReader.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\p.cs" />
+    <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\Subject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -246,12 +256,6 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MainMenu\LogIn.csproj">
-      <Project>{0184F9F6-6C3C-4BBB-9F5B-AD24EE822A54}</Project>
-      <Name>LogIn</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

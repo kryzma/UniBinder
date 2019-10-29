@@ -1,10 +1,11 @@
-﻿using LogIn;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using UniBinderAPI.Database;
 using UniBinderAPI.Models;
 
 namespace UniBinderAPI.Controllers
@@ -13,10 +14,9 @@ namespace UniBinderAPI.Controllers
     {
         List<P> p = new List<P>();
         List<Person> people = new List<Person>();
-        List<Subject> subjects = new List<Subject>();
         PersonController()
         {
-            subjects.Add(new Subject { Name = "math" });
+
             UserDataReader userDataReader = new UserDataReader();
             people = userDataReader.ReadUserData();
 

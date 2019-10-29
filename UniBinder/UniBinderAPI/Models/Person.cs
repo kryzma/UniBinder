@@ -7,7 +7,8 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
 
-namespace LogIn
+
+namespace UniBinderAPI.Models
 {
     [DataContract]
     public class Person
@@ -34,9 +35,9 @@ namespace LogIn
         public List<Subject> Subjects { get; set; }
         [DataMember]
         public Image image { get; set; }
-        
+
         public Person(int ID, string Name, string Password, string Email,
-            int Age,int HelpScore,int Likes,int Dislikes,int PeopleHelped, List<Subject> Subjects)
+            int Age, int HelpScore, int Likes, int Dislikes, int PeopleHelped, List<Subject> Subjects)
         {
             this.ID = ID;
             this.Name = Name;
