@@ -8,7 +8,7 @@ function Logout() {
   return (
     <div className="logout-wrapper">
       <Link to="/" className="logout-link">
-        <span className="pr-2 pt-3">
+        <span className="pr-2">
           Log out
       </span>
         <ExitToAppOutlinedIcon />

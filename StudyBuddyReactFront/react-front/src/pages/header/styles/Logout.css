@@ -1,8 +1,10 @@
 .logout-wrapper {
-  padding-top: 10px;
   color: white;
   padding-left: 20px;
-  font-size: 18px;
+  font-size: 2vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logout-link {

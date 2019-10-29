@@ -2,17 +2,20 @@ import React from "react"
 
 import Container from "react-bootstrap/Container"
 
-function Statistics() {
-  return (
-    <Container>
-      <div>
-        Like score
+class Statistics extends React.Component {
+  render() {
+    return (
+      <Container>
         <div>
-          9.99
+          Likes
+          <div>
+            {this.props.personLikes}
+          </div>
         </div>
-      </div>
-    </Container>
-  )
+      </Container>
+    )
+  }
+
 }
 
 export default Statistics

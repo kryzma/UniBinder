@@ -6,7 +6,7 @@ import "../styles/Profile.css"
 function Profile() {
   return (
     <div className="profile-wrapper mr-3">
-      <span className="pr-2 pt-3">
+      <span className="pr-2">
         {'{'}Username{'}'}
       </span>
       <PersonOutlineIcon />

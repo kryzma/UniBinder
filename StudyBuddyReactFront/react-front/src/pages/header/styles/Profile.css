@@ -1,7 +1,9 @@
 .profile-wrapper {
-  padding-top: 10px;
   color: white;
-  font-size: 18px;
+  font-size: 2vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .profile-wrapper:hover {

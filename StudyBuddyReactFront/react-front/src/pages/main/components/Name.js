@@ -4,14 +4,18 @@ import "../styles/Name.css"
 
 import Col from "react-bootstrap/Col"
 
-function Name() {
-  return (
-    <Col>
-      <div className="name-wrapper">
-        Vardas Pavarde
+class Name extends React.Component {
+
+  render() {
+    return (
+      <Col>
+        <div className="name-wrapper">
+          {this.props.personName}
         </div>
-    </Col>
-  )
+      </Col>
+    )
+  }
+
 }
 
 export default Name

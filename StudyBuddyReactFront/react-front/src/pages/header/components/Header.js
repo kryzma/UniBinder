@@ -18,7 +18,7 @@ function Header() {
           <Logo />
         </div>
         <div className="right">
-          <Row>
+          <Row className="right-row">
             <Profile />
             <Logout />
           </Row>

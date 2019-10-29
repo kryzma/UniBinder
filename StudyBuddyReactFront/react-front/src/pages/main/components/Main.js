@@ -1,50 +1,102 @@
 import React from "react"
 
 import Header from "../../header/components/Header"
-import Name from "./Name"
-import Photo from "./Photo"
-import Subjects from "./Subjects"
-import Statistics from "./Statistics"
-import MatchButton from "./MatchButton"
 import ArrowForward from "./ArrowForward"
 import ArrowBack from "./ArrowBack"
+import MainPaper from "./MainPaper"
 
 import Container from "react-bootstrap/Container"
 import Col from "react-bootstrap/Col"
-import Paper from "@material-ui/core/Paper"
 import Row from "react-bootstrap/Row"
 
 import "../styles/Main.css"
 
-function Main() {
-  return (
-    <div className="main-wrapper">
-      <Header />
-      <Container>
-        <Col lg={{ span: 10, offset: 1 }}>
-          <Row>
-            <ArrowBack />
-            <Paper className="main-paper">
-              <Name />
-              <Row className="remove-margins">
-                <Col lg={{ span: 4 }}>
-                  <Statistics />
-                </Col>
-                <Col lg={{ span: 4 }}>
-                  <Photo />
-                </Col>
-                <Col lg={{ span: 4 }}>
-                  <Subjects />
-                </Col>
-              </Row>
-              <MatchButton />
-            </Paper>
-            <ArrowForward />
-          </Row>
-        </Col>
-      </Container>
-    </div>
-  )
+const API = "https://localhost:44363/api/Person/count"
+
+class Main extends React.Component {
+
+  constructor() {
+    super()
+
+    this.state = {
+      currentId: 0,
+      userCount: 0
+    }
+    this.componentDidMount = this.componentDidMount.bind(this)
+    this.forwardId = this.forwardId.bind(this)
+    this.backwardId = this.backwardId.bind(this)
+  }
+
+  componentDidMount() {
+    fetch(API)
+      .then(response => response.json())
+      .then(response => this.setState({
+        userCount: response - 1
+      }))
+      .catch(console.log)
+  }
+
+  forwardId() {
+    console.log("Current id: " + this.state.currentId)
+    console.log("Current userCount: " + this.state.userCount)
+    if (this.state.currentId < this.state.userCount) {
+      this.setState(prevState => {
+        return {
+          currentId: prevState.currentId + 1
+        }
+      })
+    }
+    else {
+      this.setState(prevState => {
+        let zero = 0
+        return {
+          currentId: zero
+        }
+      })
+      console.log("else statement")
+    }
+  }
+
+  backwardId() {
+    console.log("Current id: " + this.state.currentId)
+    console.log("Current userCount: " + this.state.userCount)
+    if (this.state.currentId > 0) {
+      this.setState(prevState => {
+        return {
+          currentId: prevState.currentId - 1
+        }
+      })
+    }
+    else {
+      this.setState(prevState => {
+        let max = this.state.userCount
+        return {
+          currentId: max
+        }
+      })
+      console.log("else statement")
+    }
+  }
+
+
+
+  render() {
+    return (
+      <div className="main-wrapper">
+        <Header />
+        <Container>
+          <Col lg={{ span: 10, offset: 1 }}>
+            <Row>
+              <ArrowBack changeId={this.backwardId} />
+              <MainPaper currentId={this.state.currentId} />
+              <ArrowForward changeId={this.forwardId} />
+            </Row>
+          </Col>
+        </Container>
+      </div>
+    )
+  }
+
 }
 
 export default Main                                                    
