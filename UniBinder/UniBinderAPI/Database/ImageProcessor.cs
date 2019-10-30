@@ -4,12 +4,14 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 
 namespace UniBinderAPI.Database
 {
+    [DataContract]
     class ImageProcessor
     {
         public ImageProcessor()
@@ -22,7 +24,6 @@ namespace UniBinderAPI.Database
             {
                 image.Save(ms, format);
                 byte[] imageBytes = ms.ToArray();
-
                 string base64String = Convert.ToBase64String(imageBytes);
                 return base64String;
             }
@@ -38,5 +39,7 @@ namespace UniBinderAPI.Database
             Image image = Image.FromStream(ms, true);
             return image;
         }
+
+
     }
 }

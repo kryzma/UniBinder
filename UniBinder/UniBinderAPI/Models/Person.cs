@@ -10,6 +10,7 @@ using System.Xml.Linq;
 
 namespace UniBinderAPI.Models
 {
+    [KnownType(typeof(Image))]
     [DataContract]
     public class Person
     {
@@ -34,7 +35,7 @@ namespace UniBinderAPI.Models
         [DataMember]
         public List<Subject> Subjects { get; set; }
         [DataMember]
-        public Image image { get; set; }
+        public string ImageByte { get; set; }
 
         public Person(int ID, string Name, string Password, string Email,
             int Age, int HelpScore, int Likes, int Dislikes, int PeopleHelped, List<Subject> Subjects)
@@ -51,6 +52,19 @@ namespace UniBinderAPI.Models
             this.Subjects = Subjects;
         }
 
+        public Person(int ID, string Name, string Password, string Email)
+        {
+            this.ID = ID;
+            this.Name = Name;
+            this.Password = Password;
+            this.Email = Email;
+            this.Age = 0;
+            this.HelpScore = 0;
+            this.Likes = 0;
+            this.Dislikes = 0;
+            this.PeopleHelped = 0;
+            this.Subjects = new List<Subject> { };
+        }
         public int GetID(short ID)
         {
             int IntID = ID;

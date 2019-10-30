@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,12 +42,12 @@ namespace UniBinderAPI.Database
                 usersList.Add(new Person(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3),
                     reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(6),
                     reader.GetInt32(7), reader.GetInt32(8), Subjects));
-                //ImageProcessor imageProcessor = new ImageProcessor();
+                ImageProcessor imageProcessor = new ImageProcessor();
 
-                //if (!reader[9].Equals("0"))
-                //{
-                //    usersList[ID].image = imageProcessor.Base64ToImage(reader[9].ToString());
-                //}
+                if (!reader[9].Equals("0"))
+                {
+                    usersList[ID].ImageByte = reader[9].ToString();
+                }
                 //else
                 //{
                 //    usersList[ID].image = Properties.Resources.DefaultImage;
