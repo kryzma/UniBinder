@@ -26,7 +26,8 @@ class MainPaper extends React.Component {
             email: "",
             subjects: [],
             currentId: 0,
-            oldId: 0
+            oldId: 0,
+            image: 0
         }
         this.componentDidMount = this.componentDidMount.bind(this)
         this.componentDidUpdate = this.componentDidUpdate.bind(this)
@@ -53,7 +54,7 @@ class MainPaper extends React.Component {
         fetch(API + this.props.currentId)
             .then(response => response.json())
             .then((response) => {
-                // console.log(response)
+                console.log(response)
                 return response
             })
             .then(responseJson => this.setState({

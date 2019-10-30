@@ -17,8 +17,6 @@ class ArrowForward extends React.Component {
   }
 
   render() {
-    // console.log(this.props.userCount + "props")
-    // console.log(this.props.currentId + "ID")
     return (
       <div className="arrow-forward-wrapper">
         <ChevronRightIcon onClick={this.handleClick} className="arrow-forward" />
