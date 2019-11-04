@@ -1,0 +1,12 @@
+.profile-wrapper {
+  color: white;
+  font-size: 2vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-wrapper:hover {
+  cursor: pointer;
+  color: #ddd;
+}
