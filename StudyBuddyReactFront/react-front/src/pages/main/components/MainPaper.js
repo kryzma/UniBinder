@@ -10,6 +10,7 @@ import Col from "react-bootstrap/Col"
 import Paper from "@material-ui/core/Paper"
 import Row from "react-bootstrap/Row"
 
+//kazkur iskelti api linka, kad nebutu hardcodintas
 const API = "https://localhost:44363/api/Person/"
 
 class MainPaper extends React.Component {

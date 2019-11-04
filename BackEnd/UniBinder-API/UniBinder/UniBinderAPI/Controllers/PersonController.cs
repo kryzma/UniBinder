@@ -19,6 +19,8 @@ namespace UniBinderAPI.Controllers
         UserDataReader userDataReader = new UserDataReader();
         PersonController()
         {
+
+            ///Iskelti
             people = userDataReader.ReadUserData();
         }
 
