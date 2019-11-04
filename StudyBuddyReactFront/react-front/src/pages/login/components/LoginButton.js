@@ -11,7 +11,7 @@ function LoginButton() {
     return (
         <div>
             <Col lg={{ span: 12 }}>
-                <Link to="/main">
+                <Link to="/menu">
                     <Button variant="contained" color="primary" className="login-button mt-3">
                         Log In
                 </Button>

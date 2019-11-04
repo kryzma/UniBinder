@@ -10,8 +10,8 @@ import Col from "react-bootstrap/Col"
 import Row from "react-bootstrap/Row"
 
 import "../styles/Main.css"
+import { PERSON_COUNT_LINK } from "../../../config"
 
-const API = "https://localhost:44363/api/Person/count"
 
 class Main extends React.Component {
 
@@ -28,7 +28,8 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    fetch(API)
+
+    fetch(PERSON_COUNT_LINK)
       .then(response => response.json())
       .then(response => this.setState({
         userCount: response - 1
@@ -37,8 +38,8 @@ class Main extends React.Component {
   }
 
   forwardId() {
-    console.log("Current id: " + this.state.currentId)
-    console.log("Current userCount: " + this.state.userCount)
+    // console.log("Current id: " + this.state.currentId)
+    // console.log("Current userCount: " + this.state.userCount)
     if (this.state.currentId < this.state.userCount) {
       this.setState(prevState => {
         return {
@@ -53,13 +54,12 @@ class Main extends React.Component {
           currentId: zero
         }
       })
-      console.log("else statement")
     }
   }
 
   backwardId() {
-    console.log("Current id: " + this.state.currentId)
-    console.log("Current userCount: " + this.state.userCount)
+    // console.log("Current id: " + this.state.currentId)
+    // console.log("Current userCount: " + this.state.userCount)
     if (this.state.currentId > 0) {
       this.setState(prevState => {
         return {
@@ -74,7 +74,6 @@ class Main extends React.Component {
           currentId: max
         }
       })
-      console.log("else statement")
     }
   }
 

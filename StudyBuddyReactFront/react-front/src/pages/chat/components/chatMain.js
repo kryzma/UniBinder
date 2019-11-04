@@ -1,116 +1,73 @@
 import React from "react"
-import { tokenUrl, userId, roomId, instanceLocator as instance } from "../../../config"
-import ChatTest from "./chatTest"
+import UsernameForm from './UsernameForm'
+import ChatScreen from "./ChatScreen"
 
-import { ChatkitProvider, TokenProvider, withChatkit } from "@pusher/chatkit-client-react"
-
-const tokenProvider = new TokenProvider({
-  url: tokenUrl
-})
-
-const instanceLocator = instance
+import { IP_FETCH_LINK, SERVER_PORT } from "../../../config"
 
 class ChatMain extends React.Component {
 
-  constructor() {
-    super()
-    this.state = {
-      message: []
+    constructor() {
+        super()
+        this.state = {
+            currentUsername: '',
+            currentScreen: 'WhatIsYourUsernameScreen',
+            currentLocalIp: 0,
+            currentLink: '',
+        }
+        this.onUsernameSubmitted = this.onUsernameSubmitted.bind(this)
     }
-    this.componentDidMount = this.componentDidMount.bind(this)
-    this.fetchMessages = this.fetchMessages.bind(this)
-  }
-
-  componentDidMount() {
-    this.fetchMessages()
-  }
-
-  fetchMessages() {
-    withChatkit(props => {
-      props.chatkit.isLoading ? console.log("Loading") :
-        props.chatkit.currentUser.fetchMultipartMessages({
-          roomId: roomId,
-          direction: 'older',
-          limit: 10
+    // Create new user or change to existing one
+    onUsernameSubmitted(username) {
+        fetch(IP_FETCH_LINK, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
         })
-          .then(messages => {
-            return messages.map(part => part.parts)
-          })
-          .then(items => {
-            var messages = (items.map(item => { return item.map(item2 => { return ((item2.payload.content)) }) }))
-            return messages
-          })
-          .then(messages => this.setState({
-            message: messages
-          }))
-          .then(console.log(this.state.message))
-          .catch(err => { console.log("Error fetching messages: " + err) })
-    })
-  }
+            .then(response => {
+                response = response.json()
+                return response
+            })
+            .then(response => {
+                this.setState({
+                    currentLocalIp: response.ipv4
+                })
+
+            })
+            .then(response => {
+                this.setState({
+                    currentLink: "http://" + this.state.currentLocalIp + ':' + SERVER_PORT + '/users'
+                })
+            })
+            .then(response => {
+                fetch(this.state.currentLink, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username })
+                })
+                    .then(response => {
+                        this.setState({
+                            currentUsername: username,
+                            currentScreen: 'ChatScreen'
+                        })
+                    })
+                    .catch(error => console.log('error ', error))
+            })
 
 
-  render() {
-    return (
-      <div>
-        <ChatkitProvider
-          instanceLocator={instanceLocator}
-          tokenProvider={tokenProvider}
-          userId={userId}>
-          <ChatTest />
-          {/* <WelcomeMessage /> */}
-        </ChatkitProvider>
-      </div>
-    )
-  }
+    }
+
+    render() {
+        if (this.state.currentScreen === 'WhatIsYourUsernameScreen') {
+            return <UsernameForm onSubmit={this.onUsernameSubmitted} />
+        }
+        if (this.state.currentScreen === 'ChatScreen') {
+            return <ChatScreen currentUsername={this.state.currentUsername} />
+        }
+
+    }
 }
-
-
-// const WelcomeMessage = withChatkit(props => {
-//   return (
-//     <div>
-//       {props.chatkit.isLoading
-//         ? 'Connecting to Chatkit...'
-//         : `Hello ${props.chatkit.currentUser.name}!`}
-
-//     </div>
-//   )
-// })
-
-// const RoomMessages = withChatkit(props => {
-//   props.chatkit.isLoading ? console.log("Loading") :
-//     props.chatkit.currentUser.fetchMultipartMessages({
-//       roomId: roomId,
-//       direction: 'older',
-//       limit: 10
-//     })
-//       .then(messages => {
-//         //console.log(messages.map((part, index) => part.parts))
-//         return messages.map(part => part.parts)
-//       })
-//       .then(items => {
-//         var messages = (items.map((item, index) => { return item.map(item2 => { return ((item2.payload.content)) }) }))
-//         //var obj = (items.map(item => { return item }))
-//         console.log(messages)
-//         return messages
-//       })
-//       .catch(err => { console.log("Error fetching messages: " + err) })
-
-//   // .then(messages.map(item => { console.log(item) })
-//   //console.log(props.chatkit.currentUser)
-//   // props.chatkit.currentUser.fetchMultipartMessages({
-//   //   roomId: roomId,
-//   //   direction: 'older',
-//   //   limit: 10
-//   // })
-//   //   .then(messages => {
-//   //     console.log(messages)
-//   //   })
-//   //   .catch(err => {
-//   //     console.log('Error fetching messages: ' + err)
-//   //   })
-//   return (
-//     <div></div>
-//   )
-// })
 
 export default ChatMain

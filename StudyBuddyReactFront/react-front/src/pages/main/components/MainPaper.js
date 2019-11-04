@@ -10,8 +10,7 @@ import Col from "react-bootstrap/Col"
 import Paper from "@material-ui/core/Paper"
 import Row from "react-bootstrap/Row"
 
-//kazkur iskelti api linka, kad nebutu hardcodintas
-const API = "https://localhost:44363/api/Person/"
+import { PERSON_FETCH_LINK } from "../../../config"
 
 class MainPaper extends React.Component {
 
@@ -52,7 +51,7 @@ class MainPaper extends React.Component {
     }
 
     fetchItems() {
-        fetch(API + this.props.currentId)
+        fetch(PERSON_FETCH_LINK + this.props.currentId)
             .then(response => response.json())
             .then((response) => {
                 console.log(response)
