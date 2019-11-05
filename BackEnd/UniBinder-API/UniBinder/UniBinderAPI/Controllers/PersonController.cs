@@ -22,12 +22,11 @@ namespace UniBinderAPI.Controllers
         List<Credentials> credentials = new List<Credentials>();
         UserDataReader userDataReader = new UserDataReader();
 
-
         PersonController()
         {
 
             ///Iskelti
-           // people = userDataReader.ReadUserData();
+            people = userDataReader.ReadUserData();
         }
 
         [Route("api/person/count")]
@@ -41,9 +40,7 @@ namespace UniBinderAPI.Controllers
         public IEnumerable<Person> Get()
         {
             return people;
-            
         }
-
 
         // GET: api/Person/5
         public Person Get(int id)
@@ -52,59 +49,28 @@ namespace UniBinderAPI.Controllers
         }
 
 
-        // POST: api/Person
-        public void POST([FromBody]Person value)
-        {
-            
-        }
-
         [Route("api/person/ID")]
         [HttpGet]
         [AllowAnonymous]
-        public  int getID(string username, string password)
+        public  int getID(string username)
         {
-            return RetrieveID(username, password);
-
-            throw new HttpResponseException(HttpStatusCode.Unauthorized);
+            return RetrieveID(username);
         }
 
-        public bool CheckUser(string username, string password)
+        private int RetrieveID(string username)
         {
-            var p = people.Exists(x => x.Password == password && x.Name == username);
-            if (!p) throw new UnauthorizedAccessException();
-            return true;
-        }
-
-        private int RetrieveID(string username, string password)
-        {
-            var p2 = people.Where(x => x.Password == password && x.Name == username).FirstOrDefault().ID;
+            var p2 = people.Where(x => x.Name == username).FirstOrDefault().ID;
             return p2;
         }
 
-
-        [Route("api/person/P")]
-        [HttpPost]
+        [Route("api/person/Pass")]
+        [HttpGet]
         [AllowAnonymous]
-        public IHttpActionResult PostLogin(Credentials c)
+        public string getPassword(string username)
         {
-            if (!ModelState.IsValid)
-                return BadRequest("Invalid data.");
-            if (CheckUser(c.Password, c.UserName))
-            { 
-                credentials.Add(new Credentials()
-                {
-                    Password = c.Password,
-                    UserName = c.UserName,
-                });
-            }
-            System.Diagnostics.Debug.WriteLine(c.ToString());
-            return Ok();
-        }
-
-        // PUT: api/Person/5
-        public void Put(int id, [FromBody]string value)
-        {
-
+            var person = people.Where(x => x.Name == username).ToList().FirstOrDefault();
+            return person.Password;
+            throw new HttpResponseException(HttpStatusCode.Unauthorized);
         }
 
         // DELETE: api/Person/5
@@ -117,8 +83,8 @@ namespace UniBinderAPI.Controllers
         [AllowAnonymous]
         public string GetToken(string username)
         {
-            var personCredentials = credentials.Where(x => x.UserName == username).ToList().FirstOrDefault();
-            IAuthContainerModel model = GetJWTContainerModel(username, personCredentials.Password, CheckUser(username, personCredentials.Password).ToString());
+            var personCredentials = people.Where(x => x.Name == username).ToList().FirstOrDefault();
+            IAuthContainerModel model = GetJWTContainerModel(username, RetrieveID(username).ToString());
             IAuthService authService = new JWTService(model.SecretKey);
             string token = authService.GenerateToken(model);
 
@@ -135,7 +101,7 @@ namespace UniBinderAPI.Controllers
         }
 
         #region Private Methods
-        private static JWTContainerModel GetJWTContainerModel(string username, string password, string ID)
+        private static JWTContainerModel GetJWTContainerModel(string username,  string ID)
         {
             return new JWTContainerModel()
             {
@@ -143,8 +109,7 @@ namespace UniBinderAPI.Controllers
                 {
                     new Claim(ClaimTypes.NameIdentifier, ID),
                     new Claim(ClaimTypes.Name, username),
-                    new Claim(ClaimTypes.Email, password)
-                    
+                    //new Claim(ClaimTypes.Email, password)
                 }
             };
         }
