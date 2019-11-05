@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using UniBinderAPI.Database;
+using UniBinderAPI.Managers;
 using UniBinderAPI.Models;
+
 
 namespace UniBinderAPI.Controllers
 {
@@ -16,12 +19,15 @@ namespace UniBinderAPI.Controllers
     public class PersonController : ApiController
     {
         List<Person> people = new List<Person>();
+        List<Credentials> credentials = new List<Credentials>();
         UserDataReader userDataReader = new UserDataReader();
+
+
         PersonController()
         {
 
             ///Iskelti
-            people = userDataReader.ReadUserData();
+           // people = userDataReader.ReadUserData();
         }
 
         [Route("api/person/count")]
@@ -52,28 +58,48 @@ namespace UniBinderAPI.Controllers
             
         }
 
+        [Route("api/person/ID")]
+        [HttpGet]
+        [AllowAnonymous]
+        public  int getID(string username, string password)
+        {
+            return RetrieveID(username, password);
+
+            throw new HttpResponseException(HttpStatusCode.Unauthorized);
+        }
+
+        public bool CheckUser(string username, string password)
+        {
+            var p = people.Exists(x => x.Password == password && x.Name == username);
+            if (!p) throw new UnauthorizedAccessException();
+            return true;
+        }
+
+        private int RetrieveID(string username, string password)
+        {
+            var p2 = people.Where(x => x.Password == password && x.Name == username).FirstOrDefault().ID;
+            return p2;
+        }
 
 
-
-
-
-
-        //public HttpResponseMessage POST([FromBody]Person value)
-        //{
-        //    try
-        //    {
-        //        UserDataInserter a = new UserDataInserter();
-        //        a.SendUserData(value);
-        //        var message = Request.CreateResponse(HttpStatusCode.Created, value);
-        //        message.Headers.Location = new Uri(Request.RequestUri + value.ID.ToString());
-        //        return message;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
-        //    }
-        //}
-
+        [Route("api/person/P")]
+        [HttpPost]
+        [AllowAnonymous]
+        public IHttpActionResult PostLogin(Credentials c)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid data.");
+            if (CheckUser(c.Password, c.UserName))
+            { 
+                credentials.Add(new Credentials()
+                {
+                    Password = c.Password,
+                    UserName = c.UserName,
+                });
+            }
+            System.Diagnostics.Debug.WriteLine(c.ToString());
+            return Ok();
+        }
 
         // PUT: api/Person/5
         public void Put(int id, [FromBody]string value)
@@ -85,5 +111,44 @@ namespace UniBinderAPI.Controllers
         public void Delete(int id)
         {
         }
+
+        [Route("api/person/Token")]
+        [HttpGet]
+        [AllowAnonymous]
+        public string GetToken(string username)
+        {
+            var personCredentials = credentials.Where(x => x.UserName == username).ToList().FirstOrDefault();
+            IAuthContainerModel model = GetJWTContainerModel(username, personCredentials.Password, CheckUser(username, personCredentials.Password).ToString());
+            IAuthService authService = new JWTService(model.SecretKey);
+            string token = authService.GenerateToken(model);
+
+            if (!authService.IsTokenValid(token))
+                throw new UnauthorizedAccessException();
+            else
+            {
+                //List<Claim> claims = authService.GetTokenClaims(token).ToList();
+                //System.Diagnostics.Debug.WriteLine(claims.FirstOrDefault(e => e.Type.Equals(ClaimTypes.Name)).Value);
+                //System.Diagnostics.Debug.WriteLine(claims.FirstOrDefault(e => e.Type.Equals(ClaimTypes.Email)).Value);
+                //System.Diagnostics.Debug.WriteLine(token);
+                return token;
+            }
+        }
+
+        #region Private Methods
+        private static JWTContainerModel GetJWTContainerModel(string username, string password, string ID)
+        {
+            return new JWTContainerModel()
+            {
+                Claims = new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, ID),
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Email, password)
+                    
+                }
+            };
+        }
+        #endregion
+
     }
 }
