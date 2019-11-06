@@ -54,7 +54,7 @@ class MainPaper extends React.Component {
         fetch(PERSON_FETCH_LINK + this.props.currentId)
             .then(response => response.json())
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 return response
             })
             .then(responseJson => this.setState({
@@ -62,7 +62,7 @@ class MainPaper extends React.Component {
                 likes: responseJson.Likes,
                 name: responseJson.Name,
                 email: responseJson.Email,
-                subjects: responseJson.Subjects,
+                subjects: responseJson.SubjectList,
                 currentId: this.props.currentId,
                 oldId: this.props.currentId
             }))

@@ -1,8 +1,19 @@
 import React from 'react'
+import $ from 'jquery'
 
 import "../styles/MessageList.css"
 
 class MessagesList extends React.Component {
+
+    componentDidMount() {
+        // Scroll to the bottom of chat page in 5 ms
+        var interval = setInterval(function () {
+            $(".message-list-wrapper").scrollTop($(".message-list-wrapper").height());
+            if ($(".message-list-wrapper").scrollTop() > 0) {
+                clearInterval(interval)
+            }
+        }, 5);
+    }
 
     render() {
         const styles = {
@@ -12,7 +23,7 @@ class MessagesList extends React.Component {
             }
         }
         return (
-            <div
+            <div className="message-list-wrapper"
                 style={{
                     ...this.props.style,
                     ...styles.container,
