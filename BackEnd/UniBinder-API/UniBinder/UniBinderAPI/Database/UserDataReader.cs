@@ -60,13 +60,13 @@ namespace UniBinderAPI.Database
             using (studybuddyEntities context = new studybuddyEntities())
             {
                 var result = (from a in context.Person
-                              where username == a.Name
+                              where username.ToLower() == a.Name.ToLower()
                               select a.Name);
 
                 if (result != null) return false;
 
                 result = (from a in context.Person
-                              where email == a.Email
+                              where email.ToLower() == a.Email.ToLower()
                               select a.Email);
 
                 if (result != null) return false;
