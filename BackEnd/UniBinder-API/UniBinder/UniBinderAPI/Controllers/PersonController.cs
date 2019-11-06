@@ -47,6 +47,7 @@ namespace UniBinderAPI.Controllers
             if(userID == null)
             {
                 UnknownData(id.ToString(), "ID");
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(id.ToString(), UnknownData(id.ToString(), "ID")));
             }
             return Request.CreateResponse(HttpStatusCode.OK, userID);
         }
@@ -68,7 +69,10 @@ namespace UniBinderAPI.Controllers
         {
             List<Person> people = userDataReader.ReadUserData();
             var person = people.Where(x => x.Name == username).ToList().FirstOrDefault();
-            if (person == null) UnknownData(username, "Username");
+            if (person == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "username"));
+            }
             return Request.CreateResponse(HttpStatusCode.OK, person.Password);
         }
 
@@ -79,7 +83,11 @@ namespace UniBinderAPI.Controllers
         {
             List<Person> people = userDataReader.ReadUserData();
             var personCredentials = people.Where(x => x.Name == username).ToList().FirstOrDefault();
-            if (personCredentials == null) UnknownData(username, "Username");
+            if (personCredentials == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "Username"));
+
+            };
             IAuthContainerModel model = GetJWTContainerModel(username, RetrieveID(username).ToString());
             IAuthService authService = new JWTService(model.SecretKey);
             string token = authService.GenerateToken(model);
@@ -101,12 +109,6 @@ namespace UniBinderAPI.Controllers
         [HttpPost]
         public IHttpActionResult Registration(Person person)
         {
-            //var people = userDataReader.ReadUserData();
-            //if(!CheckExistingData(person, people))
-            //{
-            //    userDataInserter.SendUserData(person);
-            //    return Ok();
-            //}
             if (userDataReader.CheckUniqueData(person.Name, person.Email))
             {
                 userDataInserter.SendUserData(person);
@@ -135,10 +137,9 @@ namespace UniBinderAPI.Controllers
             var p2 = userDataReader.ReadUserData().Where(x => x.Name == username).FirstOrDefault().ID;
             return p2;
         }
-        private HttpResponseMessage UnknownData(string data, string nameOfData)
+        private string UnknownData(string data, string nameOfData)
         {
-            string message = string.Format("No User found with {0} = {1}", nameOfData, data);
-            return Request.CreateErrorResponse(HttpStatusCode.NotFound, message);
+            return string.Format("No User found with {0} = {1}", nameOfData, data);
         }
         private bool CheckExistingData(Person person, List<Person> people)
         {
