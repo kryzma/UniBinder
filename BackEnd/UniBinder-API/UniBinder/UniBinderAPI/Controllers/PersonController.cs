@@ -25,6 +25,8 @@ namespace UniBinderAPI.Controllers
         {           
         }
 
+        #region GetApi
+
         [Route("api/person/count")]
         [HttpGet]
         public int GetNumber()
@@ -93,7 +95,8 @@ namespace UniBinderAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, token);
             }
         }
-
+        #endregion
+        #region PostApi
         [Route("api/person/Registration")]
         [HttpPost]
         public IHttpActionResult Registration(Person person)
@@ -107,6 +110,7 @@ namespace UniBinderAPI.Controllers
             return Content(HttpStatusCode.BadRequest, "Pick unique email or nickname"); 
         }
 
+        #endregion
         #region Private Methods
         private static JWTContainerModel GetJWTContainerModel(string username,  string ID)
         {
