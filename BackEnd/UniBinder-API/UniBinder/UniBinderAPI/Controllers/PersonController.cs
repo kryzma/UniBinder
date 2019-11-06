@@ -18,7 +18,6 @@ namespace UniBinderAPI.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class PersonController : ApiController
     {
-        List<Person> people = new List<Person>();
         List<Credentials> credentials = new List<Credentials>();
         UserDataReader userDataReader = new UserDataReader();
 
@@ -26,26 +25,26 @@ namespace UniBinderAPI.Controllers
         {
 
             ///Iskelti
-            people = userDataReader.ReadUserData();
+            
         }
 
         [Route("api/person/count")]
         [HttpGet]
         public int GetNumber()
         {
-            return 1;
+            return userDataReader.ReadUserData().Count;
         }
 
         // GET: api/Person
         public IEnumerable<Person> Get()
         {
-            return people;
+            return userDataReader.ReadUserData();
         }
 
         // GET: api/Person/5
         public Person Get(int id)
         {
-            return people.Where(x => x.ID == id).FirstOrDefault();
+            return userDataReader.ReadUserData().Where(x => x.ID == id).FirstOrDefault();
         }
 
 
@@ -59,7 +58,7 @@ namespace UniBinderAPI.Controllers
 
         private int RetrieveID(string username)
         {
-            var p2 = people.Where(x => x.Name == username).FirstOrDefault().ID;
+            var p2 = userDataReader.ReadUserData().Where(x => x.Name == username).FirstOrDefault().ID;
             return p2;
         }
 
@@ -68,6 +67,7 @@ namespace UniBinderAPI.Controllers
        // [AllowAnonymous]
         public string getPassword(string username)
         {
+            List<Person> people = userDataReader.ReadUserData();
             var person = people.Where(x => x.Name == username).ToList().FirstOrDefault();
             return person.Password;
             throw new HttpResponseException(HttpStatusCode.Unauthorized);
@@ -83,6 +83,7 @@ namespace UniBinderAPI.Controllers
        // [AllowAnonymous]
         public string GetToken(string username)
         {
+            List<Person> people = userDataReader.ReadUserData();
             var personCredentials = people.Where(x => x.Name == username).ToList().FirstOrDefault();
             IAuthContainerModel model = GetJWTContainerModel(username, RetrieveID(username).ToString());
             IAuthService authService = new JWTService(model.SecretKey);
