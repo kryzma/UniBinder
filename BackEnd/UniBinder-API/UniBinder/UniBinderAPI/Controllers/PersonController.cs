@@ -19,6 +19,7 @@ namespace UniBinderAPI.Controllers
     public class PersonController : ApiController
     {
         UserDataReader userDataReader = new UserDataReader();
+        UserDataInserter userDataInserter = new UserDataInserter();
 
         PersonController()
         {           
@@ -93,6 +94,19 @@ namespace UniBinderAPI.Controllers
             }
         }
 
+        [Route("api/person/Registration")]
+        [HttpPost]
+        public IHttpActionResult Registration(Person person)
+        {
+            var people = userDataReader.ReadUserData();
+            if(!CheckExistingData(person, people))
+            {
+                userDataInserter.SendUserData(person);
+                return Ok();
+            }
+            return Content(HttpStatusCode.BadRequest, "Pick unique email or nickname"); 
+        }
+
         #region Private Methods
         private static JWTContainerModel GetJWTContainerModel(string username,  string ID)
         {
@@ -116,6 +130,11 @@ namespace UniBinderAPI.Controllers
         {
             string message = string.Format("No User found with {0} = {1}", nameOfData, data);
             return Request.CreateErrorResponse(HttpStatusCode.NotFound, message);
+        }
+        private bool CheckExistingData(Person person, List<Person> people)
+        {
+            if (people.Exists(x => x.Name == person.Name || x.Email == person.Email)) return true;
+            return false;
         }
         #endregion
 
