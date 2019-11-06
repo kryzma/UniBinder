@@ -12,27 +12,34 @@ import Username from "./Username"
 import Password from "./Password"
 import LoginButton from "./LoginButton"
 import Register from "./RegisterButton"
+import ErrorMessage from "./ErrorMessage"
+
+import { withRouter } from "react-router-dom"
 
 import "../styles/Login.css"
 
-import { GET_USER_PASSWORD } from "../../../config"
+import { GET_USER_PASSWORD, GET_USER_TOKEN } from "../../../config"
+import { bake_cookie } from 'sfcookies';
 
 class Login extends React.Component {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
 
     this.state = ({
       username: undefined,
       password: undefined,
       hashedPassword: undefined,
       recievedPassword: undefined,
+      passwordCorrect: undefined,
+      usernameCorrect: undefined,
     })
 
     this.passwordChange = this.passwordChange.bind(this)
     this.usernameChange = this.usernameChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
     this.checkPassword = this.checkPassword.bind(this)
+    this.redirect = this.redirect.bind(this)
   }
 
   passwordChange(e) {
@@ -47,42 +54,71 @@ class Login extends React.Component {
   }
 
   onSubmit() {
-    var passwordHash = require('password-hash')
-    if (this.state.password !== undefined) {
-      this.setState({
-        hashedPassword: passwordHash.generate(this.state.password)
-      }, () => {
-        //this.checkPassword()
-      })
+    // Hash password
+    // var passwordHash = require('password-hash')
+    // if (this.state.password !== undefined) {
+    //   this.setState({
+    //     hashedPassword: passwordHash.generate(this.state.password)
+    //   }, () => {
+    //     //this.checkPassword()
+    //   })
+    // }
+    this.checkPassword(this.redirect)
+  }
+
+  redirect() {
+    if (this.state.usernameCorrect && this.state.passwordCorrect) {
+      this.props.history.push("/menu")
     }
-    this.checkPassword()
   }
 
 
-  checkPassword() {
+  checkPassword(redirect) {
     var passwordHash = require('password-hash');
 
     fetch(GET_USER_PASSWORD + this.state.username)
+      .then(response => {
+        if (response.status === 404) {
+          this.setState({
+            usernameCorrect: false
+          })
+          throw new Error(response.status)
+        }
+        else {
+          this.setState({
+            usernameCorrect: true
+          })
+          return response
+        }
+      })
       .then(response => response.json())
       .then(response => this.setState({
         recievedPassword: response
       }))
-      .then(response => {
+      .then(() => {
+        // do something if password is correct
         if (passwordHash.verify(this.state.password, this.state.recievedPassword)) {
-          // this.setState({
-          //   password: undefined
-          // })
-          // do something if password is correct
-          console.log(this.state.recievedPassword)
-          console.log("true")
-          console.log(this.state.hashedPassword)
+          this.setState({
+            // Pasalint passworda is state kai correct, nzn ar reikia
+            // password: undefined,
+            passwordCorrect: true
+          })
+          // GET user Token
+          fetch(GET_USER_TOKEN + this.state.username)
+            .then(response => response.json())
+            .then(response => {
+              bake_cookie("UserToken", response)
+            })
         }
+        // do something if false
         else {
-          console.log(this.state.recievedPassword)
-          console.log(this.state.hashedPassword)
-          // do something if false
+          this.setState({
+            passwordCorrect: false
+          })
         }
       })
+      .then(() => redirect())
+      .catch(console.log)
 
 
   }
@@ -98,6 +134,7 @@ class Login extends React.Component {
               <Logo />
               <Username handleUsername={this.usernameChange} />
               <Password handlePassword={this.passwordChange} />
+              <ErrorMessage passwordHandle={this.state.passwordCorrect} usernameHandle={this.state.usernameCorrect} />
               <LoginButton handleSubmit={this.onSubmit} />
               <Register />
             </Paper>
@@ -109,4 +146,4 @@ class Login extends React.Component {
 
 }
 
-export default Login
+export default withRouter(Login)
