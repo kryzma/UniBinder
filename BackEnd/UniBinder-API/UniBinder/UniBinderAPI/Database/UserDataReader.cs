@@ -11,68 +11,46 @@ using UniBinderAPI.Models;
 namespace UniBinderAPI.Database
 {
 
-    public static class ExtensionSQLCheck
+    class UserDataReader : IUserDataReader
     {
-        public static void Query(this StringBuilder sb, int ID)
+        List<Person> PersonList = new List<Person>();
+
+        public List<Person> GetUserList()
         {
-            sb.Append("select Name ");
-            sb.Append("from Subjects ");
-            sb.Append("where ID = ");
-            sb.Append(ID.ToString());
+            if (PersonList.Count == 0)
+            {
+                return ReadUserData();
+            }
+            else
+            {
+                return PersonList;
+            }
         }
-    }
-
-    public class UserDataReader : IUserDataReader
-    {
-
         public List<Person> ReadUserData()
         {
-            return GiveUserList();
-        }
+            var context = new studybuddyEntities();
 
-        private List<Person> GiveUserList()
-        {
-            List<Person> usersList = new List<Person>();
-            SqlDataReader reader = DataBaseHelper.instance.GetSqlDataReader("select * from persons");
+            PersonList = (from a in context.Person
+                          select a
+                          ).ToList();
 
-            while (reader.Read())
+            var result = (from a in context.PersonSubject
+                          select a
+                          ).ToList();
+
+            result.ForEach(subject =>
             {
-                int ID = reader.GetInt32(0);
-                List<Subject> Subjects = GetPersonSubjectsList(ID);
-                usersList.Add(new Person(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3),
-                    reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(6),
-                    reader.GetInt32(7), reader.GetInt32(8), Subjects));
-                ImageProcessor imageProcessor = new ImageProcessor();
-
-                if (!reader[9].Equals("0"))
+                PersonList.ForEach(person =>
                 {
-                    usersList[ID].ImageByte = reader[9].ToString();
-                }
-                //else
-                //{
-                //    usersList[ID].image = Properties.Resources.DefaultImage;
-                //}
-            }
-            return usersList;
+                    if (subject.ID.Equals(person.ID))
+                    {
+                        person.SubjectList.Add(new Subject(subject.Name));
+                    }
+                });
+            });
 
-        }
-
-        private List<Subject> GetPersonSubjectsList(int ID)
-        {
-            List<Subject> subjects = new List<Subject>();
-            SqlDataReader reader = DataBaseHelper.instance.GetSqlDataReader(GivePersonSubjectListQuerry(ID));
-
-            while (reader.Read())
-            {
-                subjects.Add(new Subject(reader.GetString(0)));
-            }
-            return subjects;
-        }
-        private string GivePersonSubjectListQuerry(int ID)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Query(ID);
-            return sb.ToString();
+            context.Dispose();
+            return PersonList;
         }
 
         List<Person> IUserDataReader.ReadUserData()

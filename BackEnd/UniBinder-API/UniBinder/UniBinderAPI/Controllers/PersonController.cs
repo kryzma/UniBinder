@@ -33,7 +33,7 @@ namespace UniBinderAPI.Controllers
         [HttpGet]
         public int GetNumber()
         {
-            return DatabaseUserInfo.UserCount();
+            return 1;
         }
 
         // GET: api/Person
@@ -51,7 +51,7 @@ namespace UniBinderAPI.Controllers
 
         [Route("api/person/ID")]
         [HttpGet]
-        [AllowAnonymous]
+       // [AllowAnonymous]
         public  int getID(string username)
         {
             return RetrieveID(username);
@@ -65,7 +65,7 @@ namespace UniBinderAPI.Controllers
 
         [Route("api/person/Pass")]
         [HttpGet]
-        [AllowAnonymous]
+       // [AllowAnonymous]
         public string getPassword(string username)
         {
             var person = people.Where(x => x.Name == username).ToList().FirstOrDefault();
@@ -80,7 +80,7 @@ namespace UniBinderAPI.Controllers
 
         [Route("api/person/Token")]
         [HttpGet]
-        [AllowAnonymous]
+       // [AllowAnonymous]
         public string GetToken(string username)
         {
             var personCredentials = people.Where(x => x.Name == username).ToList().FirstOrDefault();
