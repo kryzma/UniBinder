@@ -69,7 +69,7 @@ namespace UniBinderAPI.Controllers
             List<Person> people = userDataReader.ReadUserData();
             var person = people.Where(x => x.Name == username).ToList().FirstOrDefault();
             if (person == null) UnknownData(username, "Username");
-            return Request.CreateResponse(HttpStatusCode.OK, person);
+            return Request.CreateResponse(HttpStatusCode.OK, person.Password);
         }
 
         [Route("api/person/Token")]

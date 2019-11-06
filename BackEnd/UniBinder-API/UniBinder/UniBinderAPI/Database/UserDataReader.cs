@@ -28,29 +28,31 @@ namespace UniBinderAPI.Database
         }
         public List<Person> ReadUserData()
         {
-            var context = new studybuddyEntities();
-
-            PersonList = (from a in context.Person
-                          select a
-                          ).ToList();
-
-            var result = (from a in context.PersonSubject
-                          select a
-                          ).ToList();
-
-            result.ForEach(subject =>
+            using (studybuddyEntities context = new studybuddyEntities())
             {
-                PersonList.ForEach(person =>
-                {
-                    if (subject.ID.Equals(person.ID))
-                    {
-                        person.SubjectList.Add(new Subject(subject.Name));
-                    }
-                });
-            });
+                
+                PersonList = (from a in context.Person
+                              select a
+                              ).ToList();
 
-            context.Dispose();
-            return PersonList;
+                var result = (from a in context.PersonSubject
+                              select a
+                              ).ToList();
+
+                result.ForEach(subject =>
+                {
+                    PersonList.ForEach(person =>
+                    {
+                        if (subject.ID.Equals(person.ID))
+                        {
+                            person.SubjectList.Add(new Subject(subject.Name));
+                        }
+                    });
+                });
+
+                context.Dispose();
+                return PersonList;
+            }
         }
 
         List<Person> IUserDataReader.ReadUserData()
