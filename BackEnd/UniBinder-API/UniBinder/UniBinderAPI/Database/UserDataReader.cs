@@ -74,7 +74,6 @@ namespace UniBinderAPI.Database
             }
         }
 
-
         List<Person> IUserDataReader.ReadUserData()
         {
             throw new NotImplementedException();

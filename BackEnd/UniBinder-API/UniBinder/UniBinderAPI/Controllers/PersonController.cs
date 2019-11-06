@@ -68,7 +68,7 @@ namespace UniBinderAPI.Controllers
         public HttpResponseMessage getPassword(string username)
         {
             List<Person> people = userDataReader.ReadUserData();
-            var person = people.Where(x => x.Name == username).ToList().FirstOrDefault();
+            var person = people.Where(x => x.Name.ToLower() == username.ToLower()).ToList().FirstOrDefault();
             if (person == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "username"));
@@ -82,13 +82,13 @@ namespace UniBinderAPI.Controllers
         public HttpResponseMessage GetToken(string username)
         {
             List<Person> people = userDataReader.ReadUserData();
-            var personCredentials = people.Where(x => x.Name == username).ToList().FirstOrDefault();
+            var personCredentials = people.Where(x => x.Name.ToLower() == username.ToLower()).ToList().FirstOrDefault();
             if (personCredentials == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "Username"));
 
             };
-            IAuthContainerModel model = GetJWTContainerModel(username, RetrieveID(username).ToString());
+            IAuthContainerModel model = GetJWTContainerModel(username.ToLower(), RetrieveID(username.ToLower()).ToString());
             IAuthService authService = new JWTService(model.SecretKey);
             string token = authService.GenerateToken(model);
 
@@ -126,7 +126,7 @@ namespace UniBinderAPI.Controllers
                 Claims = new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, ID),
-                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Name, username.ToLower()),
                     //new Claim(ClaimTypes.Email, password)
                 }
             };
@@ -134,7 +134,7 @@ namespace UniBinderAPI.Controllers
 
         private int RetrieveID(string username)
         {
-            var p2 = userDataReader.ReadUserData().Where(x => x.Name == username).FirstOrDefault().ID;
+            var p2 = userDataReader.ReadUserData().Where(x => x.Name.ToLower() == username.ToLower()).FirstOrDefault().ID;
             return p2;
         }
         private string UnknownData(string data, string nameOfData)
@@ -143,7 +143,7 @@ namespace UniBinderAPI.Controllers
         }
         private bool CheckExistingData(Person person, List<Person> people)
         {
-            if (people.Exists(x => x.Name == person.Name || x.Email == person.Email)) return true;
+            if (people.Exists(x => x.Name.ToLower() == person.Name.ToLower() || x.Email.ToLower() == person.Email.ToLower())) return true;
             return false;
         }
         #endregion
