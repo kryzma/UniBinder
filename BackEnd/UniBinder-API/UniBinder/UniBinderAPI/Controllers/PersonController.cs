@@ -101,8 +101,13 @@ namespace UniBinderAPI.Controllers
         [HttpPost]
         public IHttpActionResult Registration(Person person)
         {
-            var people = userDataReader.ReadUserData();
-            if(!CheckExistingData(person, people))
+            //var people = userDataReader.ReadUserData();
+            //if(!CheckExistingData(person, people))
+            //{
+            //    userDataInserter.SendUserData(person);
+            //    return Ok();
+            //}
+            if (userDataReader.CheckUniqueData(person.Name, person.Email))
             {
                 userDataInserter.SendUserData(person);
                 return Ok();

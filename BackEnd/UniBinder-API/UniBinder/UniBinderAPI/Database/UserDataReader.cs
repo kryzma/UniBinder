@@ -55,6 +55,26 @@ namespace UniBinderAPI.Database
             }
         }
 
+        public bool CheckUniqueData(string username, string email)
+        {
+            using (studybuddyEntities context = new studybuddyEntities())
+            {
+                var result = (from a in context.Person
+                              where username == a.Name
+                              select a.Name);
+
+                if (result != null) return false;
+
+                result = (from a in context.Person
+                              where email == a.Email
+                              select a.Email);
+
+                if (result != null) return false;
+                return true;
+            }
+        }
+
+
         List<Person> IUserDataReader.ReadUserData()
         {
             throw new NotImplementedException();
