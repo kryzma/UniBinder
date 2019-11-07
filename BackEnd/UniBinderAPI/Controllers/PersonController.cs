@@ -43,7 +43,8 @@ namespace UniBinderAPI.Controllers
         // GET: api/Person/5
         public HttpResponseMessage Get(int id)
         {
-            var userID = userDataReader.ReadUserData().Where(x => x.ID == id).FirstOrDefault();
+
+            //var userID = userDataReader.ReadUserData().Where(x => x.ID == id).FirstOrDefault();
             if (userID == null)
             {
                 UnknownData(id.ToString(), "ID");
@@ -79,6 +80,7 @@ namespace UniBinderAPI.Controllers
         [Route("api/person/Token")]
         [HttpGet]
         // [AllowAnonymous]
+        // prideti password
         public HttpResponseMessage GetToken(string username)
         {
             List<Person> people = userDataReader.ReadUserData();
@@ -92,6 +94,7 @@ namespace UniBinderAPI.Controllers
             IAuthService authService = new JWTService(model.SecretKey);
             string token = authService.GenerateToken(model);
 
+            //nereikia verify
             if (!authService.IsTokenValid(token))
                 throw new UnauthorizedAccessException();
             else
@@ -126,7 +129,7 @@ namespace UniBinderAPI.Controllers
                 Claims = new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, ID),
-                    new Claim(ClaimTypes.Name, username.ToLower()),
+                    new Claim(ClaimTypes.Name, username),
                     //new Claim(ClaimTypes.Email, password)
                 }
             };

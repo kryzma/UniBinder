@@ -44,3 +44,14 @@
 .user-search-title-col {
     padding-left: 0;
 }
+
+@media screen and (max-width: 1600px){
+    .user-search-description-wrapper {
+        margin-top: 10px;
+    }
+    .user-search-wrapper {
+        margin: 30px;
+        padding: 30px;
+        height: 35vh;
+    }
+}

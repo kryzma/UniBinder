@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col'
 import UserChat from './UserChat'
 import UserSettings from './UserSettings'
 import UserSearch from './UserSearch'
+import UserTest from './UserTest'
 import Header from '../../header/components/Header'
 
 import { Link } from "react-router-dom"
@@ -35,6 +36,9 @@ class Menu extends React.Component {
                     <Row>
                         <Col lg={{ span: 6 }}>
                             <UserSettings />
+                        </Col>
+                        <Col lg={{ span: 6 }}>
+                            <UserTest />
                         </Col>
                     </Row>
 

@@ -38,3 +38,15 @@
     text-align: center;
     font-family: 'Roboto', sans-serif;
 }
+
+@media screen and (max-width: 1600px){
+    .user-settings-description-wrapper {
+        margin-top: 10px;
+    }
+
+    .user-settings-wrapper {
+        margin: 30px;
+        padding: 30px;
+        height: 35vh;
+    }
+}

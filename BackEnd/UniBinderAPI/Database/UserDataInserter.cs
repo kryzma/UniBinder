@@ -15,6 +15,7 @@ namespace UniBinderAPI.Database
             {
                 var context = new studybuddyEntities();
 
+            //using naudot
                 context.Person.Add(person);
                 context.SaveChanges();
             }

@@ -30,6 +30,7 @@ class App extends React.Component {
     try {
       if (token) {
         var decoded = jwt.decode(token)
+        console.log(decoded)
         session = decoded.exp
       }
     }
@@ -47,7 +48,8 @@ class App extends React.Component {
           <Route path="/" exact component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/main" render={() => (this.getSession() ? (<Main to="/main" />) : <Redirect to="/" />)} />
-          <Route path="/chat" render={() => (this.getSession() ? (<ChatMain to="/chat" />) : <Redirect to="/" />)} />
+          {/* <Route path="/chat" render={() => (this.getSession() ? (<ChatMain to="/chat" />) : <Redirect to="/" />)} /> */}
+          <Route path="/chat" component={ChatMain} />
           <Route path="/menu" render={() => (this.getSession() ? (<Menu to="/menu" />) : <Redirect to="/" />)} />
         </Switch>
       </Router>

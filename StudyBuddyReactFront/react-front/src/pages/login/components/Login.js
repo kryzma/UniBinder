@@ -108,7 +108,9 @@ class Login extends React.Component {
             .then(response => response.json())
             .then(response => {
               bake_cookie("UserToken", response)
+              console.log(response)
             })
+            .then(() => redirect())
         }
         // do something if false
         else {
@@ -117,7 +119,6 @@ class Login extends React.Component {
           })
         }
       })
-      .then(() => redirect())
       .catch(console.log)
 
 

@@ -44,3 +44,14 @@
 .user-chat-title-col {
     padding: 0;
 }
+
+@media screen and (max-width: 1600px){
+    .user-chat-description-wrapper {
+        margin-top: 10px;
+    }
+    .user-chat-wrapper {
+        margin: 30px;
+        padding: 30px;
+        height: 35vh;
+    }
+}
