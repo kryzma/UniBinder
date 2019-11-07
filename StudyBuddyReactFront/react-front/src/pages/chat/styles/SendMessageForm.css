@@ -1,0 +1,18 @@
+.message-form-container {
+    padding: 20px;
+    border-top: 1px #4C758F solid;
+    margin-bottom: 20px;
+}
+
+.message-form {
+    display: flex;
+}
+
+.message-input {
+    color: inherit;
+    background: none;
+    outline: none;
+    border: none;
+    flex: 1;
+    font-size: 16px;
+}

@@ -1,0 +1,16 @@
+.message-list-ul {
+    list-style: none;
+}
+
+.message-list-li {
+    margin-top: 13px;
+    margin-bottom: 13px;
+}
+
+.sender-username {
+    font-weight: bold;
+}
+
+.message {
+    font-size: 15px;
+}
