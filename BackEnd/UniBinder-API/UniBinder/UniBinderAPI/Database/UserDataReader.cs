@@ -30,29 +30,46 @@ namespace UniBinderAPI.Database
         {
             using (studybuddyEntities context = new studybuddyEntities())
             {
-                
-                PersonList = (from a in context.Person
-                              select a
-                              ).ToList();
 
-                var result = (from a in context.PersonSubject
-                              select a
-                              ).ToList();
-
-                result.ForEach(subject =>
+                var groupjoin = from a in context.person
+                                orderby a.ID
+                                join b in personSubject
+                                on a.ID equals b.ID into subjectGroup
+                                select new
+                                {
+                                    ID = a.ID,
+                                    Name = a.Name,
+                                    Password = a.password,
+                                    Email = a.Email,
+                                    Age = a.Age,
+                                    HelpScore = a.HelpScore,
+                                    Likes = a.Likes,
+                                    Dislikes = a.Dislikes,
+                                    PeopleHelped = a.PeopleHelped,
+                                    Image = a.Image,
+                                    SubjectList = subjectGroup,
+                                };
+                foreach (var user in groupJoin)
                 {
-                    PersonList.ForEach(person =>
+                    Person person = new Person();
+                    person.ID = a.ID;
+                    person.Name = a.Name;
+                    person.Password = a.password;
+                    person.Email = a.Email;
+                    person.Age = a.Age;
+                    person.HelpScore = a.HelpScore;
+                    person.Likes = a.Likes;
+                    person.Dislikes = a.Dislikes;
+                    person.PeopleHelped = a.PeopleHelped;
+                    person.Image = a.Image;
+                    foreach(var subject in user.SubjectList)
                     {
-                        if (subject.ID.Equals(person.ID))
-                        {
-                            person.SubjectList.Add(new Subject(subject.Name));
-                        }
-                    });
-                });
-
-                context.Dispose();
-                return PersonList;
+                        person.SubjectList.add(new Subject(subject.name));
+                    }
+                    PersonList.Add(person);
+                }
             }
+            return PersonList;
         }
 
         public bool CheckUniqueData(string username, string email)
