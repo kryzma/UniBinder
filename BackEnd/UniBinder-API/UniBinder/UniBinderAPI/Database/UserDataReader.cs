@@ -52,16 +52,16 @@ namespace UniBinderAPI.Database
                 foreach (var user in groupJoin)
                 {
                     Person person = new Person();
-                    person.ID = a.ID;
-                    person.Name = a.Name;
-                    person.Password = a.password;
-                    person.Email = a.Email;
-                    person.Age = a.Age;
-                    person.HelpScore = a.HelpScore;
-                    person.Likes = a.Likes;
-                    person.Dislikes = a.Dislikes;
-                    person.PeopleHelped = a.PeopleHelped;
-                    person.Image = a.Image;
+                    person.ID = user.ID;
+                    person.Name = user.Name;
+                    person.Password = user.password;
+                    person.Email = user.Email;
+                    person.Age = user.Age;
+                    person.HelpScore = user.HelpScore;
+                    person.Likes = user.Likes;
+                    person.Dislikes = user.Dislikes;
+                    person.PeopleHelped = user.PeopleHelped;
+                    person.Image = user.Image;
                     foreach(var subject in user.SubjectList)
                     {
                         person.SubjectList.add(new Subject(subject.name));
