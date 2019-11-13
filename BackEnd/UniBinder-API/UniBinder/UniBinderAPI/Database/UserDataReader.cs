@@ -28,47 +28,61 @@ namespace UniBinderAPI.Database
         }
         public List<Person> ReadUserData()
         {
-            using (StuddyBuddyEntities context = new StuddyBuddyEntities())
+            using (studybuddyEntities context = new studybuddyEntities())
             {
-                PersonList = (from a in context.People
-                              select a).ToList();
 
-                PersonList = (from a in context.People
-                              select a
-                              ).ToList();
-
-                var result = (from a in context.Subjects
-                              select a
-                              ).ToList();
-
-                result.ForEach(subject =>
+                var groupjoin = from a in context.person
+                                orderby a.ID
+                                join b in personSubject
+                                on a.ID equals b.ID into subjectGroup
+                                select new
+                                {
+                                    ID = a.ID,
+                                    Name = a.Name,
+                                    Password = a.password,
+                                    Email = a.Email,
+                                    Age = a.Age,
+                                    HelpScore = a.HelpScore,
+                                    Likes = a.Likes,
+                                    Dislikes = a.Dislikes,
+                                    PeopleHelped = a.PeopleHelped,
+                                    Image = a.Image,
+                                    SubjectList = subjectGroup,
+                                };
+                foreach (var user in groupJoin)
                 {
-                    PersonList.ForEach(person =>
+                    Person person = new Person();
+                    person.ID = user.ID;
+                    person.Name = user.Name;
+                    person.Password = user.password;
+                    person.Email = user.Email;
+                    person.Age = user.Age;
+                    person.HelpScore = user.HelpScore;
+                    person.Likes = user.Likes;
+                    person.Dislikes = user.Dislikes;
+                    person.PeopleHelped = user.PeopleHelped;
+                    person.Image = user.Image;
+                    foreach(var subject in user.SubjectList)
                     {
-                        if (subject.Id.Equals(person.PersonID))
-                        {
-                            person.Subjects.Add(new Subject { SubjectName = subject.SubjectName});
-                        }
-                    });
-                });
-
-
-                return PersonList;
+                        person.SubjectList.add(new Subject(subject.name));
+                    }
+                    PersonList.Add(person);
+                }
             }
+            return PersonList;
         }
 
         public bool CheckUniqueData(string username, string email)
         {
-            using (StuddyBuddyEntities context = new StuddyBuddyEntities())
+            using (studybuddyEntities context = new studybuddyEntities())
             {
-                
-                var result = (from a in context.People
+                var result = (from a in context.Person
                               where username.ToLower() == a.Name.ToLower()
                               select a.Name);
 
                 if (result != null) return false;
 
-                result = (from a in context.People
+                result = (from a in context.Person
                               where email.ToLower() == a.Email.ToLower()
                               select a.Email);
 
