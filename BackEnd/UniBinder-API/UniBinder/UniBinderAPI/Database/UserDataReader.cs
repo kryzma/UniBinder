@@ -28,14 +28,16 @@ namespace UniBinderAPI.Database
         }
         public List<Person> ReadUserData()
         {
-            using (studybuddyEntities context = new studybuddyEntities())
+            using (StuddyBuddyEntities context = new StuddyBuddyEntities())
             {
-                
-                PersonList = (from a in context.Person
+                PersonList = (from a in context.People
+                              select a).ToList();
+
+                PersonList = (from a in context.People
                               select a
                               ).ToList();
 
-                var result = (from a in context.PersonSubject
+                var result = (from a in context.Subjects
                               select a
                               ).ToList();
 
@@ -43,29 +45,30 @@ namespace UniBinderAPI.Database
                 {
                     PersonList.ForEach(person =>
                     {
-                        if (subject.ID.Equals(person.ID))
+                        if (subject.Id.Equals(person.PersonID))
                         {
-                            person.SubjectList.Add(new Subject(subject.Name));
+                            person.Subjects.Add(new Subject { SubjectName = subject.SubjectName});
                         }
                     });
                 });
 
-                context.Dispose();
+
                 return PersonList;
             }
         }
 
         public bool CheckUniqueData(string username, string email)
         {
-            using (studybuddyEntities context = new studybuddyEntities())
+            using (StuddyBuddyEntities context = new StuddyBuddyEntities())
             {
-                var result = (from a in context.Person
+                
+                var result = (from a in context.People
                               where username.ToLower() == a.Name.ToLower()
                               select a.Name);
 
                 if (result != null) return false;
 
-                result = (from a in context.Person
+                result = (from a in context.People
                               where email.ToLower() == a.Email.ToLower()
                               select a.Email);
 

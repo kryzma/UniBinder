@@ -13,10 +13,10 @@ namespace UniBinderAPI
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class studybuddyEntities : DbContext
+    public partial class StuddyBuddyEntities : DbContext
     {
-        public studybuddyEntities()
-            : base("name=studybuddyEntities")
+        public StuddyBuddyEntities()
+            : base("name=StuddyBuddyEntities")
         {
         }
     
@@ -25,8 +25,7 @@ namespace UniBinderAPI
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Person> Person { get; set; }
-        public virtual DbSet<PersonSubject> PersonSubject { get; set; }
+        public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
     }
 }

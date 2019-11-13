@@ -43,7 +43,7 @@ namespace UniBinderAPI.Controllers
         // GET: api/Person/5
         public HttpResponseMessage Get(int id)
         {
-            var userID = userDataReader.ReadUserData().Where(x => x.ID == id).FirstOrDefault();
+            var userID = userDataReader.ReadUserData().Where(x => x.PersonID == id).FirstOrDefault();
             if(userID == null)
             {
                 UnknownData(id.ToString(), "ID");
@@ -88,7 +88,7 @@ namespace UniBinderAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "Username"));
 
             };
-            IAuthContainerModel model = GetJWTContainerModel(username.ToLower(), RetrieveID(username.ToLower()).ToString());
+            IAuthContainerModel model = GetJWTContainerModel(username, RetrieveID(username).ToString()); //might remove case sensitivity
             IAuthService authService = new JWTService(model.SecretKey);
             string token = authService.GenerateToken(model);
 
@@ -96,10 +96,6 @@ namespace UniBinderAPI.Controllers
                 throw new UnauthorizedAccessException();
             else
             {
-                //List<Claim> claims = authService.GetTokenClaims(token).ToList();
-                //System.Diagnostics.Debug.WriteLine(claims.FirstOrDefault(e => e.Type.Equals(ClaimTypes.Name)).Value);
-                //System.Diagnostics.Debug.WriteLine(claims.FirstOrDefault(e => e.Type.Equals(ClaimTypes.Email)).Value);
-                //System.Diagnostics.Debug.WriteLine(token);
                 return Request.CreateResponse(HttpStatusCode.OK, token);
             }
         }
@@ -127,14 +123,13 @@ namespace UniBinderAPI.Controllers
                 {
                     new Claim(ClaimTypes.NameIdentifier, ID),
                     new Claim(ClaimTypes.Name, username.ToLower()),
-                    //new Claim(ClaimTypes.Email, password)
                 }
             };
         }
 
         private int RetrieveID(string username)
         {
-            var p2 = userDataReader.ReadUserData().Where(x => x.Name.ToLower() == username.ToLower()).FirstOrDefault().ID;
+            var p2 = userDataReader.ReadUserData().Where(x => x.Name.ToLower() == username.ToLower()).FirstOrDefault().PersonID;
             return p2;
         }
         private string UnknownData(string data, string nameOfData)

@@ -11,16 +11,21 @@ namespace UniBinderAPI
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.Runtime.Serialization;
+
+    [DataContract(IsReference = true)]
     public partial class Subject
     {
-        public Subject(string name)
-        {
-            Name = name;
-        }
 
-        public string Name { get; set; }
+        
+        public int Id { get; set; }
+        [DataMember]
+        public string SubjectName { get; set; }
+        [Key]
+        public int PersonID { get; set; }
 
-
+        
+        public virtual Person Person { get; set; }
     }
 }

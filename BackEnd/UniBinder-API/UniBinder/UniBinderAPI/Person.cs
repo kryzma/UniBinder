@@ -9,21 +9,31 @@
 
 namespace UniBinderAPI
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    
+
+    [JsonObject(IsReference = true)]
     public partial class Person
     {
-        public int ID { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Person()
+        {
+            this.Subjects = new HashSet<Subject>();
+        }
+    
+        public int PersonID { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
         public Nullable<int> Age { get; set; }
-        public Nullable<int> HelpScore { get; set; }
+        public Nullable<int> Score { get; set; }
         public Nullable<int> Likes { get; set; }
         public Nullable<int> Dislikes { get; set; }
         public Nullable<int> PeopleHelped { get; set; }
         public string Image { get; set; }
-        public List<Subject> SubjectList = new List<Subject>();
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Subject> Subjects { get; set; }
     }
 }

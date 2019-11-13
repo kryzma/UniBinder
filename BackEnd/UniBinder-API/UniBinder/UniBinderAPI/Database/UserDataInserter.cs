@@ -13,9 +13,9 @@ namespace UniBinderAPI.Database
         {
             public void SendUserData(Person person)
             {
-                var context = new studybuddyEntities();
+                var context = new StuddyBuddyEntities();
 
-                context.Person.Add(person);
+                context.People.Add(person);
                 context.SaveChanges();
             }
         }
