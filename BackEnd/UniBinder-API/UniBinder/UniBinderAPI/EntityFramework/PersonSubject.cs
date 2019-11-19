@@ -7,25 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UniBinderAPI
+namespace UniBinderAPI.EntityFramework
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Runtime.Serialization;
-
-    [DataContract(IsReference = true)]
-    public partial class Subject
+    
+    public partial class PersonSubject
     {
-
-        
-        public int Id { get; set; }
-        [DataMember]
-        public string SubjectName { get; set; }
-        [Key]
-        public int PersonID { get; set; }
-
-        
-        public virtual Person Person { get; set; }
+        public int ID { get; set; }
+        public Nullable<int> PersonID { get; set; }
+        public string Name { get; set; }
     }
 }

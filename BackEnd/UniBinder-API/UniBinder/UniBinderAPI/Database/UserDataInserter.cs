@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UniBinderAPI.EntityFramework;
 using UniBinderAPI.Models;
 
 namespace UniBinderAPI.Database
@@ -13,10 +14,9 @@ namespace UniBinderAPI.Database
         {
             public void SendUserData(Person person)
             {
-                using (studybuddyEntities context = new studybuddyEntities())
+                using (UniBinderEF context = new UniBinderEF())
                 {
-                    var context = new studybuddyEntities();
-                    context.Person.Add(person);
+                    context.People.Add(person);
                     context.SaveChanges();
                 }   
             }

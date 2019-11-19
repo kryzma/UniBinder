@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using UniBinderAPI.Database;
+using UniBinderAPI.EntityFramework;
 using UniBinderAPI.Managers;
 using UniBinderAPI.Models;
 
@@ -43,7 +44,7 @@ namespace UniBinderAPI.Controllers
         // GET: api/Person/5
         public HttpResponseMessage Get(int id)
         {
-            var userID = userDataReader.ReadUserData().Where(x => x.PersonID == id).FirstOrDefault();
+            var userID = userDataReader.ReadUserData().Where(x => x.ID == id).FirstOrDefault();
             if(userID == null)
             {
                 UnknownData(id.ToString(), "ID");
@@ -68,7 +69,7 @@ namespace UniBinderAPI.Controllers
         public HttpResponseMessage getPassword(string username)
         {
             List<Person> people = userDataReader.ReadUserData();
-            var person = people.Where(x => x.Name.ToLower() == username.ToLower()).ToList().FirstOrDefault();
+            var person = people.Where(x => x.Name.ToLower() == username.ToLower()).FirstOrDefault();
             if (person == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "username"));
@@ -81,14 +82,16 @@ namespace UniBinderAPI.Controllers
        // [AllowAnonymous]
         public HttpResponseMessage GetToken(string username)
         {
-            List<Person> people = userDataReader.ReadUserData();
-            var personCredentials = people.Where(x => x.Name.ToLower() == username.ToLower()).ToList().FirstOrDefault();
-            if (personCredentials == null)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "Username"));
+            //List<Person> people = userDataReader.ReadUserData();
+            //var personCredentials = people.Where(x => x.Name.ToLower() == username.ToLower()).FirstOrDefault();
+            //if (people.Exists(x => x.Name.ToLower() == username.ToLower()))
+            //if(personCredentials == null)
+            //{
+            //    return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "Username"));
 
-            };
-            IAuthContainerModel model = GetJWTContainerModel(username, RetrieveID(username).ToString()); //might remove case sensitivity
+            //};
+           // IAuthContainerModel model = GetJWTContainerModel(username.ToLower(), RetrieveID(username.ToLower()).ToString()); //might remove case sensitivity
+            IAuthContainerModel model = GetJWTContainerModel("a", "test"); //might remove case sensitivity
             IAuthService authService = new JWTService(model.SecretKey);
             string token = authService.GenerateToken(model);
 
@@ -107,10 +110,11 @@ namespace UniBinderAPI.Controllers
         {
             if (userDataReader.CheckUniqueData(person.Name, person.Email))
             {
-                userDataInserter.SendUserData(person);
+
+                //userDataInserter.SendUserData(person);
                 return Ok();
             }
-            return Content(HttpStatusCode.BadRequest, "Pick unique email or nickname"); 
+            return Content(HttpStatusCode.Ambiguous, "Pick unique email or nickname"); 
         }
 
         #endregion
@@ -129,7 +133,7 @@ namespace UniBinderAPI.Controllers
 
         private int RetrieveID(string username)
         {
-            var p2 = userDataReader.ReadUserData().Where(x => x.Name.ToLower() == username.ToLower()).FirstOrDefault().PersonID;
+            var p2 = userDataReader.ReadUserData().Where(x => x.Name.ToLower() == username.ToLower()).FirstOrDefault().ID;
             return p2;
         }
         private string UnknownData(string data, string nameOfData)

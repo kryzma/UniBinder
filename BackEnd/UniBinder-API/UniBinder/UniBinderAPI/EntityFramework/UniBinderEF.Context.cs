@@ -7,16 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UniBinderAPI
+namespace UniBinderAPI.EntityFramework
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class StuddyBuddyEntities : DbContext
+    public partial class UniBinderEF : DbContext
     {
-        public StuddyBuddyEntities()
-            : base("name=StuddyBuddyEntities")
+        public UniBinderEF()
+            : base("name=UniBinderEF")
         {
         }
     
@@ -26,6 +26,7 @@ namespace UniBinderAPI
         }
     
         public virtual DbSet<Person> People { get; set; }
+        public virtual DbSet<PersonSubject> PersonSubjects { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
     }
 }

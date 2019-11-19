@@ -312,30 +312,30 @@
     <Compile Include="Database\IUserDataReader.cs" />
     <Compile Include="Database\UserDataInserter.cs" />
     <Compile Include="Database\UserDataReader.cs" />
-    <Compile Include="DataModel.Context.cs">
+    <Compile Include="EntityFramework\Person.cs">
+      <DependentUpon>UniBinderEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\PersonSubject.cs">
+      <DependentUpon>UniBinderEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Subject.cs">
+      <DependentUpon>UniBinderEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\UniBinderEF.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DataModel.Context.tt</DependentUpon>
+      <DependentUpon>UniBinderEF.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModel.cs">
+    <Compile Include="EntityFramework\UniBinderEF.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DataModel.tt</DependentUpon>
+      <DependentUpon>UniBinderEF.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModel.Designer.cs">
+    <Compile Include="EntityFramework\UniBinderEF.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DataModel.edmx</DependentUpon>
+      <DependentUpon>UniBinderEF.edmx</DependentUpon>
     </Compile>
-    <Compile Include="DataSet2.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DataSet2.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="EntityFramework\DatabaseContext.cs" />
-    <Compile Include="EntityFramework\DbInitialiazer.cs" />
-    <Compile Include="EntityFramework\Person.cs" />
-    <Compile Include="EntityFramework\PersonConfiguration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -345,13 +345,7 @@
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\IAuthContainerModel.cs" />
     <Compile Include="Models\JWTContainerModel.cs" />
-    <Compile Include="Person.cs">
-      <DependentUpon>DataModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Subject.cs">
-      <DependentUpon>DataModel.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -359,15 +353,15 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="DataModel.Context.tt">
+    <Content Include="EntityFramework\UniBinderEF.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DataModel.edmx</DependentUpon>
-      <LastGenOutput>DataModel.Context.cs</LastGenOutput>
+      <DependentUpon>UniBinderEF.edmx</DependentUpon>
+      <LastGenOutput>UniBinderEF.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="DataModel.tt">
+    <Content Include="EntityFramework\UniBinderEF.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DataModel.edmx</DependentUpon>
-      <LastGenOutput>DataModel.cs</LastGenOutput>
+      <DependentUpon>UniBinderEF.edmx</DependentUpon>
+      <LastGenOutput>UniBinderEF.cs</LastGenOutput>
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -393,23 +387,12 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="DataSet2.xsc">
-      <DependentUpon>DataSet2.xsd</DependentUpon>
-    </Content>
-    <EntityDeploy Include="DataModel.edmx">
+    <EntityDeploy Include="EntityFramework\UniBinderEF.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DataModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>UniBinderEF.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="DataModel.edmx.diagram">
-      <DependentUpon>DataModel.edmx</DependentUpon>
-    </Content>
-    <None Include="DataSet2.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DataSet2.Designer.cs</LastGenOutput>
-    </None>
-    <Content Include="DataSet2.xss">
-      <DependentUpon>DataSet2.xsd</DependentUpon>
+    <Content Include="EntityFramework\UniBinderEF.edmx.diagram">
+      <DependentUpon>UniBinderEF.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
