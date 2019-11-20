@@ -29,36 +29,61 @@ namespace UniBinderAPI.Database
         }
         public List<Person> ReadUserData()
         {
+
             using (UniBinderEF context = new UniBinderEF())
             {
-                PersonList = (from a in context.People
-                              select a).ToList();
+                var users = (from a in context.People select a).ToList();
+                var usersSubjects = (from a in context.PersonSubjects select a).ToList();
 
-                PersonList = (from a in context.People
-                              select a
-                              ).ToList();
+                var groupJoin = users.GroupJoin(usersSubjects,
+                    per => per.ID,
+                    sub => sub.ID,
+                    (per, subjectGroup) => new
+                    {
+                        subjectsList = subjectGroup,
+                        per.ID,
+                        per.Username,
+                        per.Password,
+                        per.Name,
+                        per.Surname,
+                        per.Email,
+                        per.Role,
+                        per.Likes,
+                        per.Dislikes,
+                        per.ImageLink,
 
-                var result = (from a in context.PersonSubjects
-                              select a
-                              ).ToList();
+                    });
 
-                //result.ForEach(subject =>
-                //{
-                //    PersonList.ForEach(person =>
-                //    {
+                foreach (var per in groupJoin)
+                {
+                    Person person = new Person();
+                    person.ID = per.ID;
+                    person.Username = per.Username;
+                    person.Password = per.Password;
+                    person.Name = per.Name;
+                    person.Surname = per.Surname;
+                    person.Email = per.Email;
+                    person.Role = per.Role;
+                    person.Likes = per.Likes;
+                    person.Dislikes = per.Dislikes;
+                    person.ImageLink = per.ImageLink;
 
-                //        if (subject.ID.Equals(person.ID))
-                //        {
-                //            person.SubjectList.Add(new Subject { Name = subject.Name });
-                //        }
-                //    });
-                //});
+                    person.SubjectList = new List<Subject>();
+                    foreach (var sub in per.subjectsList)
+                    {
+                        Subject subject = new Subject();
+                        subject.Name = sub.Name;
+                        person.SubjectList.Add(subject);
+                    }
+                    PersonList.Add(person);
+                }
 
                 return PersonList;
             }
         }
 
-            public bool CheckUniqueData(string username, string email)
+
+        public bool CheckUniqueData(string username, string email)
             {
                 using (UniBinderEF context = new UniBinderEF())
                 {

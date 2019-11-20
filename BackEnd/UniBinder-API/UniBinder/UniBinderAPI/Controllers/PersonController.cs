@@ -21,7 +21,8 @@ namespace UniBinderAPI.Controllers
     {
         UserDataReader userDataReader = new UserDataReader();
         UserDataInserter userDataInserter = new UserDataInserter();
-
+        Lazy<UserDataInserter> _inserter = new Lazy<UserDataInserter>();
+        Lazy<UserDataReader> _reader = new Lazy<UserDataReader>();
         PersonController()
         {           
         }
@@ -32,13 +33,15 @@ namespace UniBinderAPI.Controllers
         [HttpGet]
         public int GetNumber()
         {
-            return userDataReader.ReadUserData().Count;
+            //return userDataReader.ReadUserData().Count;
+            return _reader.Value.ReadUserData().Count;
         }
 
         // GET: api/Person
         public IEnumerable<Person> Get()
         {
-            return userDataReader.ReadUserData();
+            //return userDataReader.ReadUserData();
+            return _reader.Value.ReadUserData();
         }
 
         // GET: api/Person/5
@@ -112,6 +115,7 @@ namespace UniBinderAPI.Controllers
             {
 
                 //userDataInserter.SendUserData(person);
+               
                 return Ok();
             }
             return Content(HttpStatusCode.Ambiguous, "Pick unique email or nickname"); 
