@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using UniBinderAPI.Database;
+using UniBinderAPI.DependencyInjection;
 using UniBinderAPI.EntityFramework;
 using UniBinderAPI.Managers;
 using UniBinderAPI.Models;
@@ -23,11 +24,21 @@ namespace UniBinderAPI.Controllers
         UserDataInserter userDataInserter = new UserDataInserter();
         Lazy<UserDataInserter> _inserter = new Lazy<UserDataInserter>();
         Lazy<UserDataReader> _reader = new Lazy<UserDataReader>();
-        PersonController()
-        {           
-        }
+
+        PersonDI _personDI = new PersonDI(new PersonReader());
+
+
 
         #region GetApi
+        [Route("api/person/list")]
+        [HttpGet]
+        public IEnumerable<Person> GetList()
+        {
+            //return userDataReader.ReadUserData();
+            var list = _personDI.GetPeople();
+            return list;
+        }
+
 
         [Route("api/person/count")]
         [HttpGet]
@@ -86,16 +97,16 @@ namespace UniBinderAPI.Controllers
        // [AllowAnonymous]
         public HttpResponseMessage GetToken(string username)
         {
-            //List<Person> people = userDataReader.ReadUserData();
-            //var personCredentials = people.Where(x => x.Name.ToLower() == username.ToLower()).FirstOrDefault();
-            //if (people.Exists(x => x.Name.ToLower() == username.ToLower()))
-            //if(personCredentials == null)
-            //{
-            //    return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "Username"));
+            List<Person> people = userDataReader.ReadUserData();
+            var personCredentials = people.Where(x => x.Name.ToLower() == username.ToLower()).FirstOrDefault();
+            if (people.Exists(x => x.Name.ToLower() == username.ToLower()))
+                if (personCredentials == null)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "Username"));
 
-            //};
-           // IAuthContainerModel model = GetJWTContainerModel(username.ToLower(), RetrieveID(username.ToLower()).ToString()); //might remove case sensitivity
-            IAuthContainerModel model = GetJWTContainerModel("a", "test"); //might remove case sensitivity
+                };
+            IAuthContainerModel model = GetJWTContainerModel(username.ToLower(), RetrieveID(username.ToLower()).ToString()); //might remove case sensitivity
+           // IAuthContainerModel model = GetJWTContainerModel("a", "test"); //might remove case sensitivity
             IAuthService authService = new JWTService(model.SecretKey);
             string token = authService.GenerateToken(model);
 
