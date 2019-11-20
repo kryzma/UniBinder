@@ -37,7 +37,7 @@ namespace UniBinderAPI.Database
 
                 var groupJoin = users.GroupJoin(usersSubjects,
                     per => per.ID,
-                    sub => sub.ID,
+                    sub => sub.PersonID,
                     (per, subjectGroup) => new
                     {
                         subjectsList = subjectGroup,

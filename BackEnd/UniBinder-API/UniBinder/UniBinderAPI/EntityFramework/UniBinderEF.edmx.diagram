@@ -6,8 +6,8 @@
     <edmx:Diagrams>
       <Diagram DiagramId="1bc3504fd9dc4fcd810eca30813a7cc1" Name="Diagram1">
         <EntityTypeShape EntityType="UniBinderModel.Person" Width="1.5" PointX="4.75" PointY="0.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="UniBinderModel.PersonSubject" Width="1.5" PointX="6.875" PointY="0.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="UniBinderModel.Subject" Width="1.5" PointX="6.75" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="UniBinderModel.PersonSubject" Width="1.5" PointX="6.75" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="UniBinderModel.Subject" Width="1.5" PointX="9.5" PointY="1.625" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

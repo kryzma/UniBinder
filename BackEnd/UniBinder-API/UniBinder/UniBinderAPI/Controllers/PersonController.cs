@@ -47,7 +47,8 @@ namespace UniBinderAPI.Controllers
         // GET: api/Person/5
         public HttpResponseMessage Get(int id)
         {
-            var userID = userDataReader.ReadUserData().Where(x => x.ID == id).FirstOrDefault();
+            
+            var userID = _reader.Value.ReadUserData().Where(x => x.ID == id).FirstOrDefault();
             if(userID == null)
             {
                 UnknownData(id.ToString(), "ID");
