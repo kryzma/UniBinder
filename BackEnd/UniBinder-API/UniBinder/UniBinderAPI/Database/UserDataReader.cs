@@ -10,8 +10,13 @@ using System.Threading.Tasks;
 using UniBinderAPI.EntityFramework;
 using UniBinderAPI.Models;
 
+
+
 namespace UniBinderAPI.Database
 {
+    // defining generic delegate
+    delegate T delegate1 <T> ();
+
 
     class UserDataReader : IUserDataReader
     {
@@ -19,9 +24,12 @@ namespace UniBinderAPI.Database
 
         public List<Person> GetUserList()
         {
+            // creating delegate object
+            delegate1 < List<person> > Delegatas = ReadUserData;
+
             if (PersonList.Count == 0)
             {
-                return ReadUserData();
+                return Delegatas(); ;
             }
             else
             {
