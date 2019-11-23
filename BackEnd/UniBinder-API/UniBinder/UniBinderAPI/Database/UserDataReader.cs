@@ -14,35 +14,16 @@ using UniBinderAPI.Models;
 
 namespace UniBinderAPI.Database
 {
-    // defining generic delegate
-    delegate T delegate1 <T> ();
-
 
     class UserDataReader : IUserDataReader
     {
         List<Person> PersonList = new List<Person>();
 
-        public List<Person> GetUserList()
-        {
-            // creating delegate object
-            delegate1 < List<person> > Delegatas = ReadUserData;
-
-            if (PersonList.Count == 0)
-            {
-                return Delegatas(); ;
-            }
-            else
-            {
-                return PersonList;
-            }
-        }
-
 
             public List<Person> ReadUserData()
             {
-
-                    using (UniBinderEF context = new UniBinderEF())
-                    {
+            using (UniBinderEF context = new UniBinderEF())
+            {
                         var users = (from a in context.People select a).ToList();
                         var usersSubjects = (from a in context.PersonSubjects select a).ToList();
 
