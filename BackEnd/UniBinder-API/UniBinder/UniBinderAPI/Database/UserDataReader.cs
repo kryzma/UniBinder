@@ -33,8 +33,6 @@ namespace UniBinderAPI.Database
             public List<Person> ReadUserData()
             {
 
-                Thread thread = new Thread(() =>
-                {
                     using (UniBinderEF context = new UniBinderEF())
                     {
                         var users = (from a in context.People select a).ToList();
@@ -83,13 +81,11 @@ namespace UniBinderAPI.Database
                             PersonList.Add(person);
                         }
                     }
-                });
-                thread.Start();
-                thread.Join();
+                
+
                 return PersonList;
 
             }
-        
 
 
         public bool CheckUniqueData(string username, string email)
