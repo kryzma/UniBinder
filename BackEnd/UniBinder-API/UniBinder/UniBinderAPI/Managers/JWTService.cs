@@ -35,13 +35,12 @@ namespace UniBinderAPI.Managers
         {
             if (string.IsNullOrEmpty(token))
                 throw new ArgumentException("Given token is null or empty.");
-
             TokenValidationParameters tokenValidationParameters = GetTokenValidationParameters();
-
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken validatedToken = null;
             try
             {
-                ClaimsPrincipal tokenValid = jwtSecurityTokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
+                ClaimsPrincipal tokenValid = jwtSecurityTokenHandler.ValidateToken(token, tokenValidationParameters, out validatedToken);
                 return true;
             }
             catch (Exception)

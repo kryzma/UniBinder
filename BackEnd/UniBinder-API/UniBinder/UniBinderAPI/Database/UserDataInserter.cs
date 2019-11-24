@@ -10,17 +10,29 @@ using UniBinderAPI.Models;
 namespace UniBinderAPI.Database
 {
 
-        class UserDataInserter : IUserDataInserter
+    class UserDataInserter : IUserDataInserter
+    {
+        public void SendUserData(Person person)
         {
-            public void SendUserData(Person person)
+            using (var context = new UniBinderEF())
             {
-                using (UniBinderEF context = new UniBinderEF())
-                {
-                    context.People.Add(person);
-                    context.SaveChanges();
-                }   
+                context.People.Add(person);
+                context.SaveChanges();
+            }   
+        }
+
+        public void AddSubjects(PersonSubject personSubject)
+        {
+            using(var context = new UniBinderEF())
+            {
+                context.PersonSubjects.Add(personSubject);
+                context.SaveChanges();
             }
         }
+
+
+
+    }
 
     
 

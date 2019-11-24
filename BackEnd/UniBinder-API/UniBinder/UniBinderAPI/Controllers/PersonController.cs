@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -22,7 +21,6 @@ namespace UniBinderAPI.Controllers
     {
         UserDataReader userDataReader = new UserDataReader();
         UserDataInserter userDataInserter = new UserDataInserter();
-        Lazy<UserDataInserter> _inserter = new Lazy<UserDataInserter>();
         Lazy<UserDataReader> _reader = new Lazy<UserDataReader>();
 
         #region GetApi
@@ -43,7 +41,6 @@ namespace UniBinderAPI.Controllers
         // GET: api/Person/5
         public HttpResponseMessage Get(int id)
         {
-
             var userID = _reader.Value.ReadUserData().Where(x => x.ID == id).FirstOrDefault();
             if (userID == null)
             {
@@ -68,7 +65,7 @@ namespace UniBinderAPI.Controllers
         // [AllowAnonymous]
         public HttpResponseMessage getPassword(string username)
         {
-            List<Person> people = userDataReader.ReadUserData();
+            var people = userDataReader.ReadUserData();
             var person = people.Where(x => x.Name.ToLower() == username.ToLower()).FirstOrDefault();
             if (person == null)
             {
@@ -82,7 +79,7 @@ namespace UniBinderAPI.Controllers
         // [AllowAnonymous]
         public HttpResponseMessage GetToken(string username)
         {
-            List<Person> people = userDataReader.ReadUserData();
+            var people = userDataReader.ReadUserData();
             var personCredentials = people.Where(x => x.Name.ToLower() == username.ToLower()).FirstOrDefault();
             if (people.Exists(x => x.Name.ToLower() == username.ToLower()))
                 if (personCredentials == null)
@@ -102,6 +99,8 @@ namespace UniBinderAPI.Controllers
             }
         }
 
+        #endregion
+        #region PostApi
 
         [Route("api/person/CheckToken")]
         [HttpPost]
@@ -125,7 +124,7 @@ namespace UniBinderAPI.Controllers
                                             .Value;
 
             var legitToken = _reader.Value.ReadUserData().Exists(x =>
-                                            x.Username == checkName
+                                            x.Username == checkName        //jwt don't have claims for username so i used 'Name' instead
                                             && x.ID.ToString() == checkID);
 
             if (legitToken) return Ok();
@@ -133,20 +132,54 @@ namespace UniBinderAPI.Controllers
         }
 
 
-        #endregion
-        #region PostApi
+
         [Route("api/person/Registration")]
         [HttpPost]
         public IHttpActionResult Registration(Person person)
         {
-            if (userDataReader.CheckUniqueData(person.Name, person.Email))
+            if (!userDataReader.CheckUniqueData(person.Username, person.Email))
+            //if (!userDataReader.CheckUniqueData(person.Name, person.Email)) //
             {
-
-                //userDataInserter.SendUserData(person);
-
-                return Ok();
+                return Content(HttpStatusCode.Ambiguous, "Pick unique email or nickname");
             }
-            return Content(HttpStatusCode.Ambiguous, "Pick unique email or nickname");
+            CreateUniqueId(person);
+            
+            foreach(var item in person.SubjectList)
+            {
+                userDataInserter.AddSubjects(new PersonSubject
+                {
+                    PersonID = person.ID,
+                    Name = item.Name,
+                    ID = UniqueSubjectID(item.ID)
+                }) ;
+            }
+            return AddToDB(person);
+        }
+
+        private int UniqueSubjectID(int ID)
+        {
+            var personSubjects = userDataReader.PersonSubjects();
+            while(personSubjects.Exists(x => x.ID == ID))
+            {
+                ID++;
+            }
+            return ID;
+        }
+
+        private IHttpActionResult AddToDB(Person person)
+        {
+            CreateUniqueId(person);
+            userDataInserter.SendUserData(person);
+            return Ok();
+        }
+
+        private void CreateUniqueId(Person person)
+        {
+            while (_reader.Value.ReadUserData().Exists(x => x.ID == person.ID)) // prob. is not efficient, maybe should consider to make random number?
+            {
+                person.ID++;
+            }
+            return;
         }
 
         #endregion
