@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using UniBinderAPI.Database;
-using UniBinderAPI.DependencyInjection;
 using UniBinderAPI.EntityFramework;
 using UniBinderAPI.Managers;
 using UniBinderAPI.Models;
@@ -19,7 +18,6 @@ namespace UniBinderAPI.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class PersonController : ApiController
     {
-        UserDataReader userDataReader = new UserDataReader();
         UserDataInserter userDataInserter = new UserDataInserter();
         Lazy<UserDataReader> _reader = new Lazy<UserDataReader>();
 
@@ -29,7 +27,7 @@ namespace UniBinderAPI.Controllers
         [HttpGet]
         public int GetNumber()
         {
-            return _reader.Value.ReadUserData().Count;
+            return _reader.Value.PeopleNumber();
         }
 
         // GET: api/Person
@@ -41,13 +39,13 @@ namespace UniBinderAPI.Controllers
         // GET: api/Person/5
         public HttpResponseMessage Get(int id)
         {
-            var userID = _reader.Value.ReadUserData().Where(x => x.ID == id).FirstOrDefault();
-            if (userID == null)
+            var user = _reader.Value.ReadUserData().Where(x => x.ID == id).FirstOrDefault();
+            if (user == null)
             {
                 UnknownData(id.ToString(), "ID");
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(id.ToString(), UnknownData(id.ToString(), "ID")));
             }
-            return Request.CreateResponse(HttpStatusCode.OK, userID);
+            return Request.CreateResponse(HttpStatusCode.OK, user);
         }
 
         [Route("api/person/ID")]
@@ -65,8 +63,8 @@ namespace UniBinderAPI.Controllers
         // [AllowAnonymous]
         public HttpResponseMessage getPassword(string username)
         {
-            var people = userDataReader.ReadUserData();
-            var person = people.Where(x => x.Name.ToLower() == username.ToLower()).FirstOrDefault();
+            var people = _reader.Value.ReadUserData();
+            var person = people.Where(x => x.Username.ToLower() == username.ToLower()).FirstOrDefault();
             if (person == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "username"));
@@ -79,9 +77,9 @@ namespace UniBinderAPI.Controllers
         // [AllowAnonymous]
         public HttpResponseMessage GetToken(string username)
         {
-            var people = userDataReader.ReadUserData();
-            var personCredentials = people.Where(x => x.Name.ToLower() == username.ToLower()).FirstOrDefault();
-            if (people.Exists(x => x.Name.ToLower() == username.ToLower()))
+            var people = _reader.Value.ReadUserData();
+            var personCredentials = people.Where(x => x.Username.ToLower() == username.ToLower()).FirstOrDefault();
+            if (people.Exists(x => x.Username.ToLower() == username.ToLower()))
                 if (personCredentials == null)
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "Username"));
@@ -100,6 +98,16 @@ namespace UniBinderAPI.Controllers
         }
 
         #endregion
+
+        [Route("api/person/ChangeUserSettings")]
+        [HttpPut]
+        public IHttpActionResult ChangeUserSettings(Person person)
+        {
+            if(userDataInserter.UpdatePersonInfo(person)) return Ok();
+            return BadRequest();
+        }
+
+
         #region PostApi
 
         [Route("api/person/CheckToken")]
@@ -137,34 +145,17 @@ namespace UniBinderAPI.Controllers
         [HttpPost]
         public IHttpActionResult Registration(Person person)
         {
-            if (!userDataReader.CheckUniqueData(person.Username, person.Email))
             //if (!userDataReader.CheckUniqueData(person.Name, person.Email)) //
+            if (!_reader.Value.CheckUniqueData(person.Username, person.Email))
             {
                 return Content(HttpStatusCode.Ambiguous, "Pick unique email or nickname");
             }
             CreateUniqueId(person);
-            
-            foreach(var item in person.SubjectList)
-            {
-                userDataInserter.AddSubjects(new PersonSubject
-                {
-                    PersonID = person.ID,
-                    Name = item.Name,
-                    ID = UniqueSubjectID(item.ID)
-                }) ;
-            }
+            userDataInserter.LinkSubjectsToPerson(person);
             return AddToDB(person);
         }
 
-        private int UniqueSubjectID(int ID)
-        {
-            var personSubjects = userDataReader.PersonSubjects();
-            while(personSubjects.Exists(x => x.ID == ID))
-            {
-                ID++;
-            }
-            return ID;
-        }
+
 
         private IHttpActionResult AddToDB(Person person)
         {

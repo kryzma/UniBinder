@@ -19,7 +19,6 @@ namespace UniBinderAPI.Database
     {
         List<Person> PersonList = new List<Person>();
 
-
         public List<Person> ReadUserData()
         {
             using (var context = new UniBinderEF())
@@ -28,42 +27,40 @@ namespace UniBinderAPI.Database
                 var usersSubjects = (from a in context.PersonSubjects select a).ToList();
 
                 var groupJoin = users.GroupJoin(usersSubjects,
-                per => per.ID,
+                person => person.ID,
                 sub => sub.PersonID,
-                (per, subjectGroup) => new
+                (person, subjectGroup) => new
                 {
                     subjectsList = subjectGroup,
-                    per.ID,
-                    per.Username,
-                    per.Password,
-                    per.Name,
-                    per.Surname,
-                    per.Email,
-                    per.Role,
-                    per.Likes,
-                    per.Dislikes,
-                    per.ImageLink,
-
+                    person.ID,
+                    person.Username,
+                    person.Password,
+                    person.Name,
+                    person.Surname,
+                    person.Email,
+                    person.Role,
+                    person.Likes,
+                    person.Dislikes,
+                    person.ImageLink,
                 });
 
-                foreach (var per in groupJoin)
+                foreach (var p in groupJoin)
                 {
                     var person = new Person
                     {
-                        ID = per.ID,
-                        Username = per.Username,
-                        Password = per.Password,
-                        Name = per.Name,
-                        Surname = per.Surname,
-                        Email = per.Email,
-                        Role = per.Role,
-                        Likes = per.Likes,
-                        Dislikes = per.Dislikes,
-                        ImageLink = per.ImageLink,
-
+                        ID = p.ID,
+                        Username = p.Username,
+                        Password = p.Password,
+                        Name = p.Name,
+                        Surname = p.Surname,
+                        Email = p.Email,
+                        Role = p.Role,
+                        Likes = p.Likes,
+                        Dislikes = p.Dislikes,
+                        ImageLink = p.ImageLink,
                         SubjectList = new List<Subject>()
                     };
-                    foreach (var sub in per.subjectsList)
+                    foreach (var sub in p.subjectsList)
                     {
                         var subject = new Subject
                         {
@@ -74,10 +71,7 @@ namespace UniBinderAPI.Database
                     PersonList.Add(person);
                 }
             }
-
-
             return PersonList;
-
         }
 
         public List<PersonSubject> PersonSubjects()
@@ -86,6 +80,22 @@ namespace UniBinderAPI.Database
             {
                 var personSubjects = (from x in context.PersonSubjects select x).ToList();
                 return personSubjects;
+            }
+        }
+
+        public Person GetPersonByID(int id) //query, which returns person by id, although subject list is null, because join to subjects is missing
+        {
+            using (var context = new UniBinderEF())
+            {
+                return (context.People.Where(x => x.ID == id)).First();
+            }
+        }
+
+        public int PeopleNumber()
+        {
+            using (var context = new UniBinderEF())
+            {
+                return (from people in context.People select people).Count();
             }
         }
 
