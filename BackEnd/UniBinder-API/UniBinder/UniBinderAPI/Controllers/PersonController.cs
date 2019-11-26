@@ -115,7 +115,7 @@ namespace UniBinderAPI.Controllers
         public IHttpActionResult CheckToken(string CheckedToken, string username)
         {
             IAuthContainerModel model = GetJWTContainerModel(username, 
-                RetrieveID(username).ToString());
+                                        RetrieveID(username).ToString());
 
             IAuthService authService = new JWTService(model.SecretKey);
             string OriginalToken = authService.GenerateToken(model);

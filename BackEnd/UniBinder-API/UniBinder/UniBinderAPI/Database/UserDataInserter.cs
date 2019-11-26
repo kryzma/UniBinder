@@ -25,10 +25,13 @@ namespace UniBinderAPI.Database
 
         public void AddSubjects(PersonSubject personSubject)
         {
-            using(var context = new UniBinderEF())
+            using (var context = new UniBinderEF())
             {
+                if (!context.PersonSubjects.ToList().Exists(x => x.PersonID == personSubject.PersonID && x.Name == personSubject.Name))
+                { 
                 context.PersonSubjects.Add(personSubject);
                 context.SaveChanges();
+                }
             }
         }
 
