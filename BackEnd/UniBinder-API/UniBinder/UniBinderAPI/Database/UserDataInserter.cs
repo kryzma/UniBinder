@@ -23,7 +23,7 @@ namespace UniBinderAPI.Database
             }   
         }
 
-        public void AddSubjects(PersonSubject personSubject)
+        private void AddSubjects(PersonSubject personSubject)
         {
             using (var context = new UniBinderEF())
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -112,13 +113,14 @@ namespace UniBinderAPI.Controllers
 
         [Route("api/person/CheckToken")]
         [HttpPost]
-        public IHttpActionResult CheckToken(string CheckedToken, string username)
+        public IHttpActionResult CheckToken(string CheckedToken)
         {
-            IAuthContainerModel model = GetJWTContainerModel(username, 
-                                        RetrieveID(username).ToString());
+            //IAuthContainerModel model = GetJWTContainerModel(username, 
+            //                            RetrieveID(username).ToString());
 
-            IAuthService authService = new JWTService(model.SecretKey);
-            string OriginalToken = authService.GenerateToken(model);
+            //IAuthService authService = new JWTService(model.SecretKey);
+            IAuthService authService = new JWTService(ConfigurationManager.AppSettings["SecretJWTKey"]);
+            //string OriginalToken = authService.GenerateToken(model);
             var checkedClaims = authService.GetTokenClaims(CheckedToken).ToList();
 
             //might change FirstOrDefault to First 
@@ -132,7 +134,7 @@ namespace UniBinderAPI.Controllers
                                             .Value;
 
             var legitToken = _reader.Value.ReadUserData().Exists(x =>
-                                            x.Username == checkName        //jwt don't have claims for username so i used 'Name' instead
+                                            x.Username.ToLower() == checkName.ToLower()        //jwt don't have claims for username so i used 'Name' instead
                                             && x.ID.ToString() == checkID);
 
             if (legitToken) return Ok();
@@ -148,18 +150,18 @@ namespace UniBinderAPI.Controllers
             //if (!userDataReader.CheckUniqueData(person.Name, person.Email)) //
             if (!_reader.Value.CheckUniqueData(person.Username, person.Email))
             {
-                return Content(HttpStatusCode.Ambiguous, "Pick unique email or nickname");
+                return Conflict();
             }
             CreateUniqueId(person);
             userDataInserter.LinkSubjectsToPerson(person);
             return AddToDB(person);
         }
 
-
-
+        #endregion
+        #region Private Methods
         private IHttpActionResult AddToDB(Person person)
         {
-            CreateUniqueId(person);
+            //CreateUniqueId(person);
             userDataInserter.SendUserData(person);
             return Ok();
         }
@@ -172,9 +174,6 @@ namespace UniBinderAPI.Controllers
             }
             return;
         }
-
-        #endregion
-        #region Private Methods
         private static JWTContainerModel GetJWTContainerModel(string username, string ID)
         {
             return new JWTContainerModel()
@@ -195,11 +194,6 @@ namespace UniBinderAPI.Controllers
         private string UnknownData(string data, string nameOfData)
         {
             return string.Format("No User found with {0} = {1}", nameOfData, data);
-        }
-        private bool CheckExistingData(Person person, List<Person> people)
-        {
-            if (people.Exists(x => x.Name.ToLower() == person.Name.ToLower() || x.Email.ToLower() == person.Email.ToLower())) return true;
-            return false;
         }
         #endregion
 

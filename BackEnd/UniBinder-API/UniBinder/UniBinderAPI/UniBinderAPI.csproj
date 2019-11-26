@@ -304,7 +304,6 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
@@ -342,9 +341,6 @@
     <Compile Include="Database\IUserDataReader.cs" />
     <Compile Include="Database\UserDataInserter.cs" />
     <Compile Include="Database\UserDataReader.cs" />
-    <Compile Include="DependencyInjection\IPersonReader.cs" />
-    <Compile Include="DependencyInjection\PersonDI.cs" />
-    <Compile Include="DependencyInjection\PersonReader.cs" />
     <Compile Include="EntityFramework\Person.cs">
       <DependentUpon>UniBinderEF.tt</DependentUpon>
     </Compile>
@@ -373,17 +369,17 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Managers\IAuthService.cs" />
-    <Compile Include="Managers\IDependancyResolver.cs" />
-    <Compile Include="Managers\IDependencyScope.cs" />
-    <Compile Include="Managers\IPersonManager.cs" />
     <Compile Include="Managers\JWTService.cs" />
-    <Compile Include="Managers\PersonManager.cs" />
-    <Compile Include="Managers\UnityResolver.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\IAuthContainerModel.cs" />
     <Compile Include="Models\JWTContainerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -432,6 +428,11 @@
     <Content Include="EntityFramework\UniBinderEF.edmx.diagram">
       <DependentUpon>UniBinderEF.edmx</DependentUpon>
     </Content>
+    <Content Include=".editorconfig" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
