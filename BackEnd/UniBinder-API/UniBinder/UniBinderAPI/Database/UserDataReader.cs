@@ -83,14 +83,6 @@ namespace UniBinderAPI.Database
             }
         }
 
-        public Person GetPersonByID(int id) //query, which returns person by id, although subject list is null, because join to subjects is missing
-        {
-            using (var context = new UniBinderEF())
-            {
-                return (context.People.Where(x => x.ID == id)).First();
-            }
-        }
-
         public int PeopleNumber()
         {
             using (var context = new UniBinderEF())
