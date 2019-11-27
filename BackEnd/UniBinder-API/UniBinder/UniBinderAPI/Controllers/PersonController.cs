@@ -52,9 +52,11 @@ namespace UniBinderAPI.Controllers
         [Route("api/person/ID")]
         [HttpGet]
         // [AllowAnonymous]
-        public int getID(string username)
+        public HttpResponseMessage GetID(string username)
         {
-            return RetrieveID(username);
+            var person = _reader.Value.ReadUserData().Where(x => x.Username == username).First();
+            if (person == null) return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(id.ToString(), UnknownData(id.ToString(), "ID")));
+            return Request.CreateResponse(HttpStatusCode.OK, person.ID);
         }
 
 
@@ -80,13 +82,13 @@ namespace UniBinderAPI.Controllers
         {
             var people = _reader.Value.ReadUserData();
             var personCredentials = people.Where(x => x.Username.ToLower() == username.ToLower()).FirstOrDefault();
-            if (people.Exists(x => x.Username.ToLower() == username.ToLower()))
+            if (!people.Exists(x => x.Username.ToLower() == username.ToLower()))
                 if (personCredentials == null)
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "Username"));
 
                 };
-            IAuthContainerModel model = GetJWTContainerModel(username, RetrieveID(username).ToString()); //might remove case sensitivity
+            IAuthContainerModel model = GetJWTContainerModel(username.ToLower(), personCredentials.ID.ToString()); //might remove case sensitivity
                                                                                                                              // IAuthContainerModel model = GetJWTContainerModel("a", "test"); //might remove case sensitivity
             IAuthService authService = new JWTService(model.SecretKey);
             string token = authService.GenerateToken(model);
@@ -188,8 +190,10 @@ namespace UniBinderAPI.Controllers
 
         private int RetrieveID(string username) // null 
         {
-            var p2 = _reader.Value.ReadUserData().Where(x => x.Username == username).First();
-            return p2.ID;
+            var p2 = _reader.Value.ReadUserData().Where(x => x.Username.ToLower() == username.ToLower()).First();
+            if(p2 != null) return p2.ID;
+            return -1;
+
         }
         private string UnknownData(string data, string nameOfData)
         {
