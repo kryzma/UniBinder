@@ -145,18 +145,21 @@ namespace UniBinderAPI.Controllers
 
 
 
+
+
         [Route("api/person/Registration")]
         [HttpPost]
         public IHttpActionResult Registration(Person person)
         {
-            //if (!userDataReader.CheckUniqueData(person.Name, person.Email)) //
-            if (!_reader.Value.CheckUniqueData(person.Username, person.Email))
+            using(var context = new UniBinderEF())
             {
-                return Conflict();
+                var people = context.People.ToList();
+                if (people.Exists(x => x.Username.ToLower() == person.Username.ToLower())) return BadRequest();
+                if (people.Exists(x => x.Email.ToLower() == person.Email.ToLower())) return Conflict();
+                CreateUniqueId(person);
+                userDataInserter.LinkSubjectsToPerson(person);
+                return AddToDB(person);
             }
-            CreateUniqueId(person);
-            userDataInserter.LinkSubjectsToPerson(person);
-            return AddToDB(person);
         }
 
         #endregion
@@ -166,6 +169,17 @@ namespace UniBinderAPI.Controllers
             //CreateUniqueId(person);
             userDataInserter.SendUserData(person);
             return Ok();
+        }
+
+        public IHttpActionResult CheckUniqueData(string username, string email)
+        {
+            using (var context = new UniBinderEF())
+            {
+                var people = context.People.ToList();
+                if (people.Exists(x => x.Username.ToLower() == username.ToLower())) return BadRequest();
+                if (people.Exists(x => x.Email.ToLower() == email.ToLower())) return Conflict();
+                return Ok();
+            }
         }
 
         private void CreateUniqueId(Person person)

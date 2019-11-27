@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Http;
 using UniBinderAPI.EntityFramework;
 using UniBinderAPI.Models;
 
@@ -91,16 +92,7 @@ namespace UniBinderAPI.Database
             }
         }
 
-        public bool CheckUniqueData(string username, string email)
-        {
-            using (var context = new UniBinderEF())
-            {
-                var people = context.People.ToList();
-                if (people.Exists(x => x.Username.ToLower() == username.ToLower() || email.ToLower() == x.Email.ToLower()) ) return false;
-                else return true;
-            }
 
-        }
     }
 }
 
