@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Web.Http;
-using UniBinderAPI.Managers;
-using Unity;
-using Unity.Lifetime;
 
 namespace UniBinderAPI
 {
