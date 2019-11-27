@@ -55,7 +55,7 @@ namespace UniBinderAPI.Controllers
         public HttpResponseMessage GetID(string username)
         {
             var person = _reader.Value.ReadUserData().Where(x => x.Username == username).First();
-            if (person == null) return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(id.ToString(), UnknownData(id.ToString(), "ID")));
+            if (person == null) return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(person.ID.ToString(), UnknownData(person.ID.ToString(), "ID")));
             return Request.CreateResponse(HttpStatusCode.OK, person.ID);
         }
 
