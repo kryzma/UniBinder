@@ -12,23 +12,21 @@ class UserChat extends React.Component {
         return (
             <div className="user-chat-wrapper">
                 <Container>
-                    <Row>
-                        <div className="user-chat-row">
-                            <Col lg={{ span: 4 }}>
-                                <ChatIcon className="user-chat-icon" />
-                            </Col>
-                            <Col className="user-chat-title-col" lg={{ span: 8 }}>
-                                <div className="user-chat-title-wrapper">
-                                    Chat with matched Buddies
+                    <Row className="user-chat-row">
+                        <Col className="user-chat-icon-col" lg={{ span: 4 }} md={{ span: 2 }} sm={{ span: 2 }} xs={{ span: 2 }}>
+                            <ChatIcon className="user-chat-icon" />
+                        </Col>
+                        <Col className="user-chat-title-col" lg={{ span: 8 }} md={{ span: 10 }} sm={{ span: 10 }} xs={{ span: 10 }}>
+                            <div className="user-chat-title-wrapper">
+                                Chat with matched Buddies
                                 </div>
-                            </Col>
-                        </div>
+                        </Col>
                     </Row>
                     <div className="user-chat-description-wrapper">
                         Exchange study plans and more!
                     </div>
                 </Container>
-            </div>
+            </div >
         )
     }
 }

@@ -1,6 +1,14 @@
 .header-logo {
-  max-height: 14vh;
+  max-height: 130px;
   /* padding-left: 20px; */
   /* padding: 10px; */
   margin-top: 10px;
+}
+
+@media screen and (max-width: 500px) {
+  .header-logo {
+    max-height: 110px;
+    top: 10px;
+    position: relative;
+  }
 }

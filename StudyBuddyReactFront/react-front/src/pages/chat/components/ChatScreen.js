@@ -112,9 +112,8 @@ class ChatScreen extends React.Component {
                     .catch(error => console.error('error', error))
             })
 
-
-
     }
+
     render() {
 
         return (

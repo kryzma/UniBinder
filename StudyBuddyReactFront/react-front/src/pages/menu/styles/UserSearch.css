@@ -3,11 +3,12 @@
 .user-search-wrapper {
     background-color: white;
     margin: 50px;
-    height: 30vh;
+    height: 280px;
     border: 5px solid #3f51b5;
     border-radius: 30px;
     padding: 20px;
     transition-duration: 0.3s;
+    margin-top: 0;
 }
 
 .user-search-wrapper:hover {
@@ -43,4 +44,79 @@
 
 .user-search-title-col {
     padding-left: 0;
+}
+
+@media screen and (max-width: 1199px){
+    .user-search-wrapper {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+@media screen and (max-width: 991px){
+    .user-search-wrapper {
+        /* height: 27vh; */
+        height: 240px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .user-search-icon-col {
+        padding: 0;
+    }
+    .user-search-title-col {
+        padding: 0;
+    }
+    .user-search-description-wrapper {
+        margin-top: 15px;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .user-search-icon {
+        font-size: 60px !important;
+    }
+    .user-search-title-wrapper {
+        font-size: 25px;
+    }
+    .user-search-description-wrapper {
+        font-size: 22px;
+    }
+    .user-search-wrapper {
+        /* height: 23vh; */
+        height: 190px;
+    }
+}
+
+@media screen and (max-width: 410px) {
+    .user-search-wrapper {
+        padding: 15px;
+        /* height: 21vh; */
+        height: 180px;
+    }
+    .user-search-title-wrapper {
+        font-size: 20px;
+    }
+    .user-search-description-wrapper {
+        font-size: 19px;
+    }
+}
+
+@media screen and (max-width: 360px){
+    .user-search-icon {
+        font-size: 40px !important;
+    }
+    .user-search-title-wrapper {
+        font-size: 16px;
+    }
+    .user-search-description-wrapper {
+        width: 120%;
+        position: relative;
+        right: 10%;
+        font-size: 16px;
+    }
+    .user-search-wrapper {
+        /* height: 17vh; */
+        height: 140px;
+    }
 }

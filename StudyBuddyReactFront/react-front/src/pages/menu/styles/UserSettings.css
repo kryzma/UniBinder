@@ -3,11 +3,12 @@
 .user-settings-wrapper {
     background-color: white;
     margin: 50px;
-    height: 30vh;
+    height: 280px;
     border: 5px solid #3f51b5;
     border-radius: 30px;
     padding: 20px;
     transition-duration: 0.3s;
+    margin-top: 0;
 }
 
 .user-settings-wrapper:hover {
@@ -25,6 +26,7 @@
     font-family: 'Montserrat', sans-serif;
     color: #3f51b5;
     font-weight: 800;
+    text-align: center;
 }
 
 .user-settings-row {
@@ -37,4 +39,82 @@
     font-size: 25px;
     text-align: center;
     font-family: 'Roboto', sans-serif;
+}
+
+@media screen and (max-width: 1199px){
+    .user-settings-wrapper {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+@media screen and (max-width: 991px){
+    .user-settings-wrapper {
+        /* height: 27vh; */
+        height: 240px;
+        padding-top: 10px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .user-settings-icon-col {
+        padding: 0;
+    }
+    .user-settings-title-col {
+        padding: 0;
+    }
+    .user-settings-description-wrapper {
+        margin-top: 15px;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .user-settings-icon {
+        font-size: 60px !important;
+    }
+    .user-settings-title-wrapper {
+        font-size: 25px;
+    }
+    .user-settings-description-wrapper {
+        font-size: 22px;
+    }
+    .user-settings-wrapper {
+        /* height: 23vh; */
+        height: 190px;
+    }
+
+}
+
+@media screen and (max-width: 410px) {
+    .user-settings-wrapper {
+        padding: 15px;
+        /* height: 21vh; */
+        height: 180px;
+    }
+    .user-settings-title-wrapper {
+        font-size: 20px;
+    }
+    .user-settings-description-wrapper {
+        font-size: 19px;
+        margin-top: 5px;
+    }
+}
+
+@media screen and (max-width: 360px){
+    .user-settings-icon {
+        font-size: 40px !important;
+    }
+    .user-settings-title-wrapper {
+        font-size: 16px;
+    }
+    .user-settings-description-wrapper {
+        width: 120%;
+        position: relative;
+        right: 10%;
+        font-size: 16px;
+    }
+    .user-settings-wrapper {
+        /* height: 17vh; */
+        height: 140px;
+    }
 }

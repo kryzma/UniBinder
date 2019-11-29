@@ -1,6 +1,6 @@
 .header-wrapper {
-  max-height: 10vh;
-  height: 8vh;
+  /* max-height: 10vh; */
+  height: 80px;
   background-color: #3f51b5;
   padding-right: 20px;
   font-family: 'Roboto', sans-serif;
@@ -15,6 +15,39 @@
 }
 
 .right-row {
-  height: 8vh;
+  height: 80px;
+}
+
+.header-hamburger {
+  display: none !important;
+}
+
+@media screen and (max-width: 500px) {
+  .header-buttons {
+    display: none;
+  }
+  .MuiDrawer-paperAnchorTop {
+    background-color: #3f51b5 !important;
+  }
+  .header-hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: block !important;
+    color: white !important;
+    height: 80px !important;
+    font-size: 40px !important;
+  }
+  .header-hamburger:hover {
+    cursor: pointer;
+    color: #ddd !important;
+  }
+  .header-drawer > .MuiDrawer-paperAnchorTop > .logo-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
 }
 

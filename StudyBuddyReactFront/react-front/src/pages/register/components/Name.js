@@ -6,7 +6,7 @@ import TextField from "@material-ui/core/TextField"
 
 import "../styles/Name.css"
 
-function Name() {
+function Name(props) {
   return (
     <div>
       <Row className="remove-margins">
@@ -15,6 +15,7 @@ function Name() {
             label="Name"
             className="username-input"
             margin="dense"
+            onChange={props.handleName}
           />
         </Col>
         <Col lg={{ span: 6 }}>
@@ -22,6 +23,7 @@ function Name() {
             label="Surname"
             className="username-input"
             margin="dense"
+            onChange={props.handleSurname}
           />
         </Col>
       </Row>

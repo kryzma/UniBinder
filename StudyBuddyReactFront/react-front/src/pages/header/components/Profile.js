@@ -40,7 +40,7 @@ class Profile extends React.Component {
         <span className="pr-2">
           {this.state.username}
         </span>
-        <PersonOutlineIcon />
+        <PersonOutlineIcon className="profile-icon" />
       </div>
     )
   }

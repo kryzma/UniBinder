@@ -14,17 +14,15 @@ class UserSearch extends React.Component {
         return (
             <div className="user-search-wrapper">
                 <Container>
-                    <Row>
-                        <div className="user-search-row">
-                            <Col lg={{ span: 4 }}>
-                                <SearchIcon className="user-search-icon" />
-                            </Col>
-                            <Col className="user-search-title-col" lg={{ span: 8 }}>
-                                <div className="user-search-title-wrapper">
-                                    Search for new Buddies
-                                </div>
-                            </Col>
-                        </div>
+                    <Row className="user-search-row">
+                        <Col className="user-search-icon-col" lg={{ span: 4 }} md={{ span: 2 }} sm={{ span: 2 }} xs={{ span: 2 }}>
+                            <SearchIcon className="user-search-icon" />
+                        </Col>
+                        <Col className="user-search-title-col" lg={{ span: 8 }} md={{ span: 10 }} sm={{ span: 10 }} xs={{ span: 10 }}>
+                            <div className="user-search-title-wrapper">
+                                Search for new Buddies
+                            </div>
+                        </Col>
                     </Row>
                     <div className="user-search-description-wrapper">
                         Find new study buddies to learn with!

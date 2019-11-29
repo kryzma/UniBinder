@@ -10,3 +10,16 @@
   cursor: pointer;
   color: #ddd;
 }
+
+@media screen and (max-width: 500px){
+  .profile-wrapper {
+    margin-right: 0 !important;
+    text-align: center;
+    font-size: 25px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .profile-icon {
+    font-size: 35px !important;
+  }
+}

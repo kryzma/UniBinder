@@ -55,14 +55,15 @@ class Login extends React.Component {
 
   onSubmit() {
     // Hash password
-    // var passwordHash = require('password-hash')
-    // if (this.state.password !== undefined) {
-    //   this.setState({
-    //     hashedPassword: passwordHash.generate(this.state.password)
-    //   }, () => {
-    //     //this.checkPassword()
-    //   })
-    // }
+    var passwordHash = require('password-hash')
+    if (this.state.password !== undefined) {
+      this.setState({
+        hashedPassword: passwordHash.generate(this.state.password)
+      }, () => {
+        console.log(this.state.hashedPassword)
+        //this.checkPassword()
+      })
+    }
     this.checkPassword(this.redirect)
   }
 

@@ -49,6 +49,7 @@ class App extends React.Component {
           <Route path="/main" render={() => (this.getSession() ? (<Main to="/main" />) : <Redirect to="/" />)} />
           <Route path="/chat" render={() => (this.getSession() ? (<ChatMain to="/chat" />) : <Redirect to="/" />)} />
           <Route path="/menu" render={() => (this.getSession() ? (<Menu to="/menu" />) : <Redirect to="/" />)} />
+          {/* <Route path="/menu" component={Menu} /> */}
         </Switch>
       </Router>
     )

@@ -15,3 +15,15 @@
   color: #ddd;
   text-decoration: none;
 }
+
+@media screen and (max-width: 500px){
+  .logout-wrapper {
+    padding: 0;
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 10px;
+  }
+  .logout-icon {
+    font-size: 35px !important;
+  }
+}
