@@ -90,7 +90,43 @@ namespace UniBinderAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, person.Password);
         }
 
-        
+        [Route("api/person/FilterBySubjects")]
+        [HttpGet]
+        public IHttpActionResult FilterByChosenSubject(string token)
+        {
+            var matchedPeopleBySubject = new List<Person>();
+            var peopleList = _reader.Value.ReadUserData();
+            IAuthService authService = new JWTService(ConfigurationManager.AppSettings["SecretJWTKey"]);
+            var checkedClaims = authService.GetTokenClaims(token).ToList();
+            var checkID = checkedClaims.FirstOrDefault(x =>
+                                            x.Type.Equals(ClaimTypes.NameIdentifier))
+                                            .Value;
+
+            var selectedSubjects = peopleList.Where(x => checkID == x.ID.ToString()).FirstOrDefault().SubjectList;
+
+            if(selectedSubjects == null)
+            {
+                BadRequest(); //BadToken
+            }
+
+            foreach(var person in peopleList)
+            {
+                foreach (var subject in selectedSubjects)
+                {
+                    if(person.SubjectList.Exists(x => x.Name == subject.Name) && person.ID.ToString() != checkID)
+                    {
+                        matchedPeopleBySubject.Add(person);
+                        break;
+                    }
+                }
+            }
+            if(matchedPeopleBySubject == null)
+            {
+                return NotFound(); //404
+            }
+            return Ok(matchedPeopleBySubject);
+        }
+
 
         [Route("api/person/Token")]
         [HttpGet]
@@ -196,6 +232,10 @@ namespace UniBinderAPI.Controllers
                 return Ok();
             }
         }
+
+
+
+
 
         private void CreateUniqueId(Person person)
         {

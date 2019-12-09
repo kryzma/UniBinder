@@ -25,7 +25,7 @@ namespace UniBinderAPI.EntityFramework
         public Nullable<int> Likes { get; set; }
         public Nullable<int> Dislikes { get; set; }
         public string ImageLink { get; set; }
-
         public List<Subject> SubjectList { get; set; }
+        public List<Person> MatchedPeople { get; set; }
     }
 }
