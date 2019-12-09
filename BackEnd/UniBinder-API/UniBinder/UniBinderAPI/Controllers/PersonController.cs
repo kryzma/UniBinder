@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
@@ -22,6 +24,10 @@ namespace UniBinderAPI.Controllers
         UserDataInserter userDataInserter = new UserDataInserter();
         Lazy<UserDataReader> _reader = new Lazy<UserDataReader>();
 
+        IRepository<Person> repository = new PersonRepository();
+        
+
+
         #region GetApi
 
         [Route("api/person/count")]
@@ -34,18 +40,20 @@ namespace UniBinderAPI.Controllers
         // GET: api/Person
         public IEnumerable<Person> Get()
         {
+            //return repository.List;
             return _reader.Value.ReadUserData();
         }
 
         // GET: api/Person/5
         public HttpResponseMessage Get(int id)
         {
-            var user = _reader.Value.ReadUserData().Where(x => x.ID == id).FirstOrDefault();
+            var user = _reader.Value.ReadUserData().FirstOrDefault(x => x.ID == id);
             if (user == null)
             {
                 UnknownData(id.ToString(), "ID");
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(id.ToString(), UnknownData(id.ToString(), "ID")));
             }
+
             return Request.CreateResponse(HttpStatusCode.OK, user);
         }
 
@@ -54,8 +62,13 @@ namespace UniBinderAPI.Controllers
         // [AllowAnonymous]
         public HttpResponseMessage GetID(string username)
         {
-            var person = _reader.Value.ReadUserData().Where(x => x.Username == username).First();
-            if (person == null) return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(person.ID.ToString(), UnknownData(person.ID.ToString(), "ID")));
+
+            var person = _reader.Value.ReadUserData().Where(x => x.Username == username).FirstOrDefault();
+            if (person == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(person.ID.ToString(), UnknownData(person.ID.ToString(), "ID")));
+            }
+
             return Request.CreateResponse(HttpStatusCode.OK, person.ID);
         }
 
@@ -67,7 +80,9 @@ namespace UniBinderAPI.Controllers
         public HttpResponseMessage getPassword(string username)
         {
             var people = _reader.Value.ReadUserData();
-            var person = people.Where(x => x.Username.ToLower() == username.ToLower()).FirstOrDefault();
+            var person = people.FirstOrDefault(x => x.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase));
+
+           // var person = people.Where(x => x.Username.ToLower() == username.ToLower()).FirstOrDefault();
             if (person == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "username"));
@@ -75,29 +90,28 @@ namespace UniBinderAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, person.Password);
         }
 
+        
+
         [Route("api/person/Token")]
         [HttpGet]
         // [AllowAnonymous]
         public HttpResponseMessage GetToken(string username)
         {
             var people = _reader.Value.ReadUserData();
-            var personCredentials = people.Where(x => x.Username.ToLower() == username.ToLower()).FirstOrDefault();
-            if (!people.Exists(x => x.Username.ToLower() == username.ToLower()))
-                if (personCredentials == null)
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "Username"));
+            var person = people.Where(x => x.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
+            if (person == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "Username"));
+            };
 
-                };
-            IAuthContainerModel model = GetJWTContainerModel(username.ToLower(), personCredentials.ID.ToString()); //might remove case sensitivity
+            IAuthContainerModel model = GetJWTContainerModel(username.ToLower(), person.ID.ToString()); //might remove case sensitivity
                                                                                                                              // IAuthContainerModel model = GetJWTContainerModel("a", "test"); //might remove case sensitivity
             IAuthService authService = new JWTService(model.SecretKey);
             string token = authService.GenerateToken(model);
-            if (!authService.IsTokenValid(token))
-                throw new UnauthorizedAccessException();
-            else
-            {
+            //if (!authService.IsTokenValid(token))
+            //    throw new UnauthorizedAccessException();
+
                 return Request.CreateResponse(HttpStatusCode.OK, token);
-            }
         }
 
         #endregion
@@ -136,8 +150,9 @@ namespace UniBinderAPI.Controllers
                                             .Value;
 
             var legitToken = _reader.Value.ReadUserData().Exists(x =>
-                                            x.Username.ToLower() == checkName.ToLower()        //jwt don't have claims for username so i used 'Name' instead
+                                            x.Username.Equals(checkName, StringComparison.InvariantCultureIgnoreCase)
                                             && x.ID.ToString() == checkID);
+                                                   //jwt don't have claims for username so i used 'Name' instead
 
             if (legitToken) return Ok();
             else return BadRequest();
@@ -154,8 +169,8 @@ namespace UniBinderAPI.Controllers
             using(var context = new UniBinderEF())
             {
                 var people = context.People.ToList();
-                if (people.Exists(x => x.Username.ToLower() == person.Username.ToLower())) return BadRequest();
-                if (people.Exists(x => x.Email.ToLower() == person.Email.ToLower())) return Conflict();
+                if (people.Exists(x => x.Username.Equals(person.Username, StringComparison.InvariantCultureIgnoreCase))) return BadRequest();
+                if (people.Exists(x => x.Email.Equals(person.Email, StringComparison.InvariantCultureIgnoreCase))) return Conflict();
                 CreateUniqueId(person);
                 userDataInserter.LinkSubjectsToPerson(person);
                 return AddToDB(person);
@@ -176,8 +191,8 @@ namespace UniBinderAPI.Controllers
             using (var context = new UniBinderEF())
             {
                 var people = context.People.ToList();
-                if (people.Exists(x => x.Username.ToLower() == username.ToLower())) return BadRequest();
-                if (people.Exists(x => x.Email.ToLower() == email.ToLower())) return Conflict();
+                if (people.Exists(x => x.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase))) return BadRequest();
+                if (people.Exists(x => x.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase))) return Conflict();
                 return Ok();
             }
         }
@@ -204,7 +219,7 @@ namespace UniBinderAPI.Controllers
 
         private int RetrieveID(string username) // null 
         {
-            var p2 = _reader.Value.ReadUserData().Where(x => x.Username.ToLower() == username.ToLower()).First();
+            var p2 = _reader.Value.ReadUserData().Where(x => x.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase)).First();
             if(p2 != null) return p2.ID;
             return -1;
 

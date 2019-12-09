@@ -13,14 +13,11 @@ namespace UniBinderAPI.Database
     class UserDataInserter : IUserDataInserter
     {
         Lazy<UserDataReader> _reader = new Lazy<UserDataReader>();
+        IRepository<Person> repository = new PersonRepository();
 
         public void SendUserData(Person person)
         {
-            using (var context = new UniBinderEF())
-            {
-                context.People.Add(person);
-                context.SaveChanges();
-            }   
+            repository.Add(person);
         }
 
         private void AddSubjects(PersonSubject personSubject)
@@ -29,8 +26,8 @@ namespace UniBinderAPI.Database
             {
                 if (!context.PersonSubjects.ToList().Exists(x => x.PersonID == personSubject.PersonID && x.Name == personSubject.Name))
                 { 
-                context.PersonSubjects.Add(personSubject);
-                context.SaveChanges();
+                    context.PersonSubjects.Add(personSubject);
+                    context.SaveChanges();
                 }
             }
         }
@@ -48,6 +45,7 @@ namespace UniBinderAPI.Database
                     person.Username = p.Username;
                     person.Age = p.Age;
                     person.SubjectList = p.SubjectList;
+                    
                     LinkSubjectsToPerson(person);
                     context.SaveChanges();
                     return true;
@@ -67,6 +65,8 @@ namespace UniBinderAPI.Database
                     ID = UniqueSubjectID(item.ID)
                 });
             }
+
+            var unique = Guid.NewGuid();
         }
 
         private int UniqueSubjectID(int ID)

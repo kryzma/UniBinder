@@ -26,6 +26,10 @@ namespace UniBinderAPI.Database
             {
                 var users = (from a in context.People select a).ToList();
                 var usersSubjects = (from a in context.PersonSubjects select a).ToList();
+                var matchedPeople = (from a in context.MatchedPeoples select a).ToList();
+                //var person = matchedPeople.First();
+                
+
 
                 var groupJoin = users.GroupJoin(usersSubjects,
                 person => person.ID,
@@ -44,6 +48,8 @@ namespace UniBinderAPI.Database
                     person.Dislikes,
                     person.ImageLink,
                 });
+
+                
 
                 foreach (var p in groupJoin)
                 {
@@ -72,6 +78,8 @@ namespace UniBinderAPI.Database
                     PersonList.Add(person);
                 }
             }
+
+
             return PersonList;
         }
 
