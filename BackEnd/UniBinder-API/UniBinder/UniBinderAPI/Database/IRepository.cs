@@ -13,6 +13,6 @@ namespace UniBinderAPI.Database
         void Add(T entity);
         void Delete(T entity);
         void Update(T entity);
-        T FindById(int Id);
+        T FindById(Guid Id);
     }
 }

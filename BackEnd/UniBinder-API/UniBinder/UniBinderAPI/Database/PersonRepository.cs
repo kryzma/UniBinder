@@ -39,7 +39,7 @@ namespace UniBinderAPI.Database
             
         }
 
-        public Person FindById(int Id)
+        public Person FindById(Guid Id)
         {
             return _dbContext.People.Where(x => x.ID == Id).FirstOrDefault();
         }

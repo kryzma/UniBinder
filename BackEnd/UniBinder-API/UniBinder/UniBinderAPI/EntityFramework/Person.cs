@@ -14,7 +14,7 @@ namespace UniBinderAPI.EntityFramework
     
     public partial class Person
     {
-        public int ID { get; set; }
+        public System.Guid ID { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Name { get; set; }
@@ -25,7 +25,6 @@ namespace UniBinderAPI.EntityFramework
         public Nullable<int> Likes { get; set; }
         public Nullable<int> Dislikes { get; set; }
         public string ImageLink { get; set; }
-        public List<Subject> SubjectList { get; set; }
-        public List<Person> MatchedPeople { get; set; }
+        public List<Subject> SubjectList { get; internal set; }
     }
 }

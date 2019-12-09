@@ -15,6 +15,7 @@ using UniBinderAPI.EntityFramework;
 using UniBinderAPI.Managers;
 using UniBinderAPI.Models;
 
+//UNIQUEIDENTIFIER PRIMARY KEY default NEWID(),
 
 namespace UniBinderAPI.Controllers
 {
@@ -45,7 +46,7 @@ namespace UniBinderAPI.Controllers
         }
 
         // GET: api/Person/5
-        public HttpResponseMessage Get(int id)
+        public HttpResponseMessage Get(Guid id)
         {
             var user = _reader.Value.ReadUserData().FirstOrDefault(x => x.ID == id);
             if (user == null)
@@ -101,7 +102,8 @@ namespace UniBinderAPI.Controllers
             var checkID = checkedClaims.FirstOrDefault(x =>
                                             x.Type.Equals(ClaimTypes.NameIdentifier))
                                             .Value;
-
+            var PersonID = CheckToken(token);
+            if (CheckToken(token) == BadRequest()) return BadRequest();
             var selectedSubjects = peopleList.Where(x => checkID == x.ID.ToString()).FirstOrDefault().SubjectList;
 
             if(selectedSubjects == null)
@@ -120,10 +122,12 @@ namespace UniBinderAPI.Controllers
                     }
                 }
             }
+
             if(matchedPeopleBySubject == null)
             {
                 return NotFound(); //404
             }
+
             return Ok(matchedPeopleBySubject);
         }
 
@@ -161,6 +165,35 @@ namespace UniBinderAPI.Controllers
         }
 
 
+        [Route("api/person/UpdateUser")]
+        [HttpPatch]
+        public IHttpActionResult UpdateUser(Person person)
+        {
+            if(person != null)
+            {
+                var updatedUser = _reader.Value.ReadUserData().Where(x => x.Username == person.Username).FirstOrDefault();
+                if (updatedUser == null) return BadRequest();
+                //UpdatePersonProperties(person, updatedUser);
+                repository.Update(UpdatePersonProperties(person, updatedUser));
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        private Person UpdatePersonProperties(Person person, Person updatedUser)
+        {
+            person.Age = updatedUser.Age;
+            person.Dislikes = updatedUser.Dislikes;
+            person.Username = updatedUser.Username;
+            person.SubjectList = updatedUser.SubjectList;
+            person.Role = updatedUser.Role;
+            //person.MatchedPeople = updatedUser.MatchedPeople;
+            person.ImageLink = updatedUser.ImageLink;
+            person.ID = updatedUser.ID;
+            person.Likes = updatedUser.Likes;
+            return person;
+        }
+
         #region PostApi
 
         [Route("api/person/CheckToken")]
@@ -190,7 +223,7 @@ namespace UniBinderAPI.Controllers
                                             && x.ID.ToString() == checkID);
                                                    //jwt don't have claims for username so i used 'Name' instead
 
-            if (legitToken) return Ok();
+            if (legitToken) return Ok(checkID);
             else return BadRequest();
         }
 
@@ -207,7 +240,7 @@ namespace UniBinderAPI.Controllers
                 var people = context.People.ToList();
                 if (people.Exists(x => x.Username.Equals(person.Username, StringComparison.InvariantCultureIgnoreCase))) return BadRequest();
                 if (people.Exists(x => x.Email.Equals(person.Email, StringComparison.InvariantCultureIgnoreCase))) return Conflict();
-                CreateUniqueId(person);
+                //CreateUniqueId(person);
                 userDataInserter.LinkSubjectsToPerson(person);
                 return AddToDB(person);
             }
@@ -241,7 +274,7 @@ namespace UniBinderAPI.Controllers
         {
             while (_reader.Value.ReadUserData().Exists(x => x.ID == person.ID)) // prob. is not efficient, maybe should consider to make random number?
             {
-                person.ID++;
+                //person.ID++;
             }
             return;
         }
@@ -257,13 +290,8 @@ namespace UniBinderAPI.Controllers
             };
         }
 
-        private int RetrieveID(string username) // null 
-        {
-            var p2 = _reader.Value.ReadUserData().Where(x => x.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase)).First();
-            if(p2 != null) return p2.ID;
-            return -1;
+       
 
-        }
         private string UnknownData(string data, string nameOfData)
         {
             return string.Format("No User found with {0} = {1}", nameOfData, data);

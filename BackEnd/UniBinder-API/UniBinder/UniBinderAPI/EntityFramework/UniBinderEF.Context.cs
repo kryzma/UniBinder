@@ -28,5 +28,6 @@ namespace UniBinderAPI.EntityFramework
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<PersonSubject> PersonSubjects { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
+        public virtual DbSet<MatchedPeople> MatchedPeoples { get; set; }
     }
 }

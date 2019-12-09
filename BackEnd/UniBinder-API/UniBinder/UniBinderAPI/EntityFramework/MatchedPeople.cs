@@ -12,10 +12,9 @@ namespace UniBinderAPI.EntityFramework
     using System;
     using System.Collections.Generic;
     
-    public partial class PersonSubject
+    public partial class MatchedPeople
     {
-        public int ID { get; set; }
-        public Nullable<System.Guid> PersonID { get; set; }
-        public string Name { get; set; }
+        public System.Guid Id { get; set; }
+        public System.Guid PersonID { get; set; }
     }
 }

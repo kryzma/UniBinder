@@ -37,7 +37,7 @@ namespace UniBinderAPI.Database
             }
         }
 
-        public PersonSubject FindById(int Id)
+        public PersonSubject FindById(Guid Id)
         {
             throw new NotImplementedException();
         }
