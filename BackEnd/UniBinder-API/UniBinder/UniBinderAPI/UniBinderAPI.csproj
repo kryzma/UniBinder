@@ -331,13 +331,20 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Database\DataBaseHelper.cs" />
+    <Compile Include="Database\IRepository.cs" />
     <Compile Include="Database\IUserDataInserter.cs" />
     <Compile Include="Database\IUserDataReader.cs" />
+    <Compile Include="Database\PersonRepository.cs" />
+    <Compile Include="Database\PersonSubjectRepository.cs" />
     <Compile Include="Database\UserDataInserter.cs" />
     <Compile Include="Database\UserDataReader.cs" />
+    <Compile Include="EntityFramework\MatchedPeople.cs">
+      <DependentUpon>UniBinderEF.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\Person.cs">
       <DependentUpon>UniBinderEF.tt</DependentUpon>
     </Compile>
