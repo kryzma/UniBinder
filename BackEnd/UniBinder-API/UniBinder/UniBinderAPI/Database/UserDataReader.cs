@@ -101,6 +101,39 @@ namespace UniBinderAPI.Database
         }
 
 
+        public List<Guid?> PeopleWithSameSubjects(Guid givenID)
+        {
+            List<Person> people = new List<Person>();
+            var IDMatchedBySubjects = new List<Guid?>();
+            //var IDMatchedBySubjects = new List<Guid>();
+
+
+            using (var context = new UniBinderEF())
+            {
+                var subjects = context.PersonSubjects.Where(personSubject => personSubject.PersonID == givenID)
+                                                     .Select(personSubject => personSubject.Name).ToList();
+
+                foreach (var subjectName in subjects)
+                {
+                    var PeopleWithSameSubject = context.PersonSubjects.Where(personSubject => personSubject.Name == subjectName && personSubject.PersonID != givenID)
+                                                                      .Select(personSubject => personSubject.PersonID).ToList();
+                    foreach (var item in PeopleWithSameSubject)
+                    {
+                        if (IDMatchedBySubjects.Contains(item)) continue;
+                        IDMatchedBySubjects.Add(item);
+                    }
+                }
+            }
+            //select SubjectName from PersonSubject where id == personid;
+
+            //foreach(var item in collection)
+            //{
+            //    select personID from PersonSubject where personid != givenID && item == SubjectName
+            //}
+
+            return IDMatchedBySubjects;
+        }
+
     }
 }
 

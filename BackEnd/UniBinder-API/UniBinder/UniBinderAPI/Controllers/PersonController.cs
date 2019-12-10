@@ -25,8 +25,16 @@ namespace UniBinderAPI.Controllers
         UserDataInserter userDataInserter = new UserDataInserter();
         Lazy<UserDataReader> _reader = new Lazy<UserDataReader>();
 
+        UserDataReader reader = new UserDataReader();
+        List<Person> people;
+
         IRepository<Person> repository = new PersonRepository();
-        
+
+        public PersonController()
+        {
+            List<Person> people = new List<Person>();
+        }
+
 
 
         #region GetApi
@@ -45,32 +53,38 @@ namespace UniBinderAPI.Controllers
             return _reader.Value.ReadUserData();
         }
 
-        // GET: api/Person/5
-        public HttpResponseMessage Get(Guid id)
+        [Route("api/person/{id}")]
+        [HttpGet]
+        public IHttpActionResult Get(int id)
         {
-            var user = _reader.Value.ReadUserData().FirstOrDefault(x => x.ID == id);
+
+            if (people == null)
+            { 
+                people = _reader.Value.ReadUserData();
+            }
+            var user = people[id];
             if (user == null)
             {
-                UnknownData(id.ToString(), "ID");
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(id.ToString(), UnknownData(id.ToString(), "ID")));
+                //UnknownData(id.ToString(), "ID");
+                return NotFound();
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, user);
+            return Ok(user);
         }
 
         [Route("api/person/ID")]
         [HttpGet]
         // [AllowAnonymous]
-        public HttpResponseMessage GetID(string username)
+        public IHttpActionResult GetID(string username)
         {
 
             var person = _reader.Value.ReadUserData().Where(x => x.Username == username).FirstOrDefault();
             if (person == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(person.ID.ToString(), UnknownData(person.ID.ToString(), "ID")));
+                return NotFound();
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, person.ID);
+            return Ok(person.ID);
         }
 
 
@@ -78,7 +92,7 @@ namespace UniBinderAPI.Controllers
         [Route("api/person/Pass")]
         [HttpGet]
         // [AllowAnonymous]
-        public HttpResponseMessage getPassword(string username)
+        public IHttpActionResult getPassword(string username)
         {
             var people = _reader.Value.ReadUserData();
             var person = people.FirstOrDefault(x => x.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase));
@@ -86,17 +100,15 @@ namespace UniBinderAPI.Controllers
            // var person = people.Where(x => x.Username.ToLower() == username.ToLower()).FirstOrDefault();
             if (person == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "username"));
+                return NotFound();
             }
-            return Request.CreateResponse(HttpStatusCode.OK, person.Password);
+            return Ok(person.Password);
         }
 
         [Route("api/person/FilterBySubjects")]
         [HttpGet]
         public IHttpActionResult FilterByChosenSubject(string token)
         {
-            var matchedPeopleBySubject = new List<Person>();
-            var peopleList = _reader.Value.ReadUserData();
             IAuthService authService = new JWTService(ConfigurationManager.AppSettings["SecretJWTKey"]);
             var checkedClaims = authService.GetTokenClaims(token).ToList();
             var checkID = checkedClaims.FirstOrDefault(x =>
@@ -104,6 +116,10 @@ namespace UniBinderAPI.Controllers
                                             .Value;
             var PersonID = CheckToken(token);
             if (CheckToken(token) == BadRequest()) return BadRequest();
+
+            var matchedPeopleBySubject = new List<Person>();
+            var peopleList = _reader.Value.ReadUserData();
+            
             var selectedSubjects = peopleList.Where(x => checkID == x.ID.ToString()).FirstOrDefault().SubjectList;
 
             if(selectedSubjects == null)
@@ -111,37 +127,42 @@ namespace UniBinderAPI.Controllers
                 BadRequest(); //BadToken
             }
 
-            foreach(var person in peopleList)
-            {
-                foreach (var subject in selectedSubjects)
-                {
-                    if(person.SubjectList.Exists(x => x.Name == subject.Name) && person.ID.ToString() != checkID)
-                    {
-                        matchedPeopleBySubject.Add(person);
-                        break;
-                    }
-                }
-            }
+            var IDCollection = _reader.Value.PeopleWithSameSubjects(new Guid(checkID));
+            return Ok(IDCollection);
 
-            if(matchedPeopleBySubject == null)
-            {
-                return NotFound(); //404
-            }
+            //foreach(var person in peopleList)
+            //{
+            //    foreach (var subject in selectedSubjects)
+            //    {
+            //        if(person.SubjectList.Exists(x => x.Name == subject.Name) && person.ID.ToString() != checkID)
+            //        {
+            //            matchedPeopleBySubject.Add(person);
+            //            break;
+            //        }
+            //    }
+            //}
 
-            return Ok(matchedPeopleBySubject);
+            //if(matchedPeopleBySubject == null)
+            //{
+            //    return NotFound(); //404
+            //}
+
+            //return Ok(matchedPeopleBySubject);
         }
+
+
 
 
         [Route("api/person/Token")]
         [HttpGet]
         // [AllowAnonymous]
-        public HttpResponseMessage GetToken(string username)
+        public IHttpActionResult GetToken(string username)
         {
             var people = _reader.Value.ReadUserData();
             var person = people.Where(x => x.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
             if (person == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, UnknownData(username, "Username"));
+                return NotFound();
             };
 
             IAuthContainerModel model = GetJWTContainerModel(username.ToLower(), person.ID.ToString()); //might remove case sensitivity
@@ -151,7 +172,7 @@ namespace UniBinderAPI.Controllers
             //if (!authService.IsTokenValid(token))
             //    throw new UnauthorizedAccessException();
 
-                return Request.CreateResponse(HttpStatusCode.OK, token);
+            return Ok(token);
         }
 
         #endregion
@@ -241,7 +262,7 @@ namespace UniBinderAPI.Controllers
                 if (people.Exists(x => x.Username.Equals(person.Username, StringComparison.InvariantCultureIgnoreCase))) return BadRequest();
                 if (people.Exists(x => x.Email.Equals(person.Email, StringComparison.InvariantCultureIgnoreCase))) return Conflict();
                 //CreateUniqueId(person);
-                userDataInserter.LinkSubjectsToPerson(person);
+                //userDataInserter.LinkSubjectsToPerson(person);
                 return AddToDB(person);
             }
         }
@@ -251,6 +272,7 @@ namespace UniBinderAPI.Controllers
         private IHttpActionResult AddToDB(Person person)
         {
             //CreateUniqueId(person);
+            person.ID = Guid.NewGuid();
             userDataInserter.SendUserData(person);
             return Ok();
         }
