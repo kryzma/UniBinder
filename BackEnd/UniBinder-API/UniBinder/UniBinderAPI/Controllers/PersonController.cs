@@ -14,6 +14,15 @@ using UniBinderAPI.Database;
 using UniBinderAPI.EntityFramework;
 using UniBinderAPI.Managers;
 using UniBinderAPI.Models;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using System.Threading.Tasks;
+using System.Net.Http.Headers;
+using System.Text;
+using Microsoft.AspNetCore.WebSockets.Internal;
+using System.IO;
+using UniBinderAPI.FileManager;
+using System.Drawing;
 
 //UNIQUEIDENTIFIER PRIMARY KEY default NEWID(),
 
@@ -54,6 +63,7 @@ namespace UniBinderAPI.Controllers
         public IEnumerable<Person> Get()
         {
             //return repository.List;
+            //ImageProcessor();
             return _reader.Value.ReadUserData();
         }
 
@@ -92,6 +102,40 @@ namespace UniBinderAPI.Controllers
         }
 
 
+        [Route("api/person/GetImage")]
+        [HttpGet]
+        // [AllowAnonymous]
+        public IHttpActionResult getImage(string token)
+        {
+            IAuthService authService = new JWTService(ConfigurationManager.AppSettings["SecretJWTKey"]);
+            var checkedClaims = authService.GetTokenClaims(token).ToList();
+            var checkID = checkedClaims.FirstOrDefault(x =>
+                                            x.Type.Equals(ClaimTypes.NameIdentifier))
+                                            .Value;
+            //var PersonID = CheckToken(token);
+            if (CheckToken(token) == BadRequest())
+            {
+                return BadRequest();
+            }
+
+            var searchedUser = _reader.Value.ReadUserData().Where(x => x.ID.ToString() == checkID).FirstOrDefault();
+
+            if (searchedUser == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(ImageProcessor(searchedUser.ImageLink));
+
+        }
+
+        public string ImageProcessor(string imgName)
+        {
+            var path = string.Format("../../img/{0}", imgName);
+            
+            var base64String = Convert.ToBase64String(File.ReadAllBytes(path));
+            return base64String;
+        }
 
         [Route("api/person/Pass")]
         [HttpGet]
@@ -217,7 +261,7 @@ namespace UniBinderAPI.Controllers
             if (preUpdateUser == null) return BadRequest();
             var currentUser = GetCurrentUser(preUpdateUser);
             if (currentUser == null) return NotFound();
-            //UpdatePersonProperties(preUpdateUser, currentUser);
+            repository.Update(UpdatePersonProperties(preUpdateUser, currentUser));
             return Ok();
         }
 
@@ -226,24 +270,24 @@ namespace UniBinderAPI.Controllers
             return _reader.Value.ReadUserData().Where(x => x.ID == preUpdateUser.ID).FirstOrDefault();
         }
 
-        //private Person UpdatePersonProperties(Person preUpdatedUser, Person currentUser)
-        //{
-        //    FinalUserProperties(preUpdatedUser, currentUser);
-        //    //userDataInserter.LinkSubjectsToPerson(person);
-        //    return person;
-        //}
+        private Person UpdatePersonProperties(Person preUpdatedUser, Person currentUser)
+        {
+            FinalUserProperties(preUpdatedUser, currentUser);
+            userDataInserter.LinkSubjectsToPerson(preUpdatedUser);
+            return preUpdatedUser;
+        }
 
         private void FinalUserProperties(Person preUpdatedUser, Person currentUser)
         {
-            preUpdatedUser.Age = preUpdatedUser.Age;
-            preUpdatedUser.Dislikes = preUpdatedUser.Dislikes;
-            preUpdatedUser.Username = preUpdatedUser.Username;
-            preUpdatedUser.SubjectList = preUpdatedUser.SubjectList;
-            preUpdatedUser.Role = preUpdatedUser.Role;
+            preUpdatedUser.Age = currentUser.Age;
+            preUpdatedUser.Dislikes = currentUser.Dislikes;
+            preUpdatedUser.Username = currentUser.Username;
+            preUpdatedUser.SubjectList = currentUser.SubjectList;
+            preUpdatedUser.Role = currentUser.Role;
             //person.MatchedPeople = updatedUser.MatchedPeople;
-            preUpdatedUser.ImageLink = preUpdatedUser.ImageLink;
-            preUpdatedUser.ID = preUpdatedUser.ID;
-            preUpdatedUser.Likes = preUpdatedUser.Likes;
+            preUpdatedUser.ImageLink = currentUser.ImageLink;
+            preUpdatedUser.ID = currentUser.ID;
+            preUpdatedUser.Likes = currentUser.Likes;
         }
 
         #region PostApi
@@ -279,8 +323,17 @@ namespace UniBinderAPI.Controllers
             else return BadRequest();
         }
 
-        
 
+        [Route("api/person/SaveImage")]
+        [HttpPost]
+        public IHttpActionResult PostImage(ImgHandler img)
+        {
+            var image = Image.FromStream(new MemoryStream(Convert.FromBase64String(img.ImgBase64)));
+            var path = string.Format("../../img/{0}", img.ImgPath);
+
+            image.Save(path);
+            return Ok();
+        }
 
 
         [Route("api/person/Registration")]

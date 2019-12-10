@@ -83,14 +83,6 @@ namespace UniBinderAPI.Database
             return PersonList;
         }
 
-        public List<PersonSubject> PersonSubjects()
-        {
-            using (var context = new UniBinderEF())
-            {
-                var personSubjects = (from x in context.PersonSubjects select x).ToList();
-                return personSubjects;
-            }
-        }
 
         public int PeopleNumber()
         {
@@ -106,7 +98,6 @@ namespace UniBinderAPI.Database
             List<Person> people = new List<Person>();
             var IDMatchedBySubjects = new List<Guid?>();
             //var IDMatchedBySubjects = new List<Guid>();
-
 
             using (var context = new UniBinderEF())
             {
@@ -142,7 +133,15 @@ namespace UniBinderAPI.Database
             }
         }
 
-
+        public List<string> SubjectsPersonHas(Guid personID)
+        {
+            using (var context = new UniBinderEF())
+            {
+                var subjects = context.PersonSubjects.Where(subject => subject.PersonID == personID)
+                                                     .Select(subject => subject.Name).ToList();
+                return subjects;
+            }
+        }
     }
 }
 

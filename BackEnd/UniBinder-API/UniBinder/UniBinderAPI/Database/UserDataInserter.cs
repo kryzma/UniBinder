@@ -14,6 +14,8 @@ namespace UniBinderAPI.Database
     {
         Lazy<UserDataReader> _reader = new Lazy<UserDataReader>();
         IRepository<Person> repository = new PersonRepository();
+        IRepository<PersonSubject> subjectRepository = new PersonSubjectRepository();
+        UserDataInserter userDataInserter = new UserDataInserter();
 
         public void SendUserData(Person person)
         {
@@ -56,25 +58,22 @@ namespace UniBinderAPI.Database
 
         public void LinkSubjectsToPerson(Person person)
         {
-            foreach (var item in person.SubjectList)
+            var alreadyChosenSubjects = _reader.Value.SubjectsPersonHas(person.ID);
+            foreach (var subject in person.SubjectList)
             {
-                AddSubjects(new PersonSubject
+                if (alreadyChosenSubjects.Contains(subject.Name)) continue;
+
+                subjectRepository.Add(new PersonSubject
                 {
-                    PersonID = person.ID,
-                    Name = item.Name,
-                    ID = UniqueSubjectID(item.ID)
+                    Name = subject.Name,
+                    PersonID = person.ID
                 });
             }
         }
 
         private int UniqueSubjectID(int ID)
         {
-            var personSubjects = _reader.Value.PersonSubjects();
-            while (personSubjects.Exists(x => x.ID == ID))
-            {
-                ID++;
-            }
-            return ID;
+            
         }
     }
 }
