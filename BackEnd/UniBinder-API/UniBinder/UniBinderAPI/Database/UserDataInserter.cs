@@ -65,8 +65,6 @@ namespace UniBinderAPI.Database
                     ID = UniqueSubjectID(item.ID)
                 });
             }
-
-            var unique = Guid.NewGuid();
         }
 
         private int UniqueSubjectID(int ID)

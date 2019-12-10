@@ -9,9 +9,11 @@
 
 namespace UniBinderAPI.EntityFramework
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    
+
+    [JsonObject]
     public partial class Person
     {
         public System.Guid ID { get; set; }
@@ -25,6 +27,8 @@ namespace UniBinderAPI.EntityFramework
         public Nullable<int> Likes { get; set; }
         public Nullable<int> Dislikes { get; set; }
         public string ImageLink { get; set; }
+
+        [JsonProperty(PropertyName = "subjects")]
         public List<Subject> SubjectList { get; internal set; }
     }
 }

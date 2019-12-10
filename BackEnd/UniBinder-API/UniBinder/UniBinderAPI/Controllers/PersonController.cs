@@ -30,14 +30,18 @@ namespace UniBinderAPI.Controllers
 
         IRepository<Person> repository = new PersonRepository();
 
-        public PersonController()
-        {
-            List<Person> people = new List<Person>();
-        }
 
 
 
         #region GetApi
+
+        [Route("api/person/SubjectList")]
+        [HttpGet]
+        public IHttpActionResult GetSubjects()
+        {
+            return Ok(_reader.Value.SubjectList());
+        }
+
 
         [Route("api/person/count")]
         [HttpGet]
@@ -57,12 +61,12 @@ namespace UniBinderAPI.Controllers
         [HttpGet]
         public IHttpActionResult Get(int id)
         {
-
             if (people == null)
             { 
                 people = _reader.Value.ReadUserData();
             }
             var user = people[id];
+
             if (user == null)
             {
                 //UnknownData(id.ToString(), "ID");
@@ -179,7 +183,7 @@ namespace UniBinderAPI.Controllers
 
         [Route("api/person/ChangeUserSettings")]
         [HttpPut]
-        public IHttpActionResult ChangeUserSettings(Person person)
+        public IHttpActionResult ChangeUserSettings([FromBody]Person person)
         {
             if(userDataInserter.UpdatePersonInfo(person)) return Ok();
             return BadRequest();
@@ -188,30 +192,31 @@ namespace UniBinderAPI.Controllers
 
         [Route("api/person/UpdateUser")]
         [HttpPatch]
-        public IHttpActionResult UpdateUser(Person person)
+        public IHttpActionResult UpdateUser([FromBody]Person person)
         {
             if(person != null)
             {
-                var updatedUser = _reader.Value.ReadUserData().Where(x => x.Username == person.Username).FirstOrDefault();
-                if (updatedUser == null) return BadRequest();
+                var preUpdatedUser = _reader.Value.ReadUserData().Where(x => x.Username == person.Username).FirstOrDefault();
+                if (preUpdatedUser == null) return BadRequest();
                 //UpdatePersonProperties(person, updatedUser);
-                repository.Update(UpdatePersonProperties(person, updatedUser));
+                repository.Update(UpdatePersonProperties(person, preUpdatedUser));
                 return Ok();
             }
             return BadRequest();
         }
 
-        private Person UpdatePersonProperties(Person person, Person updatedUser)
+        private Person UpdatePersonProperties(Person person, Person preUpdatedUser)
         {
-            person.Age = updatedUser.Age;
-            person.Dislikes = updatedUser.Dislikes;
-            person.Username = updatedUser.Username;
-            person.SubjectList = updatedUser.SubjectList;
-            person.Role = updatedUser.Role;
+            person.Age = preUpdatedUser.Age;
+            person.Dislikes = preUpdatedUser.Dislikes;
+            person.Username = preUpdatedUser.Username;
+            person.SubjectList = preUpdatedUser.SubjectList;
+            person.Role = preUpdatedUser.Role;
             //person.MatchedPeople = updatedUser.MatchedPeople;
-            person.ImageLink = updatedUser.ImageLink;
-            person.ID = updatedUser.ID;
-            person.Likes = updatedUser.Likes;
+            person.ImageLink = preUpdatedUser.ImageLink;
+            person.ID = preUpdatedUser.ID;
+            person.Likes = preUpdatedUser.Likes;
+            userDataInserter.LinkSubjectsToPerson(person);
             return person;
         }
 

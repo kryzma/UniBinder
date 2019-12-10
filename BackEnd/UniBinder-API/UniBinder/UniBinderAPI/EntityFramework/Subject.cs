@@ -11,7 +11,7 @@ namespace UniBinderAPI.EntityFramework
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Subject
     {
         public int ID { get; set; }

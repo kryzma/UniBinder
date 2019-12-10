@@ -134,6 +134,15 @@ namespace UniBinderAPI.Database
             return IDMatchedBySubjects;
         }
 
+        public List<String> SubjectList()
+        {
+            using (var context = new UniBinderEF())
+            {
+                return context.Subjects.Select(x => x.Name).ToList();
+            }
+        }
+
+
     }
 }
 
