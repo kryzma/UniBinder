@@ -28,7 +28,7 @@ namespace UniBinderAPI.EntityFramework
         public Nullable<int> Dislikes { get; set; }
         public string ImageLink { get; set; }
 
-        [JsonProperty(PropertyName = "subjects")]
+        [JsonProperty(PropertyName = "Subjects")]
         public List<Subject> SubjectList { get; internal set; }
     }
 }

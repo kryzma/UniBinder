@@ -154,7 +154,31 @@ namespace UniBinderAPI.Controllers
             //return Ok(matchedPeopleBySubject);
         }
 
+        [Route("api/person/UserDataByToken")]
+        [HttpGet]
+        // [AllowAnonymous]
+        public IHttpActionResult GetUserWithToken(string token)
+        {
+            IAuthService authService = new JWTService(ConfigurationManager.AppSettings["SecretJWTKey"]);
+            var checkedClaims = authService.GetTokenClaims(token).ToList();
+            var checkID = checkedClaims.FirstOrDefault(x =>
+                                            x.Type.Equals(ClaimTypes.NameIdentifier))
+                                            .Value;
+            //var PersonID = CheckToken(token);
+            if (CheckToken(token) == BadRequest())
+            {
+                return BadRequest();
+            }
 
+            var searchedUser = _reader.Value.ReadUserData().Where(x => x.ID.ToString() == checkID).FirstOrDefault();
+
+            if (searchedUser == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(searchedUser);
+        }
 
 
         [Route("api/person/Token")]
@@ -173,9 +197,6 @@ namespace UniBinderAPI.Controllers
                                                                                                                              // IAuthContainerModel model = GetJWTContainerModel("a", "test"); //might remove case sensitivity
             IAuthService authService = new JWTService(model.SecretKey);
             string token = authService.GenerateToken(model);
-            //if (!authService.IsTokenValid(token))
-            //    throw new UnauthorizedAccessException();
-
             return Ok(token);
         }
 
@@ -189,35 +210,40 @@ namespace UniBinderAPI.Controllers
             return BadRequest();
         }
 
-
         [Route("api/person/UpdateUser")]
         [HttpPatch]
-        public IHttpActionResult UpdateUser([FromBody]Person person)
+        public IHttpActionResult UpdateUser([FromBody]Person preUpdateUser)
         {
-            if(person != null)
-            {
-                var preUpdatedUser = _reader.Value.ReadUserData().Where(x => x.Username == person.Username).FirstOrDefault();
-                if (preUpdatedUser == null) return BadRequest();
-                //UpdatePersonProperties(person, updatedUser);
-                repository.Update(UpdatePersonProperties(person, preUpdatedUser));
-                return Ok();
-            }
-            return BadRequest();
+            if (preUpdateUser == null) return BadRequest();
+            var currentUser = GetCurrentUser(preUpdateUser);
+            if (currentUser == null) return NotFound();
+            //UpdatePersonProperties(preUpdateUser, currentUser);
+            return Ok();
         }
 
-        private Person UpdatePersonProperties(Person person, Person preUpdatedUser)
+        private Person GetCurrentUser(Person preUpdateUser)
         {
-            person.Age = preUpdatedUser.Age;
-            person.Dislikes = preUpdatedUser.Dislikes;
-            person.Username = preUpdatedUser.Username;
-            person.SubjectList = preUpdatedUser.SubjectList;
-            person.Role = preUpdatedUser.Role;
+            return _reader.Value.ReadUserData().Where(x => x.ID == preUpdateUser.ID).FirstOrDefault();
+        }
+
+        //private Person UpdatePersonProperties(Person preUpdatedUser, Person currentUser)
+        //{
+        //    FinalUserProperties(preUpdatedUser, currentUser);
+        //    //userDataInserter.LinkSubjectsToPerson(person);
+        //    return person;
+        //}
+
+        private void FinalUserProperties(Person preUpdatedUser, Person currentUser)
+        {
+            preUpdatedUser.Age = preUpdatedUser.Age;
+            preUpdatedUser.Dislikes = preUpdatedUser.Dislikes;
+            preUpdatedUser.Username = preUpdatedUser.Username;
+            preUpdatedUser.SubjectList = preUpdatedUser.SubjectList;
+            preUpdatedUser.Role = preUpdatedUser.Role;
             //person.MatchedPeople = updatedUser.MatchedPeople;
-            person.ImageLink = preUpdatedUser.ImageLink;
-            person.ID = preUpdatedUser.ID;
-            person.Likes = preUpdatedUser.Likes;
-            userDataInserter.LinkSubjectsToPerson(person);
-            return person;
+            preUpdatedUser.ImageLink = preUpdatedUser.ImageLink;
+            preUpdatedUser.ID = preUpdatedUser.ID;
+            preUpdatedUser.Likes = preUpdatedUser.Likes;
         }
 
         #region PostApi
@@ -253,7 +279,7 @@ namespace UniBinderAPI.Controllers
             else return BadRequest();
         }
 
-
+        
 
 
 
@@ -278,6 +304,7 @@ namespace UniBinderAPI.Controllers
         {
             //CreateUniqueId(person);
             person.ID = Guid.NewGuid();
+
             userDataInserter.SendUserData(person);
             return Ok();
         }
@@ -312,7 +339,7 @@ namespace UniBinderAPI.Controllers
                 Claims = new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, ID),
-                    new Claim(ClaimTypes.Name, username.ToLower()),
+                    new Claim(ClaimTypes.Name, username.ToLower())
                 }
             };
         }
