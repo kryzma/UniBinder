@@ -10,6 +10,11 @@ namespace UniBinderAPI.Database
     {
         UniBinderEF _dbContext;
 
+        public PersonSubjectRepository()
+        {
+            _dbContext = new UniBinderEF();
+        }
+
         public IEnumerable<PersonSubject> List
         {
             get
@@ -30,7 +35,7 @@ namespace UniBinderAPI.Database
 
         public void Delete(PersonSubject entity)
         {
-            if (!_dbContext.PersonSubjects.ToList().Exists(x => x.PersonID == entity.PersonID && x.Name == entity.Name))
+            if (_dbContext.PersonSubjects.ToList().Exists(x => x.PersonID == entity.PersonID && x.Name == entity.Name))
             {
                 _dbContext.PersonSubjects.Remove(entity);
                 _dbContext.SaveChanges();

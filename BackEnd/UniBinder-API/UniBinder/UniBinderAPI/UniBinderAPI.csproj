@@ -343,6 +343,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Database\DataBaseHelper.cs" />
+    <Compile Include="Database\DataTableSubjectLinker.cs" />
     <Compile Include="Database\IRepository.cs" />
     <Compile Include="Database\IUserDataInserter.cs" />
     <Compile Include="Database\IUserDataReader.cs" />

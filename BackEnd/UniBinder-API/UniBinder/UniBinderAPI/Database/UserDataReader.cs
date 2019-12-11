@@ -10,6 +10,14 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using UniBinderAPI.EntityFramework;
 using UniBinderAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using UniBinderAPI.EntityFramework;
 
 
 
@@ -133,6 +141,16 @@ namespace UniBinderAPI.Database
             }
         }
 
+        public List<PersonSubject> PersonSubjects()
+        {
+            using (var context = new UniBinderEF())
+            {
+                var personSubjects = (from x in context.PersonSubjects select x).ToList();
+                return personSubjects;
+            }
+        }
+
+
         public List<string> SubjectsPersonHas(Guid personID)
         {
             using (var context = new UniBinderEF())
@@ -142,6 +160,17 @@ namespace UniBinderAPI.Database
                 return subjects;
             }
         }
+
+
+
+
+
+
+
+
+
     }
+
+
 }
 

@@ -15,6 +15,7 @@ namespace UniBinderAPI.EntityFramework
     public partial class MatchedPeople
     {
         public System.Guid Id { get; set; }
-        public System.Guid PersonID { get; set; }
+        public Nullable<System.Guid> FirstPersonID { get; set; }
+        public Nullable<System.Guid> SecondPersonID { get; set; }
     }
 }

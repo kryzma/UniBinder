@@ -250,44 +250,45 @@ namespace UniBinderAPI.Controllers
         [HttpPut]
         public IHttpActionResult ChangeUserSettings([FromBody]Person person)
         {
-            if(userDataInserter.UpdatePersonInfo(person)) return Ok();
+            if (userDataInserter.UpdatePersonInfo(person)) return Ok();
             return BadRequest();
         }
 
         [Route("api/person/UpdateUser")]
         [HttpPatch]
-        public IHttpActionResult UpdateUser([FromBody]Person preUpdateUser)
+        public IHttpActionResult UpdateUser([FromBody]Person updatedUser)
         {
-            if (preUpdateUser == null) return BadRequest();
-            var currentUser = GetCurrentUser(preUpdateUser);
+            if (updatedUser == null) return BadRequest();
+            var currentUser = GetCurrentUser(updatedUser);
             if (currentUser == null) return NotFound();
-            repository.Update(UpdatePersonProperties(preUpdateUser, currentUser));
+            repository.Update(UpdatePersonProperties(updatedUser, currentUser));
             return Ok();
         }
 
-        private Person GetCurrentUser(Person preUpdateUser)
+        private Person GetCurrentUser(Person updatedUser)
         {
-            return _reader.Value.ReadUserData().Where(x => x.ID == preUpdateUser.ID).FirstOrDefault();
+            return _reader.Value.ReadUserData().Where(x => x.ID == updatedUser.ID).FirstOrDefault();
         }
 
-        private Person UpdatePersonProperties(Person preUpdatedUser, Person currentUser)
+        private Person UpdatePersonProperties(Person updatedUser, Person currentUser)
         {
-            FinalUserProperties(preUpdatedUser, currentUser);
-            userDataInserter.LinkSubjectsToPerson(preUpdatedUser);
-            return preUpdatedUser;
+            FinalUserProperties(currentUser, updatedUser);
+            //userDataInserter.LinkSubjectsToPersonWithDel(currentUser);
+            userDataInserter.LinkSubjectsToPersonDataTable(currentUser);
+            return updatedUser;
         }
 
-        private void FinalUserProperties(Person preUpdatedUser, Person currentUser)
+        private void FinalUserProperties(Person currentUser, Person preUpdatedUser)
         {
-            preUpdatedUser.Age = currentUser.Age;
-            preUpdatedUser.Dislikes = currentUser.Dislikes;
-            preUpdatedUser.Username = currentUser.Username;
-            preUpdatedUser.SubjectList = currentUser.SubjectList;
-            preUpdatedUser.Role = currentUser.Role;
+            currentUser.Age = preUpdatedUser.Age;
+            currentUser.Dislikes = preUpdatedUser.Dislikes;
+            currentUser.Username = preUpdatedUser.Username;
+            currentUser.SubjectList = preUpdatedUser.SubjectList;
+            currentUser.Role = preUpdatedUser.Role;
             //person.MatchedPeople = updatedUser.MatchedPeople;
-            preUpdatedUser.ImageLink = currentUser.ImageLink;
-            preUpdatedUser.ID = currentUser.ID;
-            preUpdatedUser.Likes = currentUser.Likes;
+            currentUser.ImageLink = preUpdatedUser.ImageLink;
+            currentUser.ID = preUpdatedUser.ID;
+            currentUser.Likes = preUpdatedUser.Likes;
         }
 
         #region PostApi
@@ -398,6 +399,10 @@ namespace UniBinderAPI.Controllers
         }
 
        
+
+
+
+
 
         private string UnknownData(string data, string nameOfData)
         {

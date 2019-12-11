@@ -11,11 +11,11 @@ namespace UniBinderAPI.EntityFramework
 {
     using System;
     using System.Collections.Generic;
-
+    
     public partial class PersonSubject
     {
-        public int ID { get; set; }
-        public Nullable<System.Guid> PersonID { get; set; }
+        public System.Guid ID { get; set; }
+        public System.Guid PersonID { get; set; }
         public string Name { get; set; }
     }
 }

@@ -10,7 +10,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="PersonID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FirstPersonID" Type="uniqueidentifier" />
+          <Property Name="SecondPersonID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -32,8 +33,8 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
-          <Property Name="PersonID" Type="uniqueidentifier" />
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PersonID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="Subject">
@@ -73,8 +74,8 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="PersonID" Type="Guid" />
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="PersonID" Type="Guid" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Subject">
@@ -95,7 +96,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="PersonID" Type="Guid" Nullable="false" />
+          <Property Name="FirstPersonID" Type="Guid" />
+          <Property Name="SecondPersonID" Type="Guid" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -140,7 +142,8 @@
           <EntitySetMapping Name="MatchedPeoples">
             <EntityTypeMapping TypeName="UniBinderModel.MatchedPeople">
               <MappingFragment StoreEntitySet="MatchedPeople">
-                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="SecondPersonID" ColumnName="SecondPersonID" />
+                <ScalarProperty Name="FirstPersonID" ColumnName="FirstPersonID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
