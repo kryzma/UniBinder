@@ -53,17 +53,12 @@ namespace UniBinderAPI.Controllers
 
         [Route("api/person/{id}")]
         [HttpGet]
-        public IHttpActionResult Get(int id)
+        public IHttpActionResult Get(Guid id)
         {
-            if (people == null)
-            { 
-                people = _reader.Value.ReadUserData();
-            }
-            var user = people[id];
+            var user = _reader.Value.ReadUserData().Where(x => x.ID == id).FirstOrDefault();
 
             if (user == null)
             {
-                //UnknownData(id.ToString(), "ID");
                 return NotFound();
             }
 
@@ -89,28 +84,16 @@ namespace UniBinderAPI.Controllers
         [Route("api/person/GetImage")]
         [HttpGet]
         // [AllowAnonymous]
-        public IHttpActionResult GetImage(string token)
+        public IHttpActionResult GetImage(Guid PersonID)
         {
-            IAuthService authService = new JWTService(ConfigurationManager.AppSettings["SecretJWTKey"]);
-            var checkedClaims = authService.GetTokenClaims(token).ToList();
-            var checkID = checkedClaims.FirstOrDefault(x =>
-                                            x.Type.Equals(ClaimTypes.NameIdentifier))
-                                            .Value;
-            //var PersonID = CheckToken(token);
-            if (CheckToken(token) == BadRequest())
+            var user = _reader.Value.ReadUserData().Where(x => x.ID == PersonID).FirstOrDefault();
+
+            if (user == null)
             {
                 return BadRequest();
             }
 
-            var searchedUser = _reader.Value.ReadUserData().Where(x => x.ID.ToString() == checkID).FirstOrDefault();
-
-            if (searchedUser == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(ImageProcessor(searchedUser.ID.ToString()));
-
+            return Ok(ImageProcessor(PersonID.ToString()));
         }
 
         public string ImageProcessor(string imgName)
@@ -167,6 +150,20 @@ namespace UniBinderAPI.Controllers
             var IDCollection = _reader.Value.PeopleWithSameSubjects(new Guid(checkID));
             return Ok(IDCollection);
         }
+
+
+        public IHttpActionResult ResolveToken(string token)
+        {
+            IAuthService authService = new JWTService(ConfigurationManager.AppSettings["SecretJWTKey"]);
+            var checkedClaims = authService.GetTokenClaims(token).ToList();
+            var checkID = checkedClaims.FirstOrDefault(x =>
+                                            x.Type.Equals(ClaimTypes.NameIdentifier))
+                                            .Value;
+            var PersonID = CheckToken(token);
+            if (CheckToken(token) == BadRequest()) return BadRequest();
+            return Ok();
+        }
+
 
         [Route("api/person/UserDataByToken")]
         [HttpGet]
@@ -323,6 +320,31 @@ namespace UniBinderAPI.Controllers
             //var path = string.Format("../../img/{0}", img.ImgPath);
 
             image.Save(fullPath);
+            return Ok();
+        }
+
+
+        [Route("api/person/Match")]
+        [HttpPost]
+        public IHttpActionResult AddMatch(string token, Guid victimID)
+        {
+            IAuthService authService = new JWTService(ConfigurationManager.AppSettings["SecretJWTKey"]);
+            var checkedClaims = authService.GetTokenClaims(token).ToList();
+            var checkID = checkedClaims.FirstOrDefault(x =>
+                                            x.Type.Equals(ClaimTypes.NameIdentifier))
+                                            .Value;
+            if (CheckToken(token) == BadRequest())
+            {
+                return BadRequest();
+            }
+
+            if (new Guid(checkID) == victimID) return Conflict();
+
+            using (var context = new UniBinderEF())
+            {
+                context.MatchedPeoples.Add(new MatchedPeople { FirstPersonID = new Guid(checkID), SecondPersonID = victimID });
+                context.SaveChanges();
+            }
             return Ok();
         }
 
