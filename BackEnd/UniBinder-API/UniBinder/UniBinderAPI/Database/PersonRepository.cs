@@ -46,15 +46,7 @@ namespace UniBinderAPI.Database
 
         public void Update(Person entity)
         {
-            //var subjectList = repository.List;
 
-            //var person = _dbContext.People.Where(x => entity.ID == x.ID).FirstOrDefault();
-            //if (person != null)
-            //{
-            //    var subjectsByID = subjectList.Where(x => person.ID == x.PersonID);
-
-
-            //    entity.SubjectList = subjectsByID.ToList();
                 _dbContext.Entry(entity).State = System.Data.Entity.EntityState.Modified;
                 _dbContext.SaveChanges();
             }

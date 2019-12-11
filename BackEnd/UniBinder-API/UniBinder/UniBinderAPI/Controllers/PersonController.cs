@@ -24,18 +24,7 @@ namespace UniBinderAPI.Controllers
         UserDataInserter userDataInserter = new UserDataInserter();
         Lazy<UserDataReader> _reader = new Lazy<UserDataReader>();
 
-        UserDataReader reader = new UserDataReader();
         List<Person> people;
-
-        IRepository<Person> repository = new PersonRepository();
-        string path1 = string.Format("/asd/{0}", "benas.pjg");
-
-        public PersonController()
-        {
-            //ImageProcessor("benas.jpg");
-        }
-        //System.IO.FileNotFoundException: 'Could not find file 'C:\projects\uniBinder\UniBinder\BackEnd\UniBinder-API\UniBinder\UniBinderAPI\FileManager\benas.pjg'.'
-
 
         #region GetApi
 
@@ -328,7 +317,9 @@ namespace UniBinderAPI.Controllers
             //var path1 = string.Format(, imgName);
             var fullPath = domainPath + "Images" + @"\" + img.ImgPath + ".jpg";
 
-            var image = Image.FromStream(new MemoryStream(Convert.FromBase64String(img.ImgBase64)));
+            
+
+            var image = Image.FromStream(new MemoryStream(Convert.FromBase64String(img.ImgBase64.Remove(0,23))));
             //var path = string.Format("../../img/{0}", img.ImgPath);
 
             image.Save(fullPath);
