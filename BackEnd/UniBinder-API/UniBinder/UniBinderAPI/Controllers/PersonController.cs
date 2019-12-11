@@ -45,6 +45,8 @@ namespace UniBinderAPI.Controllers
         }
 
 
+
+
         [Route("api/person/count")]
         [HttpGet]
         public int GetNumber()
@@ -160,6 +162,7 @@ namespace UniBinderAPI.Controllers
             }
 
             var IDCollection = _reader.Value.PeopleWithSameSubjects(new Guid(checkID));
+
             return Ok(IDCollection);
         }
 
