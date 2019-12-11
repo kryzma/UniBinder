@@ -1,25 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Reflection;
 using System.Security.Claims;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using UniBinderAPI.Database;
 using UniBinderAPI.EntityFramework;
 using UniBinderAPI.Managers;
 using UniBinderAPI.Models;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
-using System.Threading.Tasks;
-using System.Net.Http.Headers;
-using System.Text;
-using Microsoft.AspNetCore.WebSockets.Internal;
 using System.IO;
 using UniBinderAPI.FileManager;
 using System.Drawing;
@@ -38,8 +27,13 @@ namespace UniBinderAPI.Controllers
         List<Person> people;
 
         IRepository<Person> repository = new PersonRepository();
+        string path1 = string.Format("/asd/{0}", "benas.pjg");
 
+        public PersonController()
+        {
 
+        }
+        //System.IO.FileNotFoundException: 'Could not find file 'C:\projects\uniBinder\UniBinder\BackEnd\UniBinder-API\UniBinder\UniBinderAPI\FileManager\benas.pjg'.'
 
 
         #region GetApi
@@ -105,7 +99,7 @@ namespace UniBinderAPI.Controllers
         [Route("api/person/GetImage")]
         [HttpGet]
         // [AllowAnonymous]
-        public IHttpActionResult getImage(string token)
+        public IHttpActionResult GetImage(string token)
         {
             IAuthService authService = new JWTService(ConfigurationManager.AppSettings["SecretJWTKey"]);
             var checkedClaims = authService.GetTokenClaims(token).ToList();
@@ -177,25 +171,6 @@ namespace UniBinderAPI.Controllers
 
             var IDCollection = _reader.Value.PeopleWithSameSubjects(new Guid(checkID));
             return Ok(IDCollection);
-
-            //foreach(var person in peopleList)
-            //{
-            //    foreach (var subject in selectedSubjects)
-            //    {
-            //        if(person.SubjectList.Exists(x => x.Name == subject.Name) && person.ID.ToString() != checkID)
-            //        {
-            //            matchedPeopleBySubject.Add(person);
-            //            break;
-            //        }
-            //    }
-            //}
-
-            //if(matchedPeopleBySubject == null)
-            //{
-            //    return NotFound(); //404
-            //}
-
-            //return Ok(matchedPeopleBySubject);
         }
 
         [Route("api/person/UserDataByToken")]
@@ -261,35 +236,37 @@ namespace UniBinderAPI.Controllers
             if (updatedUser == null) return BadRequest();
             var currentUser = GetCurrentUser(updatedUser);
             if (currentUser == null) return NotFound();
-            repository.Update(UpdatePersonProperties(updatedUser, currentUser));
-            return Ok();
+
+            Person user = new Person() { Name = updatedUser.Name, Password = updatedUser.Password,
+                                        Surname = updatedUser.Surname, Email = updatedUser.Email, ID = updatedUser.ID, SubjectList = updatedUser.SubjectList };
+
+            if (user.SubjectList == null)
+            {
+                using (var db = new UniBinderEF())
+                {
+                    db.People.Attach(user);
+                    db.Entry(user).Property(x => x.Password).IsModified = true;
+                    db.Entry(user).Property(x => x.Name).IsModified = true;
+                    db.Entry(user).Property(x => x.Surname).IsModified = true;
+                    db.Entry(user).Property(x => x.Email).IsModified = true;
+                    db.SaveChanges();
+                }
+                return Ok();
+            }
+
+            else
+            {
+                userDataInserter.LinkSubjectsToPersonDataTable(user);
+                return Ok();
+            }
         }
+
 
         private Person GetCurrentUser(Person updatedUser)
         {
             return _reader.Value.ReadUserData().Where(x => x.ID == updatedUser.ID).FirstOrDefault();
         }
 
-        private Person UpdatePersonProperties(Person updatedUser, Person currentUser)
-        {
-            FinalUserProperties(currentUser, updatedUser);
-            //userDataInserter.LinkSubjectsToPersonWithDel(currentUser);
-            userDataInserter.LinkSubjectsToPersonDataTable(currentUser);
-            return updatedUser;
-        }
-
-        private void FinalUserProperties(Person currentUser, Person preUpdatedUser)
-        {
-            currentUser.Age = preUpdatedUser.Age;
-            currentUser.Dislikes = preUpdatedUser.Dislikes;
-            currentUser.Username = preUpdatedUser.Username;
-            currentUser.SubjectList = preUpdatedUser.SubjectList;
-            currentUser.Role = preUpdatedUser.Role;
-            //person.MatchedPeople = updatedUser.MatchedPeople;
-            currentUser.ImageLink = preUpdatedUser.ImageLink;
-            currentUser.ID = preUpdatedUser.ID;
-            currentUser.Likes = preUpdatedUser.Likes;
-        }
 
         #region PostApi
 
