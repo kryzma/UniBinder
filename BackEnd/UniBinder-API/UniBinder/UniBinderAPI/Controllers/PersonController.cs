@@ -120,7 +120,7 @@ namespace UniBinderAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(ImageProcessor(searchedUser.ImageLink));
+            return Ok(ImageProcessor(searchedUser.ID.ToString()));
 
         }
 
@@ -128,8 +128,10 @@ namespace UniBinderAPI.Controllers
         {
             var domainPath = AppDomain.CurrentDomain.BaseDirectory;
             //var path1 = string.Format(, imgName);
-            var fullPath = domainPath + "Images" + @"\" + imgName;
+            var fullPath = domainPath + "Images" + @"\" + imgName + ".jpg";
             System.Diagnostics.Debug.WriteLine(fullPath);
+
+
 
             var base64String = Convert.ToBase64String(File.ReadAllBytes(fullPath));
             return base64String;
@@ -324,7 +326,7 @@ namespace UniBinderAPI.Controllers
         {
             var domainPath = AppDomain.CurrentDomain.BaseDirectory;
             //var path1 = string.Format(, imgName);
-            var fullPath = domainPath + "Images" + @"\" + img.ImgPath;
+            var fullPath = domainPath + "Images" + @"\" + img.ImgPath + ".jpg";
 
             var image = Image.FromStream(new MemoryStream(Convert.FromBase64String(img.ImgBase64)));
             //var path = string.Format("../../img/{0}", img.ImgPath);
