@@ -126,39 +126,40 @@ namespace UniBinderAPI.Database
 
                 delete.Parameters.Add(new SqlParameter("@ID", SqlDbType.UniqueIdentifier, 50, "ID"));
 
-                SqlDataAdapter adapter = new SqlDataAdapter("select * from PersonSubject", connection);
-
-                adapter.DeleteCommand = delete;
-
-                DataSet ds = new DataSet();
-
-                adapter.Fill(ds, "PersonSubject");
-
-                for (int i = ds.Tables[0].Rows.Count - 1; i >= 0; i--)
+                using (SqlDataAdapter adapter = new SqlDataAdapter("select * from PersonSubject", connection))
                 {
-                    if (person.ID.Equals(ds.Tables[0].Rows[i]["PersonID"]))
+                    adapter.DeleteCommand = delete;
+
+                    DataSet ds = new DataSet();
+
+                    adapter.Fill(ds, "PersonSubject");
+
+                    for (int i = ds.Tables[0].Rows.Count - 1; i >= 0; i--)
                     {
-                        DataRow row = ds.Tables[0].Rows[i];
-                        row.Delete();
+                        if (person.ID.Equals(ds.Tables[0].Rows[i]["PersonID"]))
+                        {
+                            DataRow row = ds.Tables[0].Rows[i];
+                            row.Delete();
+                        }
                     }
+
+                    SqlCommand insert = new SqlCommand();
+                    insert.Connection = connection;
+                    insert.CommandType = CommandType.Text;
+                    insert.CommandText = "Insert into PersonSubject Values (@ID,@PI,@NAME)";
+
+                    insert.Parameters.Add(new SqlParameter("@ID", SqlDbType.UniqueIdentifier, 50, "ID"));
+                    insert.Parameters.Add(new SqlParameter("@PI", SqlDbType.UniqueIdentifier, 50, "PersonID"));
+                    insert.Parameters.Add(new SqlParameter("@NAME", SqlDbType.VarChar, 50, "Name"));
+
+                    adapter.InsertCommand = insert;
+
+                    foreach (var sub in person.SubjectList)
+                    {
+                        ds.Tables[0].Rows.Add(Guid.NewGuid(), person.ID, sub.Name);
+                    }
+                    adapter.Update(ds.Tables[0]);
                 }
-
-                SqlCommand insert = new SqlCommand();
-                insert.Connection = connection;
-                insert.CommandType = CommandType.Text;
-                insert.CommandText = "Insert into PersonSubject Values (@ID,@PI,@NAME)";
-
-                insert.Parameters.Add(new SqlParameter("@ID", SqlDbType.UniqueIdentifier, 50, "ID"));
-                insert.Parameters.Add(new SqlParameter("@PI", SqlDbType.UniqueIdentifier, 50, "PersonID"));
-                insert.Parameters.Add(new SqlParameter("@NAME", SqlDbType.VarChar, 50, "Name"));
-
-                adapter.InsertCommand = insert;
-
-                foreach (var sub in person.SubjectList)
-                {
-                    ds.Tables[0].Rows.Add(Guid.NewGuid(), person.ID, sub.Name);
-                }
-                adapter.Update(ds.Tables[0]);
             }
         }
 

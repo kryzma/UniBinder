@@ -30,5 +30,7 @@ namespace UniBinderAPI.EntityFramework
 
         [JsonProperty(PropertyName = "Subjects")]
         public List<Subject> SubjectList { get; internal set; }
+
+        public List<System.Guid> Matches { get; internal set; }
     }
 }

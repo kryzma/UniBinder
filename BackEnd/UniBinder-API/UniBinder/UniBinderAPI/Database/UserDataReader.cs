@@ -83,7 +83,22 @@ namespace UniBinderAPI.Database
                         };
                         person.SubjectList.Add(subject);
                     }
+
+                    //foreach (var item in PersonList)
+                    //{
+                    //    item.Matches = from match in matchedPeople
+                    //                   where match.FirstPersonID.Equal(item.id) match.FirstPersonID = item.ID
+                    //                   select match.SecondPersonID;
+
+
+                    //    item.Matches = matchedPeople.Where(x => x.FirstPersonID.Equals(item.ID));
+
+
+
+                    //}
                     PersonList.Add(person);
+
+
                 }
             }
 

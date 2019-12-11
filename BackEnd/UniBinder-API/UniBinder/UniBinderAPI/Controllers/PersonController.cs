@@ -12,6 +12,7 @@ using UniBinderAPI.Models;
 using System.IO;
 using UniBinderAPI.FileManager;
 using System.Drawing;
+using System.Data.Entity.Infrastructure;
 
 //UNIQUEIDENTIFIER PRIMARY KEY default NEWID(),
 
@@ -31,7 +32,7 @@ namespace UniBinderAPI.Controllers
 
         public PersonController()
         {
-
+            //ImageProcessor("benas.jpg");
         }
         //System.IO.FileNotFoundException: 'Could not find file 'C:\projects\uniBinder\UniBinder\BackEnd\UniBinder-API\UniBinder\UniBinderAPI\FileManager\benas.pjg'.'
 
@@ -125,9 +126,12 @@ namespace UniBinderAPI.Controllers
 
         public string ImageProcessor(string imgName)
         {
-            var path = string.Format("../../img/{0}", imgName);
-            
-            var base64String = Convert.ToBase64String(File.ReadAllBytes(path));
+            var domainPath = AppDomain.CurrentDomain.BaseDirectory;
+            //var path1 = string.Format(, imgName);
+            var fullPath = domainPath + "Images" + @"\" + imgName;
+            System.Diagnostics.Debug.WriteLine(fullPath);
+
+            var base64String = Convert.ToBase64String(File.ReadAllBytes(fullPath));
             return base64String;
         }
 
@@ -240,16 +244,28 @@ namespace UniBinderAPI.Controllers
             Person user = new Person() { Name = updatedUser.Name, Password = updatedUser.Password,
                                         Surname = updatedUser.Surname, Email = updatedUser.Email, ID = updatedUser.ID, SubjectList = updatedUser.SubjectList };
 
+
             if (user.SubjectList == null)
             {
                 using (var db = new UniBinderEF())
                 {
+
                     db.People.Attach(user);
-                    db.Entry(user).Property(x => x.Password).IsModified = true;
+                    if(user.Password != null)
+                    {
+                        db.Entry(user).Property(x => x.Password).IsModified = true;
+                    }
                     db.Entry(user).Property(x => x.Name).IsModified = true;
                     db.Entry(user).Property(x => x.Surname).IsModified = true;
                     db.Entry(user).Property(x => x.Email).IsModified = true;
-                    db.SaveChanges();
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        return BadRequest();
+                    }
                 }
                 return Ok();
             }
@@ -306,10 +322,14 @@ namespace UniBinderAPI.Controllers
         [HttpPost]
         public IHttpActionResult PostImage(ImgHandler img)
         {
-            var image = Image.FromStream(new MemoryStream(Convert.FromBase64String(img.ImgBase64)));
-            var path = string.Format("../../img/{0}", img.ImgPath);
+            var domainPath = AppDomain.CurrentDomain.BaseDirectory;
+            //var path1 = string.Format(, imgName);
+            var fullPath = domainPath + "Images" + @"\" + img.ImgPath;
 
-            image.Save(path);
+            var image = Image.FromStream(new MemoryStream(Convert.FromBase64String(img.ImgBase64)));
+            //var path = string.Format("../../img/{0}", img.ImgPath);
+
+            image.Save(fullPath);
             return Ok();
         }
 
@@ -346,7 +366,14 @@ namespace UniBinderAPI.Controllers
             {
                 var people = context.People.ToList();
                 if (people.Exists(x => x.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase))) return BadRequest();
-                if (people.Exists(x => x.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase))) return Conflict();
+
+                var checkEmail = people.Where(x => x.Email.ToLower() == email.ToLower()).FirstOrDefault();
+                if(checkEmail != null)
+                {
+                    return Conflict();
+                }
+                
+                //if (people.Exists(x => x.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase))) return Conflict();
                 return Ok();
             }
         }
@@ -375,9 +402,12 @@ namespace UniBinderAPI.Controllers
             };
         }
 
-       
 
 
+        public virtual void HandleException(Exception exception)
+        {
+
+        }
 
 
 
