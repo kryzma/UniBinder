@@ -384,7 +384,6 @@
     </Compile>
     <Compile Include="Managers\IAuthService.cs" />
     <Compile Include="Managers\JWTService.cs" />
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\IAuthContainerModel.cs" />
     <Compile Include="Models\JWTContainerModel.cs" />
