@@ -35,15 +35,13 @@ namespace UniBinderAPI.Controllers
             return Ok(_reader.Value.SubjectList());
         }
 
-        [Route("api/person/UsersMatches")]
+        [Route("api/person/UserMatches")]
         [HttpGet]
         public IHttpActionResult GetMatchedUsers(Guid personID)
         {
-            
-
-
-
-
+            var matchList = _reader.Value.MatchList(personID);
+            if (matchList == null) return BadRequest();
+            return Ok(matchList);
         }
 
 
@@ -119,7 +117,7 @@ namespace UniBinderAPI.Controllers
             }
             catch (Exception)
             {
-                return NotFound();
+                return BadRequest();
             } 
         }
 

@@ -105,7 +105,16 @@ namespace UniBinderAPI.Database
             }
         }
 
-
+        public List<Guid?> MatchList(Guid userID)
+        {
+            var matches = new List<Guid?>();
+            using (var context = new UniBinderEF())
+            {
+                var allMatches = context.MatchedPeoples.Where(match => match.FirstPersonID == userID).Select(match => match.SecondPersonID).ToList();
+                matches = allMatches;
+                return matches;
+            }
+        }
 
         public List<Guid?> PeopleWithSameSubjects(Guid givenID)
         {
