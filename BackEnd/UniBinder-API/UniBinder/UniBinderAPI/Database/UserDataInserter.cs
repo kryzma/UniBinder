@@ -162,16 +162,14 @@ namespace UniBinderAPI.Database
                 }
             }
         }
-
-        //private int FindUniqueSubjectID(int ID) //for dataset
-        //{
-        //    var personSubjects = _reader.Value.PersonSubjects();
-        //    while (personSubjects.Exists(x => x.ID == ID))
-        //    {
-        //        ID++;
-        //    }
-        //    return ID;
-        //}
+        public void AddNewMatch(Guid victimID, string checkID)
+        {
+            using (var context = new UniBinderEF())
+            {
+                context.MatchedPeoples.Add(new MatchedPeople { FirstPersonID = new Guid(checkID), SecondPersonID = victimID });
+                context.SaveChanges();
+            }
+        }
 
     }
 }

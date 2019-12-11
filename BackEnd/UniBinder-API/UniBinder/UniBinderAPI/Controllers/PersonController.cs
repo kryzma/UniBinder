@@ -35,6 +35,17 @@ namespace UniBinderAPI.Controllers
             return Ok(_reader.Value.SubjectList());
         }
 
+        [Route("api/person/UsersMatches")]
+        [HttpGet]
+        public IHttpActionResult GetMatchedUsers(Guid personID)
+        {
+            
+
+
+
+
+        }
+
 
         [Route("api/person/count")]
         [HttpGet]
@@ -84,29 +95,32 @@ namespace UniBinderAPI.Controllers
         [Route("api/person/GetImage")]
         [HttpGet]
         // [AllowAnonymous]
-        public IHttpActionResult GetImage(Guid PersonID)
+        public IHttpActionResult GetImage(Guid personID)
         {
-            var user = _reader.Value.ReadUserData().Where(x => x.ID == PersonID).FirstOrDefault();
+            var user = _reader.Value.ReadUserData().Where(x => x.ID == personID).FirstOrDefault();
 
             if (user == null)
             {
                 return BadRequest();
             }
 
-            return Ok(ImageProcessor(PersonID.ToString()));
+            return ImageProcessor(personID.ToString());
         }
 
-        public string ImageProcessor(string imgName)
+        public IHttpActionResult ImageProcessor(string imgName)
         {
             var domainPath = AppDomain.CurrentDomain.BaseDirectory;
-            //var path1 = string.Format(, imgName);
             var fullPath = domainPath + "Images" + @"\" + imgName + ".jpg";
-            System.Diagnostics.Debug.WriteLine(fullPath);
 
-
-
-            var base64String = Convert.ToBase64String(File.ReadAllBytes(fullPath));
-            return base64String;
+            try
+            {
+                var base64String = Convert.ToBase64String(File.ReadAllBytes(fullPath));
+                return Ok(base64String);
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            } 
         }
 
         [Route("api/person/Pass")]
@@ -339,14 +353,10 @@ namespace UniBinderAPI.Controllers
             }
 
             if (new Guid(checkID) == victimID) return Conflict();
-
-            using (var context = new UniBinderEF())
-            {
-                context.MatchedPeoples.Add(new MatchedPeople { FirstPersonID = new Guid(checkID), SecondPersonID = victimID });
-                context.SaveChanges();
-            }
+            userDataInserter.AddNewMatch(victimID, checkID);
             return Ok();
         }
+
 
 
         [Route("api/person/Registration")]

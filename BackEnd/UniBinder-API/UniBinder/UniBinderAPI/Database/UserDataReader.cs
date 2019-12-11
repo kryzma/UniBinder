@@ -106,6 +106,7 @@ namespace UniBinderAPI.Database
         }
 
 
+
         public List<Guid?> PeopleWithSameSubjects(Guid givenID)
         {
             List<Person> people = new List<Person>();
