@@ -7,9 +7,8 @@ class Statistics extends React.Component {
     return (
       <Container>
         <div>
-          Likes
           <div>
-            {this.props.personLikes}
+            {/* {this.props.personLikes} */}
           </div>
         </div>
       </Container>

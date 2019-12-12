@@ -6,9 +6,9 @@
   justify-content: center;
 }
 
-.profile-wrapper:hover {
+.profile-name-link:hover {
   cursor: pointer;
-  color: #ddd;
+  color: #ddd !important;
 }
 
 @media screen and (max-width: 500px){
@@ -22,4 +22,9 @@
   .profile-icon {
     font-size: 35px !important;
   }
+}
+
+.profile-name-link {
+  text-decoration: none !important;
+  color: white !important;
 }

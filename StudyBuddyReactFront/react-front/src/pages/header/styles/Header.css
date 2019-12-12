@@ -42,7 +42,9 @@
     cursor: pointer;
     color: #ddd !important;
   }
-  .header-drawer > .MuiDrawer-paperAnchorTop > .logo-wrapper {
+
+
+  body > div.MuiDrawer-root.MuiDrawer-modal.header-drawer > div.MuiPaper-root.MuiPaper-elevation16.MuiDrawer-paper.MuiDrawer-paperAnchorTop > a > div {
     display: flex;
     align-items: center;
     justify-content: center;

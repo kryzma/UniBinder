@@ -35,10 +35,14 @@ class Menu extends React.Component {
                     </Row>
                     <Row>
                         <Col lg={{ span: 6 }} md={{ span: 12 }}>
-                            <UserSettings />
+                            <Link className="user-settings" to="/settings">
+                                <UserSettings />
+                            </Link>
                         </Col>
                         <Col lg={{ span: 6 }} md={{ span: 12 }}>
-                            <UserTest />
+                            <Link className="user-chat" to="/matches">
+                                <UserTest />
+                            </Link>
                         </Col>
                     </Row>
 

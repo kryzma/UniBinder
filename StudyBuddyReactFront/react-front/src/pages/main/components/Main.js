@@ -9,8 +9,10 @@ import Container from "react-bootstrap/Container"
 import Col from "react-bootstrap/Col"
 import Row from "react-bootstrap/Row"
 
+import { read_cookie } from 'sfcookies';
+
 import "../styles/Main.css"
-import { PERSON_COUNT_LINK } from "../../../config"
+import { LOAD_LIST } from "../../../config"
 
 
 class Main extends React.Component {
@@ -19,8 +21,9 @@ class Main extends React.Component {
     super()
 
     this.state = {
+      userList: [],
       currentId: 0,
-      userCount: 0
+      listLength: 0,
     }
     this.componentDidMount = this.componentDidMount.bind(this)
     this.forwardId = this.forwardId.bind(this)
@@ -29,18 +32,30 @@ class Main extends React.Component {
 
   componentDidMount() {
 
-    fetch(PERSON_COUNT_LINK)
+    // fetch(PERSON_COUNT_LINK)
+    //   .then(response => response.json())
+    //   .then(response => this.setState({
+    //     userCount: response - 1
+    //   }))
+    //   .catch(console.log)
+    var token = read_cookie("UserToken")
+    fetch(LOAD_LIST + token)
       .then(response => response.json())
-      .then(response => this.setState({
-        userCount: response - 1
-      }))
-      .catch(console.log)
+      .then(response => {
+        this.setState({
+          userList: response
+        })
+      })
+      .then(() => {
+        this.setState({
+          listLength: this.state.userList.length
+        })
+      })
+
   }
 
   forwardId() {
-    // console.log("Current id: " + this.state.currentId)
-    // console.log("Current userCount: " + this.state.userCount)
-    if (this.state.currentId < this.state.userCount) {
+    if (this.state.currentId < this.state.listLength - 1) {
       this.setState(prevState => {
         return {
           currentId: prevState.currentId + 1
@@ -58,8 +73,6 @@ class Main extends React.Component {
   }
 
   backwardId() {
-    // console.log("Current id: " + this.state.currentId)
-    // console.log("Current userCount: " + this.state.userCount)
     if (this.state.currentId > 0) {
       this.setState(prevState => {
         return {
@@ -69,7 +82,7 @@ class Main extends React.Component {
     }
     else {
       this.setState(prevState => {
-        let max = this.state.userCount
+        let max = this.state.listLength - 1
         return {
           currentId: max
         }
@@ -80,20 +93,38 @@ class Main extends React.Component {
 
 
   render() {
-    return (
-      <div className="main-wrapper">
-        <Header />
-        <Container>
-          <Col lg={{ span: 10, offset: 1 }}>
-            <Row>
-              <ArrowBack changeId={this.backwardId} />
-              <MainPaper currentId={this.state.currentId} />
-              <ArrowForward changeId={this.forwardId} />
-            </Row>
+    if (this.state.listLength === 0) {
+      return (
+        <div>
+          <Header />
+          <Container className="matched-all-wrapper">
+            <Col lg={{ span: 12 }}>
+              You've matched with everyone !
           </Col>
-        </Container>
-      </div>
-    )
+            <Col lg={{ span: 12 }}>
+              Select more subjects to find more matches !
+          </Col>
+          </Container>
+
+        </div>
+      )
+    }
+    else {
+      return (
+        <div className="main-wrapper">
+          <Header />
+          <Container>
+            <Col lg={{ span: 10, offset: 1 }}>
+              <Row>
+                <ArrowBack changeId={this.backwardId} />
+                <MainPaper currentId={this.state.userList[this.state.currentId]} />
+                <ArrowForward changeId={this.forwardId} />
+              </Row>
+            </Col>
+          </Container>
+        </div>
+      )
+    }
   }
 
 }

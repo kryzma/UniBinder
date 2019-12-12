@@ -1,0 +1,10 @@
+.matched-with-nothing-container {
+    margin-top: 200px;
+    text-align: center;
+    font-size: 30px;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.matched-person-list-container {
+    margin-top: 100px;
+}

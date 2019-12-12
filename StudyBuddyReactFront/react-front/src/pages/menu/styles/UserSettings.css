@@ -39,6 +39,7 @@
     font-size: 25px;
     text-align: center;
     font-family: 'Roboto', sans-serif;
+    color: black;
 }
 
 @media screen and (max-width: 1199px){

@@ -12,6 +12,7 @@ import Email from "./Email"
 import Password from "./Password"
 import RegisterButton from "./RegisterButton"
 import LoginButton from "./LoginButton"
+import ErrorMessage from "./ErrorMessage"
 
 import "../styles/Register.css"
 
@@ -31,8 +32,8 @@ class Register extends React.Component {
             email: undefined,
             password: undefined,
             hashedPassword: undefined,
-            usernameCorrect: undefined,
-            emailCorrect: undefined,
+            usernameCorrect: true,
+            emailCorrect: true,
         })
         this.nameChange = this.nameChange.bind(this)
         this.surnameChange = this.surnameChange.bind(this)
@@ -73,8 +74,13 @@ class Register extends React.Component {
 
     redirect() {
         // Check if everything is OK
-        if (true) {
-            this.props.history.push("/menu")
+        if (this.state.usernameCorrect && this.state.emailCorrect) {
+            fetch(GET_USER_TOKEN + this.state.username)
+                .then(response => response.json())
+                .then(response => {
+                    bake_cookie("UserToken", response)
+                })
+                .then(() => { this.props.history.push("/menu") })
         }
     }
 
@@ -108,17 +114,15 @@ class Register extends React.Component {
             .then(response => {
                 if (response.status === 400) {
                     this.setState({
-                        usernameCorrect: false
+                        usernameCorrect: false,
+                        emailCorrect: true
                     })
-                    console.log("username incorrect")
-                    //throw new Error(response.status)
                 }
-                if (response.status === 409) {
+                else if (response.status === 409) {
                     this.setState({
-                        emailCorrect: false
+                        emailCorrect: false,
+                        usernameCorrect: true
                     })
-                    console.log("email incorrect")
-                    //throw new Error(response.status)
                 }
                 else {
                     this.setState({
@@ -127,14 +131,7 @@ class Register extends React.Component {
                     })
                 }
             })
-            .then(
-                fetch(GET_USER_TOKEN + this.state.username)
-                    .then(response => response.json())
-                    .then(response => {
-                        bake_cookie("UserToken", response)
-                    })
-                //.then(() => redirect())
-            )
+            .then(() => redirect())
     }
 
 
@@ -149,6 +146,7 @@ class Register extends React.Component {
                             <Username handleUsername={this.usernameChange} />
                             <Email handleEmail={this.emailChange} />
                             <Password handlePassword={this.passwordChange} />
+                            <ErrorMessage usernameHandle={this.state.usernameCorrect} emailHandle={this.state.emailCorrect} />
                             <RegisterButton handleSubmit={this.onSubmit} />
                             <LoginButton />
                         </Paper>
