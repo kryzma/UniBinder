@@ -28,76 +28,80 @@ namespace UniBinderAPI.Database
     {
         List<Person> PersonList = new List<Person>();
 
-        public List<Person> ReadUserData()
-        {
-            using (var context = new UniBinderEF())
+
+
+            public List<Person> ReadUserData()
             {
-                var users = (from a in context.People select a).ToList();
-                var usersSubjects = (from a in context.PersonSubjects select a).ToList();
-                var matchedPeople = (from a in context.MatchedPeoples select a).ToList();
-                //var person = matchedPeople.First();
-                
-
-
-                var groupJoin = users.GroupJoin(usersSubjects,
-                person => person.ID,
-                sub => sub.PersonID,
-                (person, subjectGroup) => new
+                using (var context = new UniBinderEF())
                 {
-                    subjectsList = subjectGroup,
-                    person.ID,
-                    person.Username,
-                    person.Password,
-                    person.Name,
-                    person.Surname,
-                    person.Email,
-                    person.Role,
-                    person.Likes,
-                    person.Dislikes,
-                    person.ImageLink,
-                });
+                    var users = (from a in context.People select a).ToList();
+                    var usersSubjects = (from a in context.PersonSubjects select a).ToList();
+                    var matchedPeople = (from a in context.MatchedPeoples select a).ToList();
+                    //var person = matchedPeople.First();
 
-                
 
-                foreach (var p in groupJoin)
-                {
-                    var person = new Person
+
+                    var groupJoin = users.GroupJoin(usersSubjects,
+                    person => person.ID,
+                    sub => sub.PersonID,
+                    (person, subjectGroup) => new
                     {
-                        ID = p.ID,
-                        Username = p.Username,
-                        Password = p.Password,
-                        Name = p.Name,
-                        Surname = p.Surname,
-                        Email = p.Email,
-                        Role = p.Role,
-                        Likes = p.Likes,
-                        Dislikes = p.Dislikes,
-                        ImageLink = p.ImageLink,
-                        SubjectList = new List<Subject>()
-                    };
-                    foreach (var sub in p.subjectsList)
+                        subjectsList = subjectGroup,
+                        person.ID,
+                        person.Username,
+                        person.Password,
+                        person.Name,
+                        person.Surname,
+                        person.Email,
+                        person.Role,
+                        person.Likes,
+                        person.Dislikes,
+                        person.ImageLink,
+                    });
+
+
+
+                    foreach (var p in groupJoin)
                     {
-                        var subject = new Subject
+                        var person = new Person
                         {
-                            Name = sub.Name
+                            ID = p.ID,
+                            Username = p.Username,
+                            Password = p.Password,
+                            Name = p.Name,
+                            Surname = p.Surname,
+                            Email = p.Email,
+                            Role = p.Role,
+                            Likes = p.Likes,
+                            Dislikes = p.Dislikes,
+                            ImageLink = p.ImageLink,
+                            SubjectList = new List<Subject>()
                         };
-                        person.SubjectList.Add(subject);
-                    }
-                    foreach (var per in PersonList)
-                    {
-                        per.Matches = (from a in matchedPeople
-                                       where per.ID.Equals(a.FirstPersonID) || per.ID.Equals(a.SecondPersonID)
-                                       select (Guid)a.SecondPersonID).ToList();
+                        foreach (var sub in p.subjectsList)
+                        {
+                            var subject = new Subject
+                            {
+                                Name = sub.Name
+                            };
+                            person.SubjectList.Add(subject);
+                        }
+                        foreach (var per in PersonList)
+                        {
+                            per.Matches = (from a in matchedPeople
+                                           where per.ID.Equals(a.FirstPersonID) || per.ID.Equals(a.SecondPersonID)
+                                           select (Guid)a.SecondPersonID).ToList();
+                        }
+                    PersonList.Add(person);
                     }
                 }
+
+            var check = PersonList;
+            var check2 = PersonList.Count();
+                return PersonList;
             }
 
 
-            return PersonList;
-        }
-
-
-        public int PeopleNumber()
+            public int PeopleNumber()
         {
             using (var context = new UniBinderEF())
             {
@@ -125,13 +129,12 @@ namespace UniBinderAPI.Database
             using (var context = new UniBinderEF())
             {
                 var matches = MatchList(personID);
-                List<string> subjects = new List<string>();
+                //List<string> subjects = new List<string>();
 
-                foreach (var userID in matches)
-                {
-                    subjects = context.PersonSubjects.Where(personSubject => personSubject.PersonID == personID && userID != personSubject.PersonID)
+                var subjects = context.PersonSubjects.Where(personSubject => personSubject.PersonID == personID)
                                                      .Select(personSubject => personSubject.Name).ToList();
-                }
+
+
 
                 foreach (var subjectName in subjects)
                 {
@@ -139,21 +142,12 @@ namespace UniBinderAPI.Database
                                                                       .Select(personSubject => personSubject.PersonID).ToList();
                     foreach (var item in PeopleWithSameSubject)
                     {
-                        if (IDMatchedBySubjects.Contains(item)) continue;
+                        if (IDMatchedBySubjects.Contains(item) || matches.Contains(item)) continue;
                         IDMatchedBySubjects.Add(item);
                     }
                 }
 
-
-
             }
-            //select SubjectName from PersonSubject where id == personid;
-
-            //foreach(var item in collection)
-            //{
-            //    select personID from PersonSubject where personid != givenID && item == SubjectName
-            //}
-
             return IDMatchedBySubjects;
         }
 

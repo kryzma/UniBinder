@@ -166,7 +166,8 @@ namespace UniBinderAPI.Database
         {
             using (var context = new UniBinderEF())
             {
-                context.MatchedPeoples.Add(new MatchedPeople { FirstPersonID = new Guid(checkID), SecondPersonID = victimID });
+                context.MatchedPeoples.Add(new MatchedPeople {
+                    FirstPersonID = new Guid(checkID), SecondPersonID = victimID, Id = Guid.NewGuid() });
                 context.SaveChanges();
             }
         }

@@ -57,8 +57,6 @@ namespace UniBinderAPI.Controllers
         // GET: api/Person
         public IEnumerable<Person> Get()
         {
-            //return repository.List;
-            //ImageProcessor();
             return _reader.Value.ReadUserData();
         }
 
@@ -252,7 +250,6 @@ namespace UniBinderAPI.Controllers
             {
                 using (var db = new UniBinderEF())
                 {
-
                     db.People.Attach(user);
                     if(user.Password != null)
                     {
@@ -404,7 +401,12 @@ namespace UniBinderAPI.Controllers
             }
         }
 
+        public IHttpActionResult UnmatchPeople(Guid personID1, Guid personID2)
+        {
+            if()
 
+
+        }
 
 
 
