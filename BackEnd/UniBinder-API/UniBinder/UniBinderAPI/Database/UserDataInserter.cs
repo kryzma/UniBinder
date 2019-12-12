@@ -172,5 +172,14 @@ namespace UniBinderAPI.Database
             }
         }
 
+        public void RemoveMatch(Guid id2)
+        {
+            using (var context = new UniBinderEF())
+            {
+                var match = context.MatchedPeoples.Where(x => x.SecondPersonID == id2).FirstOrDefault();
+                context.Entry(match).State = System.Data.Entity.EntityState.Deleted;
+                context.SaveChanges();
+            }
+        }
     }
 }

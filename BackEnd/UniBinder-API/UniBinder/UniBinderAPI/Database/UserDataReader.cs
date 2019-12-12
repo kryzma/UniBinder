@@ -124,17 +124,12 @@ namespace UniBinderAPI.Database
         {
             List<Person> people = new List<Person>();
             var IDMatchedBySubjects = new List<Guid?>();
-            //var IDMatchedBySubjects = new List<Guid>();
 
             using (var context = new UniBinderEF())
             {
                 var matches = MatchList(personID);
-                //List<string> subjects = new List<string>();
-
                 var subjects = context.PersonSubjects.Where(personSubject => personSubject.PersonID == personID)
                                                      .Select(personSubject => personSubject.Name).ToList();
-
-
 
                 foreach (var subjectName in subjects)
                 {
@@ -146,7 +141,6 @@ namespace UniBinderAPI.Database
                         IDMatchedBySubjects.Add(item);
                     }
                 }
-
             }
             return IDMatchedBySubjects;
         }

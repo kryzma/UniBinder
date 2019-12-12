@@ -372,6 +372,19 @@ namespace UniBinderAPI.Controllers
             }
         }
 
+        [Route("api/person/RemoveMatch")]
+        [HttpDelete]
+        public IHttpActionResult UnmatchPeople(Guid personID1, Guid personID2)
+        {
+
+            if (!_reader.Value.MatchList(personID1).Contains(personID2))
+            {
+                return BadRequest();
+            }
+            userDataInserter.RemoveMatch(personID2);
+            return Ok();
+        }
+
         #endregion
         #region Private Methods
         private IHttpActionResult AddToDB(Person person)
@@ -401,12 +414,7 @@ namespace UniBinderAPI.Controllers
             }
         }
 
-        public IHttpActionResult UnmatchPeople(Guid personID1, Guid personID2)
-        {
-            if()
 
-
-        }
 
 
 
