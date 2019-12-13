@@ -9,3 +9,9 @@
 .settings-container {
     margin-top: 100px !important;
 }
+
+@media screen and (max-width: 991px){
+    .settings-main-paper {
+        margin-top: 50px;
+    }
+}

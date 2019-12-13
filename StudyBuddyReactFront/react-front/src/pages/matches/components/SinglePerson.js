@@ -15,7 +15,7 @@ class SinglePerson extends React.Component {
                 return (
                     <ListItem key={key} className="matched-person-list-item">
                         <ListItemText primary={item.Name + " " + item.Surname} />
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" color="primary" onClick={() => (this.props.handleUnmatch(item.ID))}>
                             Unmatch
                         </Button>
                     </ListItem>

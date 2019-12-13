@@ -4,6 +4,7 @@ import Header from "../../header/components/Header"
 import ArrowForward from "./ArrowForward"
 import ArrowBack from "./ArrowBack"
 import MainPaper from "./MainPaper"
+import ErrorMessage from "./ErrorMessage"
 
 import Container from "react-bootstrap/Container"
 import Col from "react-bootstrap/Col"
@@ -24,20 +25,16 @@ class Main extends React.Component {
       userList: [],
       currentId: 0,
       listLength: 0,
+      success: undefined
     }
     this.componentDidMount = this.componentDidMount.bind(this)
     this.forwardId = this.forwardId.bind(this)
     this.backwardId = this.backwardId.bind(this)
+    this.onMatch = this.onMatch.bind(this)
   }
 
   componentDidMount() {
 
-    // fetch(PERSON_COUNT_LINK)
-    //   .then(response => response.json())
-    //   .then(response => this.setState({
-    //     userCount: response - 1
-    //   }))
-    //   .catch(console.log)
     var token = read_cookie("UserToken")
     fetch(LOAD_LIST + token)
       .then(response => response.json())
@@ -55,6 +52,7 @@ class Main extends React.Component {
   }
 
   forwardId() {
+
     if (this.state.currentId < this.state.listLength - 1) {
       this.setState(prevState => {
         return {
@@ -90,6 +88,35 @@ class Main extends React.Component {
     }
   }
 
+  onMatch(currentId, success) {
+
+    if (success) {
+      this.setState({
+        success: true
+      })
+      setTimeout(() => {
+        this.setState({
+          success: undefined
+        })
+      }, 1000);
+    }
+
+    if (currentId !== undefined) {
+      var objects2 = []
+      var objects = this.state.userList
+      objects.forEach(item => {
+        if (item !== currentId) {
+          objects2.push(item)
+        }
+
+      })
+      this.setState(() => ({
+        userList: objects2,
+        listLength: objects2.length
+      }))
+    }
+
+  }
 
 
   render() {
@@ -115,9 +142,10 @@ class Main extends React.Component {
           <Header />
           <Container>
             <Col lg={{ span: 10, offset: 1 }}>
+              <ErrorMessage handleSuccess={this.state.success} />
               <Row>
                 <ArrowBack changeId={this.backwardId} />
-                <MainPaper currentId={this.state.userList[this.state.currentId]} />
+                <MainPaper currentId={this.state.userList[this.state.currentId]} handleMatch={this.onMatch} />
                 <ArrowForward changeId={this.forwardId} />
               </Row>
             </Col>

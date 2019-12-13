@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col"
 import Row from "react-bootstrap/Row"
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 
-class UserTest extends React.Component {
+class UserMatches extends React.Component {
     render() {
         return (
             <div className="user-chat-wrapper">
@@ -28,4 +28,4 @@ class UserTest extends React.Component {
     }
 }
 
-export default UserTest
+export default UserMatches

@@ -60,7 +60,6 @@ class Login extends React.Component {
       this.setState({
         hashedPassword: passwordHash.generate(this.state.password)
       }, () => {
-        console.log(this.state.hashedPassword)
         //this.checkPassword()
       })
     }

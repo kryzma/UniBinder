@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col'
 import UserChat from './UserChat'
 import UserSettings from './UserSettings'
 import UserSearch from './UserSearch'
-import UserTest from "./UserTest"
+import UserMatches from "./UserMatches"
 import Header from '../../header/components/Header'
 
 import { Link } from "react-router-dom"
@@ -41,7 +41,7 @@ class Menu extends React.Component {
                         </Col>
                         <Col lg={{ span: 6 }} md={{ span: 12 }}>
                             <Link className="user-chat" to="/matches">
-                                <UserTest />
+                                <UserMatches />
                             </Link>
                         </Col>
                     </Row>

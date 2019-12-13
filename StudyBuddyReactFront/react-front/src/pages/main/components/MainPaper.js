@@ -26,9 +26,11 @@ class MainPaper extends React.Component {
             likes: 0,
             email: "",
             subjects: [],
+            surname: undefined,
             currentId: undefined,
             oldId: undefined,
-            image: undefined
+            image: undefined,
+            handleSuccess: undefined,
         }
         this.componentDidMount = this.componentDidMount.bind(this)
         this.componentDidUpdate = this.componentDidUpdate.bind(this)
@@ -49,7 +51,11 @@ class MainPaper extends React.Component {
                 }
             })
             this.fetchItems()
+            this.setState({
+                handleSuccess: undefined
+            })
         }
+
     }
 
     fetchItems() {
@@ -64,6 +70,7 @@ class MainPaper extends React.Component {
                     id: responseJson.ID,
                     likes: responseJson.Likes,
                     name: responseJson.Name,
+                    surname: responseJson.Surname,
                     email: responseJson.Email,
                     subjects: responseJson.Subjects,
                     currentId: this.props.currentId,
@@ -90,13 +97,20 @@ class MainPaper extends React.Component {
 
     handleMatch() {
         var token = read_cookie("UserToken")
-        console.log(this.props.currentId)
         fetch(MATCH + token + "&victimID=" + this.props.currentId, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
         })
+            .then(response => {
+                if (response.status === 200) {
+                    this.setState({
+                        handleSuccess: true
+                    })
+                    this.props.handleMatch(this.props.currentId, true)
+                }
+            })
 
     }
 
@@ -104,7 +118,7 @@ class MainPaper extends React.Component {
         return (
 
             <Paper className="main-paper">
-                <Name personName={this.state.name} />
+                <Name personName={this.state.name} personSurname={this.state.surname} />
                 <Row className="remove-margins">
                     <Col lg={{ span: 3 }}>
                         <Statistics personLikes={this.state.likes} />
@@ -116,6 +130,7 @@ class MainPaper extends React.Component {
                         <Subjects personSubjects={this.state.subjects} />
                     </Col>
                 </Row>
+
                 <MatchButton handleMatch={this.handleMatch} />
             </Paper>
         )
