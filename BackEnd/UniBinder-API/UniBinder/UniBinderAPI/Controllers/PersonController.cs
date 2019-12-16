@@ -163,6 +163,7 @@ namespace UniBinderAPI.Controllers
 
 
         [Route("api/person/UserDataByToken")]
+        [Route("api/person/UserDataByToken")]
         [HttpGet]
         // [AllowAnonymous]
         public IHttpActionResult GetUserWithToken(string token)
@@ -178,13 +179,12 @@ namespace UniBinderAPI.Controllers
                 return BadRequest();
             }
 
-            var searchedUser = _reader.Value.GetAllPeopleID().Where(x => x.ToString() == checkID).FirstOrDefault();
+            var searchedUser = _reader.Value.ReadUserData().Where(x => x.ID.ToString() == checkID).FirstOrDefault();
 
             if (searchedUser == null)
             {
                 return NotFound();
             }
-
             return Ok(searchedUser);
         }
 
