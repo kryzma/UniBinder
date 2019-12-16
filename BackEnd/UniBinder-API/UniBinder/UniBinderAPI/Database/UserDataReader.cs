@@ -25,18 +25,15 @@ namespace UniBinderAPI.Database
 
     class UserDataReader : IUserDataReader
     {
-        List<Person> PersonList = new List<Person>();
 
         public List<Person> ReadUserData()
         {
+            List<Person> PersonList = new List<Person>();
             using (var context = new UniBinderEF())
             {
-
                 var users = (from a in context.People select a).ToList();
                 var usersSubjects = (from a in context.PersonSubjects select a).ToList();
                 var matchedPeople = (from a in context.MatchedPeoples select a).ToList();
-
-
 
                 var groupJoin = users.GroupJoin(usersSubjects,
                     person =>
@@ -80,6 +77,7 @@ namespace UniBinderAPI.Database
                             ImageLink = p.ImageLink,
                             SubjectList = new List<Subject>()
                         };
+
                         foreach (var sub in p.subjectsList)
                         {
                             var subject = new Subject
@@ -88,18 +86,17 @@ namespace UniBinderAPI.Database
                             };
                             person.SubjectList.Add(subject);
                         }
+
                         foreach (var per in PersonList)
                         {
                             per.Matches = (from a in matchedPeople
                                            where per.ID.Equals(a.FirstPersonID) || per.ID.Equals(a.SecondPersonID)
                                            select (Guid)a.SecondPersonID).ToList();
                         }
+
                     PersonList.Add(person);
                     }
                 }
-
-            var check = PersonList;
-            var check2 = PersonList.Count();
                 return PersonList;
             }
 

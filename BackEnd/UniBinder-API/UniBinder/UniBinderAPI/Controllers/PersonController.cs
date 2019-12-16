@@ -42,9 +42,6 @@ namespace UniBinderAPI.Controllers
             return Ok(matchList);
         }
 
-
-
-
         [Route("api/person/count")]
         [HttpGet]
         public int GetNumber()
@@ -55,7 +52,6 @@ namespace UniBinderAPI.Controllers
         // GET: api/Person
         public IEnumerable<Person> Get()
         {
-
             return _reader.Value.ReadUserData();
         }
 
@@ -69,7 +65,6 @@ namespace UniBinderAPI.Controllers
             {
                 return NotFound();
             }
-
             return Ok(user);
         }
 
@@ -315,12 +310,8 @@ namespace UniBinderAPI.Controllers
             var domainPath = AppDomain.CurrentDomain.BaseDirectory;
             //var path1 = string.Format(, imgName);
             var fullPath = domainPath + "Images" + @"\" + img.ImgPath + ".jpg";
-
-            
-
             var image = Image.FromStream(new MemoryStream(Convert.FromBase64String(img.ImgBase64.Remove(0,23))));
             //var path = string.Format("../../img/{0}", img.ImgPath);
-
             image.Save(fullPath);
             return Ok();
         }
@@ -366,7 +357,6 @@ namespace UniBinderAPI.Controllers
         [HttpDelete]
         public IHttpActionResult UnmatchPeople(Guid personID1, Guid personID2)
         {
-
             if (!_reader.Value.MatchList(personID1).Contains(personID2))
             {
                 return BadRequest();
@@ -381,7 +371,6 @@ namespace UniBinderAPI.Controllers
         {
             //CreateUniqueId(person);
             person.ID = Guid.NewGuid();
-
             userDataInserter.SendUserData(person);
             return Ok();
         }
@@ -398,7 +387,6 @@ namespace UniBinderAPI.Controllers
                 {
                     return Conflict();
                 }
-                
                 //if (people.Exists(x => x.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase))) return Conflict();
                 return Ok();
             }
@@ -415,21 +403,6 @@ namespace UniBinderAPI.Controllers
                 }
             };
         }
-
-
-
-        public virtual void HandleException(Exception exception)
-        {
-
-        }
-
-
-
-        private string UnknownData(string data, string nameOfData)
-        {
-            return string.Format("No User found with {0} = {1}", nameOfData, data);
-        }
         #endregion
-
     }
 }
