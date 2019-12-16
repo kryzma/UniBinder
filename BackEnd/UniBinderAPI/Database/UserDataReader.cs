@@ -50,6 +50,7 @@ namespace UniBinderAPI.Database
                     });
                 });
 
+                context.Dispose();
                 return PersonList;
             }
         }
