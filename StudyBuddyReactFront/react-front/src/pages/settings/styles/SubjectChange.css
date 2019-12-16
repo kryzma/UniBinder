@@ -1,0 +1,11 @@
+.subject-change-button-wrapper {
+    margin-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.subject-change-button {
+    width: 80%;
+    margin-left: 10% !important;
+}

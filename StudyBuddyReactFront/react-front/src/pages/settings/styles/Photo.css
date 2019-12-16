@@ -1,0 +1,11 @@
+.settings-photo-wrapper {
+    text-align: center;
+    padding-top: 20px;
+    height: 241px;
+}
+
+.settings-photo {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+}

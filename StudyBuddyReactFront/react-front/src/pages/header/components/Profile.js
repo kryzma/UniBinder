@@ -4,6 +4,7 @@ import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import "../styles/Profile.css"
 
 import { read_cookie } from 'sfcookies';
+import { Link } from "react-router-dom"
 
 class Profile extends React.Component {
 
@@ -36,12 +37,16 @@ class Profile extends React.Component {
 
   render() {
     return (
+
       <div className="profile-wrapper mr-3">
-        <span className="pr-2">
-          {this.state.username}
-        </span>
-        <PersonOutlineIcon />
+        <Link className="profile-name-link" to="/settings">
+          <span className="pr-2">
+            {this.state.username}
+          </span>
+          <PersonOutlineIcon className="profile-icon" />
+        </Link>
       </div>
+
     )
   }
 }

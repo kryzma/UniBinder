@@ -10,7 +10,7 @@ class Name extends React.Component {
     return (
       <Col>
         <div className="name-wrapper">
-          {this.props.personName}
+          {this.props.personName} {this.props.personSurname}
         </div>
       </Col>
     )

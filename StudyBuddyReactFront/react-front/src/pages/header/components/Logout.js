@@ -25,7 +25,7 @@ class Logout extends React.Component {
           <span className="pr-2">
             Log out
         </span>
-          <ExitToAppOutlinedIcon />
+          <ExitToAppOutlinedIcon className="logout-icon" />
         </Link>
       </div>
     )

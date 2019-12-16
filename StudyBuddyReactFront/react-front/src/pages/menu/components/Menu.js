@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col'
 import UserChat from './UserChat'
 import UserSettings from './UserSettings'
 import UserSearch from './UserSearch'
-import UserTest from './UserTest'
+import UserMatches from "./UserMatches"
 import Header from '../../header/components/Header'
 
 import { Link } from "react-router-dom"
@@ -20,25 +20,29 @@ class Menu extends React.Component {
         return (
             <div>
                 <Header />
-                <Container>
+                <Container className="menu-wrapper">
                     <Row>
-                        <Col lg={{ span: 6 }}>
+                        <Col lg={{ span: 6 }} md={{ span: 12 }}>
                             <Link className="user-search" to="/main">
                                 <UserSearch />
                             </Link>
                         </Col>
-                        <Col lg={{ span: 6 }}>
+                        <Col lg={{ span: 6 }} md={{ span: 12 }}>
                             <Link className="user-chat" to="/chat">
                                 <UserChat />
                             </Link>
                         </Col>
                     </Row>
                     <Row>
-                        <Col lg={{ span: 6 }}>
-                            <UserSettings />
+                        <Col lg={{ span: 6 }} md={{ span: 12 }}>
+                            <Link className="user-settings" to="/settings">
+                                <UserSettings />
+                            </Link>
                         </Col>
-                        <Col lg={{ span: 6 }}>
-                            <UserTest />
+                        <Col lg={{ span: 6 }} md={{ span: 12 }}>
+                            <Link className="user-chat" to="/matches">
+                                <UserMatches />
+                            </Link>
                         </Col>
                     </Row>
 

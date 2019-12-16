@@ -1,14 +1,17 @@
 import React from "react"
 
 import LogoImg from "../../../images/logo.png"
+import { Link } from "react-router-dom"
 
 import "../styles/Logo.css"
 
-function Logo() {
+function Logo(props) {
   return (
-    <div className="logo-wrapper">
-      <img className="img-fluid header-logo" alt="" src={LogoImg} />
-    </div>
+    <Link to="/menu">
+      <div className="logo-wrapper">
+        <img className="img-fluid header-logo" alt="" src={LogoImg} onClick={props.handleClick} />
+      </div>
+    </Link>
   )
 }
 

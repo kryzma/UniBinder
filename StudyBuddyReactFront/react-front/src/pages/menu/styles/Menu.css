@@ -5,3 +5,11 @@
 .user-chat {
     text-decoration: none !important;
 }
+
+.user-settings {
+    text-decoration: none !important;
+}
+
+.menu-wrapper {
+    margin-top: 100px;
+}

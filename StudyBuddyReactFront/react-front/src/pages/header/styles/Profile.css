@@ -1,12 +1,34 @@
 .profile-wrapper {
   color: white;
-  font-size: 2vh;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.profile-wrapper:hover {
+.profile-icon {
+  font-size: 30px !important;
+}
+
+.profile-name-link:hover {
   cursor: pointer;
-  color: #ddd;
+  color: #ddd !important;
+}
+
+@media screen and (max-width: 500px){
+  .profile-wrapper {
+    margin-right: 0 !important;
+    text-align: center;
+    font-size: 25px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .profile-icon {
+    font-size: 35px !important;
+  }
+}
+
+.profile-name-link {
+  text-decoration: none !important;
+  color: white !important;
 }

@@ -1,10 +1,14 @@
 import React from 'react'
 import Chatkit from '@pusher/chatkit-client'
-import { INSTANCE_LOCATOR, ROOM_ID, IP_FETCH_LINK, SERVER_PORT } from "../../../config"
+import { INSTANCE_LOCATOR, ROOM_ID, USER_AUTHENTICATION_LINK, USER_FETCH_LINK } from "../../../config"
 import MessageList from './MessageList'
 import SendMessageForm from './SendMessageForm'
 import TypingIndicator from './TypingIndicator'
 import WhosOnlineList from './WhosOnlineList'
+import Drawer from "@material-ui/core/Drawer"
+import MenuIcon from '@material-ui/icons/Menu';
+
+import { read_cookie } from 'sfcookies';
 
 import "../styles/ChatScreen.css"
 
@@ -19,9 +23,14 @@ class ChatScreen extends React.Component {
             usersWhoAreTyping: [],
             currentLocalIp: 0,
             currentLink: 0,
+            currentUsername: undefined,
+            drawer: false,
         }
         this.sendMessage = this.sendMessage.bind(this)
         this.sendTypingEvent = this.sendTypingEvent.bind(this)
+        this.componentDidMount = this.componentDidMount.bind(this)
+        this.openDrawer = this.openDrawer.bind(this)
+        this.closeDrawer = this.closeDrawer.bind(this)
     }
 
     // Send message function
@@ -39,44 +48,55 @@ class ChatScreen extends React.Component {
     }
 
 
-    componentDidMount() {
+    async componentDidMount() {
 
-        // Get local ipv4 adress
-        fetch(IP_FETCH_LINK, {
-            method: 'GET',
+        var jwt = require("jsonwebtoken");
+        var token = read_cookie("UserToken")
+
+        try {
+            if (token) {
+                var decoded = jwt.decode(token)
+                await this.setState({
+                    currentUsername: decoded.unique_name
+                })
+
+            }
+        }
+        catch (error) {
+            console.log(error)
+        }
+        var username = {
+            username: this.state.currentUsername
+        }
+        await fetch(USER_FETCH_LINK, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
+            body: JSON.stringify(username)
         })
             .then(response => {
-                response = response.json()
-                return response
-            })
-            .then(response => {
-                this.setState({
-                    currentLocalIp: response.ipv4
-                })
 
-            })
-            .then(response => {
                 this.setState({
-                    currentLink: "http://" + this.state.currentLocalIp + ':' + SERVER_PORT + '/authenticate'
+                    currentScreen: 'ChatScreen'
                 })
             })
+            .catch(error => console.log('error ', error, this.state.currentUsername))
+
             // Connect to instance with currentUser
             // Current instance is static atm, make instance manager in backend
-            .then(response => {
+            .then(() => {
                 const chatManager = new Chatkit.ChatManager({
                     instanceLocator: INSTANCE_LOCATOR,
-                    userId: this.props.currentUsername,
+                    userId: this.state.currentUsername,
                     tokenProvider: new Chatkit.TokenProvider({
-                        url: this.state.currentLink,
+                        url: USER_AUTHENTICATION_LINK,
                     }),
                 })
                 return chatManager
             })
-            .then(response => {
-                response
+            .then(chatManager => {
+                chatManager
                     .connect()
                     .then(currentUser => {
                         this.setState({ currentUser })
@@ -113,13 +133,33 @@ class ChatScreen extends React.Component {
             })
 
 
-
     }
+
+    openDrawer() {
+        this.setState({
+            drawer: true
+        })
+    }
+    closeDrawer() {
+        this.setState({
+            drawer: false
+        })
+    }
+
     render() {
 
         return (
             <div className="chat-container">
+                <div className="online-header">
+                    <MenuIcon className="online-hamburger" onClick={this.openDrawer} />
+                </div>
                 <div className="chat-window-container">
+                    <Drawer className="online-drawer" anchor="left" open={this.state.drawer} onClose={this.closeDrawer}>
+                        <WhosOnlineList
+                            currentUser={this.state.currentUser}
+                            users={this.state.currentRoom.users}
+                        />
+                    </Drawer>
                     <aside className="who-is-online-container">
                         <WhosOnlineList
                             currentUser={this.state.currentUser}

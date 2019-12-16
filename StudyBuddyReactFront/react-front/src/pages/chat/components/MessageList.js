@@ -1,18 +1,20 @@
 import React from 'react'
-import $ from 'jquery'
 
+import { animateScroll } from "react-scroll";
 import "../styles/MessageList.css"
 
 class MessagesList extends React.Component {
 
     componentDidMount() {
-        // Scroll to the bottom of chat page in 5 ms
-        var interval = setInterval(function () {
-            $(".message-list-wrapper").scrollTop($(".message-list-wrapper").height());
-            if ($(".message-list-wrapper").scrollTop() > 0) {
-                clearInterval(interval)
-            }
-        }, 5);
+        this.scrollToBottom()
+    }
+    componentDidUpdate() {
+        this.scrollToBottom()
+    }
+    scrollToBottom() {
+        animateScroll.scrollToBottom({
+            containerId: "scrollContainer"
+        });
     }
 
     render() {
@@ -23,7 +25,7 @@ class MessagesList extends React.Component {
             }
         }
         return (
-            <div className="message-list-wrapper"
+            <div className="message-list-wrapper" id="scrollContainer"
                 style={{
                     ...this.props.style,
                     ...styles.container,

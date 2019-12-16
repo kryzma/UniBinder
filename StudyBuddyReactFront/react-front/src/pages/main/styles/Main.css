@@ -8,3 +8,14 @@
 .main-wrapper {
   font-family: 'Roboto', sans-serif !important;
 }
+
+.matched-all-wrapper {
+  margin-top: 200px;
+  text-align: center;
+  font-size: 30px;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.remove-padding {
+  padding: 0 !important;
+}

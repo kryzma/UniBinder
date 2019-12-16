@@ -1,3 +1,13 @@
 .photo-wrapper {
   text-align: center;
+  height: 250px !important;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.user-photo-img {
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+  object-position: center;
 }

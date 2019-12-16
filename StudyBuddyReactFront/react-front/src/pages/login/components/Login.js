@@ -55,14 +55,14 @@ class Login extends React.Component {
 
   onSubmit() {
     // Hash password
-    // var passwordHash = require('password-hash')
-    // if (this.state.password !== undefined) {
-    //   this.setState({
-    //     hashedPassword: passwordHash.generate(this.state.password)
-    //   }, () => {
-    //     //this.checkPassword()
-    //   })
-    // }
+    var passwordHash = require('password-hash')
+    if (this.state.password !== undefined) {
+      this.setState({
+        hashedPassword: passwordHash.generate(this.state.password)
+      }, () => {
+        //this.checkPassword()
+      })
+    }
     this.checkPassword(this.redirect)
   }
 
@@ -108,7 +108,6 @@ class Login extends React.Component {
             .then(response => response.json())
             .then(response => {
               bake_cookie("UserToken", response)
-              console.log(response)
             })
             .then(() => redirect())
         }

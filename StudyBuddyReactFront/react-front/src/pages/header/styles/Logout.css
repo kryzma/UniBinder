@@ -1,10 +1,14 @@
 .logout-wrapper {
   color: white;
   padding-left: 20px;
-  font-size: 2vh;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.logout-icon {
+  font-size: 30px !important;
 }
 
 .logout-link {
@@ -14,4 +18,16 @@
 .logout-link:hover {
   color: #ddd;
   text-decoration: none;
+}
+
+@media screen and (max-width: 500px){
+  .logout-wrapper {
+    padding: 0;
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 10px;
+  }
+  .logout-icon {
+    font-size: 35px !important;
+  }
 }
