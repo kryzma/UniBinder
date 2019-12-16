@@ -18,8 +18,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using UniBinderAPI.EntityFramework;
-
-
+using System.Collections;
 
 namespace UniBinderAPI.Database
 {
@@ -141,7 +140,7 @@ namespace UniBinderAPI.Database
             }
         }
 
-        public List<Guid?> PeopleWithSameSubjects(Guid personID)
+        public IEnumerable PeopleWithSameSubjects(Guid personID)
         {
             var IDMatchedBySubjects = new List<Guid?>();
             var matches = MatchList(personID);
@@ -177,7 +176,8 @@ namespace UniBinderAPI.Database
                              }).Distinct().ToList();
 
                 if (!subjects.Any()) return null;
-
+                IEnumerable ts = query;
+                return ts;
                 //foreach (var subjectName in subjects)
                 //{
                 //    var PeopleWithSameSubject = context.PersonSubjects.Where(personSubject => personSubject.Name == subjectName && personSubject.PersonID != personID)
@@ -189,7 +189,7 @@ namespace UniBinderAPI.Database
                 //    }
                 //}
             }
-            return IDMatchedBySubjects;
+            
         }
 
         public List<string> SubjectList()
