@@ -24,8 +24,6 @@ namespace UniBinderAPI.Controllers
         UserDataInserter userDataInserter = new UserDataInserter();
         Lazy<UserDataReader> _reader = new Lazy<UserDataReader>();
 
-        List<Person> people;
-
         #region GetApi
 
         [Route("api/person/SubjectList")]
@@ -57,6 +55,7 @@ namespace UniBinderAPI.Controllers
         // GET: api/Person
         public IEnumerable<Person> Get()
         {
+
             return _reader.Value.ReadUserData();
         }
 
@@ -95,13 +94,11 @@ namespace UniBinderAPI.Controllers
         // [AllowAnonymous]
         public IHttpActionResult GetImage(Guid personID)
         {
-            var user = _reader.Value.ReadUserData().Where(x => x.ID == personID).FirstOrDefault();
-
+            var user = _reader.Value.GetPeopleByID(personID);
             if (user == null)
             {
                 return BadRequest();
             }
-
             return ImageProcessor(personID.ToString());
         }
 
@@ -150,14 +147,6 @@ namespace UniBinderAPI.Controllers
             if (CheckToken(token) == BadRequest()) return BadRequest();
 
             var matchedPeopleBySubject = new List<Person>();
-            var peopleList = _reader.Value.ReadUserData();
-            
-            var selectedSubjects = peopleList.Where(x => checkID == x.ID.ToString()).FirstOrDefault().SubjectList;
-
-            if(selectedSubjects == null)
-            {
-                BadRequest(); //BadToken
-            }
 
             var IDCollection = _reader.Value.PeopleWithSameSubjects(new Guid(checkID));
 
@@ -194,7 +183,7 @@ namespace UniBinderAPI.Controllers
                 return BadRequest();
             }
 
-            var searchedUser = _reader.Value.ReadUserData().Where(x => x.ID.ToString() == checkID).FirstOrDefault();
+            var searchedUser = _reader.Value.GetAllPeopleID().Where(x => x.ToString() == checkID).FirstOrDefault();
 
             if (searchedUser == null)
             {
@@ -273,6 +262,7 @@ namespace UniBinderAPI.Controllers
             else
             {
                 userDataInserter.LinkSubjectsToPersonDataTable(user);
+                //userDataInserter.LinkSubjectsToPersonWithDel(user); //slower by 1.5 sec
                 return Ok();
             }
         }
@@ -414,18 +404,6 @@ namespace UniBinderAPI.Controllers
             }
         }
 
-
-
-
-
-        private void CreateUniqueId(Person person)
-        {
-            while (_reader.Value.ReadUserData().Exists(x => x.ID == person.ID)) // prob. is not efficient, maybe should consider to make random number?
-            {
-                //person.ID++;
-            }
-            return;
-        }
         private static JWTContainerModel GetJWTContainerModel(string username, string ID)
         {
             return new JWTContainerModel()

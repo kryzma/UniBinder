@@ -28,21 +28,27 @@ namespace UniBinderAPI.Database
     {
         List<Person> PersonList = new List<Person>();
 
-
-
-            public List<Person> ReadUserData()
+        public List<Person> ReadUserData()
+        {
+            using (var context = new UniBinderEF())
             {
-                using (var context = new UniBinderEF())
-                {
-                    var users = (from a in context.People select a).ToList();
-                    var usersSubjects = (from a in context.PersonSubjects select a).ToList();
-                    var matchedPeople = (from a in context.MatchedPeoples select a).ToList();
-                    //var person = matchedPeople.First();
+
+                var users = (from a in context.People select a).ToList();
+                var usersSubjects = (from a in context.PersonSubjects select a).ToList();
+                var matchedPeople = (from a in context.MatchedPeoples select a).ToList();
 
 
 
-                    var groupJoin = users.GroupJoin(usersSubjects,
-                    person => person.ID,
+                var groupJoin = users.GroupJoin(usersSubjects,
+                    person =>
+                    {
+                        if (person is null)
+                        {
+                            throw new ArgumentNullException(nameof(person));
+                        }
+
+                        return person.ID;
+                    },
                     sub => sub.PersonID,
                     (person, subjectGroup) => new
                     {
@@ -58,8 +64,6 @@ namespace UniBinderAPI.Database
                         person.Dislikes,
                         person.ImageLink,
                     });
-
-
 
                     foreach (var p in groupJoin)
                     {
@@ -100,8 +104,25 @@ namespace UniBinderAPI.Database
                 return PersonList;
             }
 
+        public Person GetPeopleByID(Guid guid)
+        {
+            //List<Person> people = new List<Person>();
+            using (var context = new UniBinderEF())
+            {
+                var person = context.People.Where(x => x.ID == guid).FirstOrDefault();
+                return person;
+            }
+        }
 
-            public int PeopleNumber()
+        public List<Guid> GetAllPeopleID()
+        {
+            using (var context = new UniBinderEF())
+            {
+                return context.People.Select(x => x.ID).ToList();
+            }
+        }
+
+        public int PeopleNumber()
         {
             using (var context = new UniBinderEF())
             {
@@ -122,25 +143,51 @@ namespace UniBinderAPI.Database
 
         public List<Guid?> PeopleWithSameSubjects(Guid personID)
         {
-            List<Person> people = new List<Person>();
             var IDMatchedBySubjects = new List<Guid?>();
+            var matches = MatchList(personID);
 
             using (var context = new UniBinderEF())
             {
-                var matches = MatchList(personID);
                 var subjects = context.PersonSubjects.Where(personSubject => personSubject.PersonID == personID)
                                                      .Select(personSubject => personSubject.Name).ToList();
 
-                foreach (var subjectName in subjects)
-                {
-                    var PeopleWithSameSubject = context.PersonSubjects.Where(personSubject => personSubject.Name == subjectName && personSubject.PersonID != personID)
-                                                                      .Select(personSubject => personSubject.PersonID).ToList();
-                    foreach (var item in PeopleWithSameSubject)
-                    {
-                        if (IDMatchedBySubjects.Contains(item) || matches.Contains(item)) continue;
-                        IDMatchedBySubjects.Add(item);
-                    }
-                }
+                var query = (from c in context.People
+                             join b in context.PersonSubjects on new { ID = c.ID } equals new { ID = b.PersonID }
+                             where
+                               c.ID != new Guid(personID.ToString()) &&
+                                 (from PersonSubjects in context.PersonSubjects
+                                  where
+                        PersonSubjects.PersonID == new Guid(personID.ToString())
+                                  select new
+                                  {
+                                      PersonSubjects.Name
+                                  }).Contains(new { Name = b.Name }) &&
+                               !
+                                 (from x in context.MatchedPeoples
+                                  join z in context.People on new { FirstPersonID = (Guid)x.FirstPersonID } equals new { FirstPersonID = z.ID }
+                                  where
+                                        x.FirstPersonID == z.ID
+                                  select new
+                                  {
+                                      x.SecondPersonID
+                                  }).Contains(new { SecondPersonID = (Guid?)c.ID })
+                             select new
+                             {
+                                 c.ID
+                             }).Distinct().ToList();
+
+                if (!subjects.Any()) return null;
+
+                //foreach (var subjectName in subjects)
+                //{
+                //    var PeopleWithSameSubject = context.PersonSubjects.Where(personSubject => personSubject.Name == subjectName && personSubject.PersonID != personID)
+                //                                                      .Select(personSubject => personSubject.PersonID).ToList();
+                //    foreach (var item in PeopleWithSameSubject)
+                //    {
+                //        if (IDMatchedBySubjects.Contains(item) || matches.Contains(item)) continue;
+                //        IDMatchedBySubjects.Add(item);
+                //    }
+                //}
             }
             return IDMatchedBySubjects;
         }
@@ -162,7 +209,6 @@ namespace UniBinderAPI.Database
             }
         }
 
-
         public List<string> SubjectsPersonHas(Guid personID)
         {
             using (var context = new UniBinderEF())
@@ -172,17 +218,6 @@ namespace UniBinderAPI.Database
                 return subjects;
             }
         }
-
-
-
-
-
-
-
-
-
     }
-
-
 }
 
